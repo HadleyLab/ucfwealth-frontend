@@ -5,8 +5,10 @@
     "dependencies": {
         "aidbox-react": "git+https://github.com/beda-software/aidbox-react.git#932185f6a58a47f746264dc7a7c1b7cbbf24733c",
         "classnames": "^2.2.6",
+        "final-form": "^4.20.1",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
+        "react-final-form": "^6.5.2",
         "react-router-dom": "^5.2.0",
         "react-scripts": "4.0.1",
         "shared": "0.0.1"
