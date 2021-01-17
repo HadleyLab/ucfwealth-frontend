@@ -1,0 +1,17 @@
+{
+    "name": "shared",
+    "version": "0.0.1",
+    "description": "",
+    "scripts": {
+        "typecheck": "tsc"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "moment": "^2.29.1"
+    },
+    "devDependencies": {
+        "typescript": "^4.0.5"
+    }
+}

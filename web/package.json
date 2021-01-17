@@ -1,0 +1,68 @@
+{
+    "name": "web",
+    "version": "0.1.0",
+    "private": true,
+    "dependencies": {
+        "aidbox-react": "git+https://github.com/beda-software/aidbox-react.git#932185f6a58a47f746264dc7a7c1b7cbbf24733c",
+        "classnames": "^2.2.6",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "react-router-dom": "^5.2.0",
+        "react-scripts": "4.0.1",
+        "shared": "0.0.1"
+    },
+    "scripts": {
+        "start": "react-app-rewired start",
+        "build": "react-app-rewired build",
+        "test": "react-scripts test --watchAll=false",
+        "eject": "react-scripts eject",
+        "typecheck": "tsc"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "**/*.{ts,tsx}",
+            "!**/node_modules/**",
+            "!**/contrib/**"
+        ],
+        "coverageReporters": [
+            "text-summary",
+            "html"
+        ],
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "transformIgnorePatterns": [
+            "node_modules/(?!axios)$",
+            "^.+\\.module\\.(css|sass|scss)$"
+        ]
+    },
+    "devDependencies": {
+        "@sentry/browser": "^5.27.1",
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^9.3.2",
+        "@testing-library/user-event": "^7.1.2",
+        "@types/classnames": "^2.2.11",
+        "@types/jest": "^26.0.15",
+        "@types/node": "^12.0.0",
+        "@types/react": "^16.9.0",
+        "@types/react-dom": "^16.9.0",
+        "@types/react-router-dom": "^5.1.6",
+        "customize-cra": "^1.0.0",
+        "node-sass": "^4.14.1",
+        "react-app-rewired": "^2.1.6",
+        "ts-jest": "^26.4.3",
+        "typescript": "^4.0.5"
+    }
+}
