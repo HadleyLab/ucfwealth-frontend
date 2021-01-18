@@ -27,6 +27,7 @@ export interface User {
     identifier?: Identifier[];
     email: string;
     password?: string;
+    userType: 'superAdmin' | 'patient' | 'practitioner';
     name?: {
         familyName?: string;
         formatted?: string;

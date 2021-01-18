@@ -1,0 +1,41 @@
+.react-select__control {
+    border-radius: 4px !important;
+}
+.react-select__value-container {
+    padding: 4px 11px !important;
+}
+
+.react-select__dropdown-indicator {
+    padding: 8px 16px !important;
+}
+.react-select__dropdown-indicator svg {
+    width: 18px;
+    fill: lighten(#575757, 30%) !important;
+}
+
+.react-select__value-container {
+    line-height: 20px;
+}
+
+.react-select__value-container > div {
+    margin: 0 !important;
+}
+
+.react-select__menu {
+    z-index: 10 !important;
+}
+
+.invalid {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #ff0000;
+}
+
+.radio-element-button-icon {
+    margin-right: 0.4em;
+}
+
+.ant-upload-text {
+    margin: 0px 10px !important;
+}
