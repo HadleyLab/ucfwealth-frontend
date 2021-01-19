@@ -3,7 +3,6 @@
     "scripts": {
         "clean": "lerna clean",
         "bootstrap": "lerna bootstrap",
-        "prepare": "rimraf shared/build && lerna run prepare",
         "test": "lerna run test --stream --concurrency=1 --",
         "test:web": "lerna run test --stream --concurrency=1 --scope web --",
         "test:mobile": "lerna run test --stream --concurrency=1 --scope mobile --",

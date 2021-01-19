@@ -6,7 +6,7 @@ import {
     NotificationBackgroundFetchResult,
 } from 'react-native-notifications/lib/dist/interfaces/NotificationCompletion';
 
-import { dispatch } from 'aidbox-react/src/hooks/bus';
+// import { dispatch } from 'aidbox-react/src/hooks/bus';
 import { isFailure, notAsked } from 'aidbox-react/src/libs/remoteData';
 import { forceDeleteFHIRResource, saveFHIRResource } from 'aidbox-react/src/services/fhir';
 
@@ -70,8 +70,9 @@ Notifications.events().registerNotificationReceivedBackground(
 Notifications.events().registerNotificationOpened(
     (notification: Notification, completion: () => void) => {
         const data = getNotificationData(notification);
+        console.log(data);
 
-        dispatch({ type: 'NotificationOpened', payload: data });
+        // dispatch({ type: 'NotificationOpened', payload: data });
 
         completion();
     },

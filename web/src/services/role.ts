@@ -59,7 +59,7 @@ export const userRoles = [
 export function getUserRole(user: User) {
     if (isSuperAdmin(user)) {
         return UserRole.SuperAdminRole;
-    } else if (isAdmin(user)) {
+    } else if (isPatient(user)) {
         return UserRole.PatientRole;
     } else if (isPractitioner(user)) {
         return UserRole.PractitionerRole;

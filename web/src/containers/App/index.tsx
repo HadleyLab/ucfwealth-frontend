@@ -112,19 +112,19 @@ export function App() {
                 </div>
             );
         }
-
-        const renderRoutes = () => {
-            if (appToken) {
-                return renderAuthenticatedRoutes();
-            }
-
-            return renderAnonymousRoutes();
-        };
-
-        return (
-            <Router history={history}>
-                <Switch>{renderRoutes()}</Switch>
-            </Router>
-        );
     };
+
+    const renderRoutes = () => {
+        if (appToken) {
+            return renderAuthenticatedRoutes();
+        }
+
+        return renderAnonymousRoutes();
+    };
+
+    return (
+        <Router history={history}>
+            <Switch>{renderRoutes()}</Switch>
+        </Router>
+    );
 }

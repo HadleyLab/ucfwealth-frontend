@@ -1,14 +1,20 @@
-import React from 'react';
-import _ from 'lodash';
-import { FORM_ERROR } from 'final-form';
 import { Layout, Form, Row, Col, Alert, Button, Card } from 'antd';
+import { Content } from 'antd/es/layout/layout';
+import { FORM_ERROR } from 'final-form';
+import _ from 'lodash';
+import React from 'react';
+
+import { isSuccess } from 'aidbox-react/src/libs/remoteData';
+import { Token } from 'aidbox-react/src/services/token';
+
 import { CustomForm } from 'src/components/CustomForm';
 import { InputField } from 'src/components/fields';
-import { isSuccess } from 'aidbox-react/lib/libs/remoteData';
-import validate from './validation';
-import { Content } from 'antd/es/layout/layout';
 import { signin, SigninBody } from 'src/services/auth';
-import { Token } from 'aidbox-react/lib/services/token';
+
+import validate from './validation';
+
+
+
 
 interface LoginProps {
     setToken: (token: Token) => void;
@@ -70,7 +76,11 @@ export function Login({ setToken }: LoginProps) {
                                         <Form.Item {...tailFormItemLayout}>
                                             <h1>Login</h1>
                                         </Form.Item>
-                                        <InputField name="email" placeholder="Email" label="Email" />
+                                        <InputField
+                                            name="email"
+                                            placeholder="Email"
+                                            label="Email"
+                                        />
                                         <InputField
                                             name="password"
                                             placeholder="Password"
