@@ -1,0 +1,44 @@
+.ant-layout-header {
+    background: #323747 !important;
+    height: 56px !important;
+    padding: 0 24px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
+    width: 100%;
+}
+
+.ant-layout-header {
+    .userpanel__wrapper {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .userpanel__dropdown {
+        color: white;
+    }
+
+    .userpanel__userrole {
+        font-weight: 500;
+    }
+
+    .userpanel__username {
+        padding-left: 4px;
+        font-weight: 30;
+    }
+}
+
+.ant-layout {
+    background: white !important;
+}
+
+.ant-layout-sider-trigger {
+    background: transparent !important;
+    margin-bottom: 10px;
+}
+
+.footer__text {
+    margin-left: 175px;
+}
