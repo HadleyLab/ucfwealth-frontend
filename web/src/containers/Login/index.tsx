@@ -13,9 +13,6 @@ import { signin, SigninBody } from 'src/services/auth';
 
 import validate from './validation';
 
-
-
-
 interface LoginProps {
     setToken: (token: Token) => void;
 }

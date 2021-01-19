@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
-import { RemoteDataResult } from 'aidbox-react/lib/libs/remoteData';
-import { service } from 'aidbox-react/lib/services/service';
-import { Token } from 'aidbox-react/lib/services/token';
+
+import { RemoteDataResult } from 'aidbox-react/src/libs/remoteData';
+import { service } from 'aidbox-react/src/services/service';
+import { Token } from 'aidbox-react/src/services/token';
 
 export interface SigninBody {
     email: string;

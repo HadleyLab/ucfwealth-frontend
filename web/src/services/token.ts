@@ -1,4 +1,4 @@
-import { Token } from 'aidbox-react/lib/services/token';
+import { Token } from 'aidbox-react/src/services/token';
 
 export function saveToken(token: Token): void {
     window.localStorage.setItem('token', JSON.stringify(token));
