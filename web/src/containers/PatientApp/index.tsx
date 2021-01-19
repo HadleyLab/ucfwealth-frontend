@@ -10,8 +10,8 @@ export function PatientApp({}: PatientAppProps) {
     let match = useRouteMatch();
     const routes: RouteItem[] = [
         {
-            path: `${match.url}/test`,
-            title: 'Test',
+            path: `${match.url}/questionnaire`,
+            title: 'Questionnaire',
         },
     ];
 
@@ -19,7 +19,11 @@ export function PatientApp({}: PatientAppProps) {
         <Router>
             <BaseLayout routes={routes}>
                 <Switch>
-                    <Route path={`${match.url}/test`} exact render={() => <p>Test</p>} />
+                    <Route
+                        path={`${match.url}/questionnaire`}
+                        exact
+                        render={() => <p>Questionnaire</p>}
+                    />
                     <Route path={'/'} render={() => <p>Page not found</p>} />
                 </Switch>
             </BaseLayout>
