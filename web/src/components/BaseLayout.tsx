@@ -1,10 +1,15 @@
-import * as React from 'react';
-import * as _ from 'lodash';
+import {
+    DoubleRightOutlined,
+    DownOutlined,
+    PoweroffOutlined,
+    UserOutlined,
+} from '@ant-design/icons/lib';
 import { Layout, Menu, Dropdown, Button } from 'antd';
+import * as _ from 'lodash';
+import * as React from 'react';
+import { useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { DoubleRightOutlined, DownOutlined, PoweroffOutlined, UserOutlined } from '@ant-design/icons/lib';
-import { useContext } from 'react';
 import { SessionContext } from 'src/containers/SessionContext';
 
 const { Header, Content, Sider, Footer } = Layout;
@@ -63,7 +68,10 @@ export function BaseLayout(props: BaseLayoutProps) {
     function getActiveKeys(routes: RouteItem[]): RouteItem[] {
         return _.filter(routes, ({ path, submenu }) => {
             if (path) {
-                return history.location.pathname === path || history.location.pathname.startsWith(`${path}/`);
+                return (
+                    history.location.pathname === path ||
+                    history.location.pathname.startsWith(`${path}/`)
+                );
             }
 
             if (submenu) {
@@ -78,7 +86,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         <Layout>
             <Header>
                 <a href="/app">
-                    <h2 style={{ color: 'white' }}>Edregvps Analytics</h2>
+                    <h2 style={{ color: 'white' }}>Covidimaging</h2>
                 </a>
                 {user && (
                     <div className="userpanel__wrapper">
@@ -114,7 +122,10 @@ export function BaseLayout(props: BaseLayoutProps) {
                     {routeList && (
                         <Menu
                             mode="inline"
-                            defaultSelectedKeys={_.map(getActiveKeys(routeList), ({ path, title }) => path || title)}
+                            defaultSelectedKeys={_.map(
+                                getActiveKeys(routeList),
+                                ({ path, title }) => path || title,
+                            )}
                             style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
                         >
                             {renderMenu(routeList)}
@@ -122,11 +133,13 @@ export function BaseLayout(props: BaseLayoutProps) {
                     )}
                 </Sider>
                 <Content>
-                    <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>{children}</div>
+                    <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+                        {children}
+                    </div>
                 </Content>
             </Layout>
             <Footer>
-                <div>Edregvps</div>
+                <div>Covidimaging</div>
             </Footer>
         </Layout>
     );

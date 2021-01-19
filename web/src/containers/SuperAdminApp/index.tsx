@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 import { RouteItem } from 'src/utils/route';
@@ -10,7 +10,7 @@ export function SuperAdminApp({}: SuperAdminAppProps) {
     let match = useRouteMatch();
     const routes: RouteItem[] = [
         {
-            path: `${match.url}/patients`,
+            path: `${match.url}/`,
             title: 'Patients',
         },
     ];
@@ -20,10 +20,10 @@ export function SuperAdminApp({}: SuperAdminAppProps) {
             <BaseLayout routes={routes}>
                 <Switch>
                     {/*<Route path={`${match.url}/users`} exact render={(props) => <UserList {...props} />}/>*/}
-                    <Route path={`${match.url}/test`} exact render={() => <p>Test</p>} />
+                    <Route path={`${match.url}/`} exact render={() => <p>Test</p>} />
                     <Route path={'/'} render={() => <p>Page not found</p>} />
                 </Switch>
-                {/*<Redirect to={`${match.url}/reports`} />*/}
+                <Redirect to={`${match.url}/`} />
             </BaseLayout>
         </Router>
     );
