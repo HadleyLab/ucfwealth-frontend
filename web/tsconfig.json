@@ -7,8 +7,8 @@
       "dom.iterable",
       "esnext"
     ],
-    "jsx": "react-jsx",
-    "module": "esnext"
+    "module": "esnext",
+    "jsx": "react-jsx"
   },
   "include": [
     "src"

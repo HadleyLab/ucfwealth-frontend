@@ -4,14 +4,14 @@ import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-rou
 import { BaseLayout } from 'src/components/BaseLayout';
 import { RouteItem } from 'src/utils/route';
 
-interface SuperAdminAppProps {}
+interface PatientAppProps {}
 
-export function SuperAdminApp({}: SuperAdminAppProps) {
+export function PatientApp({}: PatientAppProps) {
     let match = useRouteMatch();
     const routes: RouteItem[] = [
         {
-            path: `${match.url}/patients`,
-            title: 'Patients',
+            path: `${match.url}/test`,
+            title: 'Test',
         },
     ];
 
@@ -19,11 +19,9 @@ export function SuperAdminApp({}: SuperAdminAppProps) {
         <Router>
             <BaseLayout routes={routes}>
                 <Switch>
-                    {/*<Route path={`${match.url}/users`} exact render={(props) => <UserList {...props} />}/>*/}
                     <Route path={`${match.url}/test`} exact render={() => <p>Test</p>} />
                     <Route path={'/'} render={() => <p>Page not found</p>} />
                 </Switch>
-                {/*<Redirect to={`${match.url}/reports`} />*/}
             </BaseLayout>
         </Router>
     );

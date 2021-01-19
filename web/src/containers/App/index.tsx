@@ -1,25 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import {Route, Switch, Router, Redirect} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, Router, Redirect } from 'react-router-dom';
 
-import {isFailure, notAsked, RemoteData} from "aidbox-react/lib/libs/remoteData";
-import {resetInstanceToken, setInstanceBaseURL, setInstanceToken} from "aidbox-react/lib/services/instance";
-import {isSuccess} from 'aidbox-react/src/libs/remoteData';
-import {Token} from 'aidbox-react/src/services/token';
+import { isFailure, notAsked } from 'aidbox-react/src/libs/remoteData';
+import { isSuccess } from 'aidbox-react/src/libs/remoteData';
+import { RemoteData } from 'aidbox-react/src/libs/remoteData';
+import { resetInstanceToken, setInstanceBaseURL } from 'aidbox-react/src/services/instance';
+import { setInstanceToken } from 'aidbox-react/src/services/instance';
+import { Token } from 'aidbox-react/src/services/token';
 
-import {User} from "shared/src/contrib/aidbox";
+import { User } from 'shared/src/contrib/aidbox';
 
-import {RoleSwitch} from "src/components/RoleSwitch";
-import {Login} from "src/containers/Login";
-import {SuperAdminApp} from "src/containers/SuperAdminApp";
-import {UnprivilegedApp} from "src/containers/UnprivilegedApp";
-import {getUserInfo} from "src/services/auth";
-import {baseURL} from "src/services/constants";
-import {getUserRole, UserRole} from "src/services/role";
-import {removeToken, retrieveToken, saveToken} from "src/services/token";
+import { RoleSwitch } from 'src/components/RoleSwitch';
+import { Login } from 'src/containers/Login';
+import { PractitionerApp } from 'src/containers/ParactitonerApp';
+import { PatientApp } from 'src/containers/PatientApp';
+import { SuperAdminApp } from 'src/containers/SuperAdminApp';
+import { UnprivilegedApp } from 'src/containers/UnprivilegedApp';
+import { getUserInfo } from 'src/services/auth';
+import { baseURL } from 'src/services/constants';
+import { history } from 'src/services/history';
+import { getUserRole, UserRole } from 'src/services/role';
+import { removeToken, retrieveToken, saveToken } from 'src/services/token';
 
-import {history} from '../../services/history';
-import {SessionContext} from '../SessionContext';
-
+import { SessionContext } from '../SessionContext';
 
 (function init() {
     setInstanceBaseURL(baseURL);
@@ -54,26 +57,25 @@ function useApp() {
         })();
     }, [appToken]);
 
-    return {appToken, setToken, userRD, logout: resetToken};
+    return { appToken, setToken, userRD, logout: resetToken };
 }
 
 export function App() {
-    const {appToken, setToken, userRD, logout} = useApp();
-
+    const { appToken, setToken, userRD, logout } = useApp();
 
     function renderAnonymousRoutes() {
         return (
             <Switch>
                 {/*<Route path="/signup" exact render={(props) => <Signup {...props} />} />*/}
                 <Route path="/login" exact>
-                    <Login setToken={setToken}/>
+                    <Login setToken={setToken} />
                 </Route>
                 {/*<Route path="/reset-password" exact render={(props) => <ResetPassword {...props} />} />*/}
                 {/*<Route path="/set-password/:code" exact render={(props) => <SetPasswordWrapper {...props} />} />*/}
                 <Redirect
                     to={{
                         pathname: '/login',
-                        state: {referrer: history.location.pathname},
+                        state: { referrer: history.location.pathname },
                     }}
                 />
             </Switch>
@@ -87,18 +89,18 @@ export function App() {
             return (
                 <Switch>
                     <Route path="/app">
-                        <SessionContext.Provider value={{user, role: getUserRole(user), logout}}>
+                        <SessionContext.Provider value={{ user, role: getUserRole(user), logout }}>
                             <RoleSwitch>
                                 {{
-                                    [UserRole.SuperAdminRole]: () => <SuperAdminApp/>,
-                                    // [UserRole.PatientRole]: () => <PatientApp />,
-                                    // [UserRole.PractitionerRole]: () => <PractitionerApp />,
-                                    default: () => <UnprivilegedApp/>,
+                                    [UserRole.SuperAdminRole]: () => <SuperAdminApp />,
+                                    [UserRole.PatientRole]: () => <PatientApp />,
+                                    [UserRole.PractitionerRole]: () => <PractitionerApp />,
+                                    default: () => <UnprivilegedApp />,
                                 }}
                             </RoleSwitch>
                         </SessionContext.Provider>
                     </Route>
-                    <Redirect to={referrer !== '/' ? referrer : '/app'}/>
+                    <Redirect to={referrer !== '/' ? referrer : '/app'} />
                 </Switch>
             );
         }
@@ -124,5 +126,5 @@ export function App() {
                 <Switch>{renderRoutes()}</Switch>
             </Router>
         );
-    }
+    };
 }

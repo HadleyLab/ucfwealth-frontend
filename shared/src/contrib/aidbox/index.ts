@@ -37,7 +37,11 @@ export interface User {
     meta?: Meta;
 }
 
-export interface UserData {}
+export interface UserData {
+    superAdmin?: AidboxReference<Practitioner>;
+    patient?: AidboxReference<Patient>;
+    practitioner?: AidboxReference<Practitioner>;
+}
 
 export interface Session {
     id: string;

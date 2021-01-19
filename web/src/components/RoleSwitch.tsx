@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import { SessionContext } from 'src/containers/SessionContext';
-
 import { User } from 'shared/src/contrib/aidbox';
+
+import { SessionContext } from 'src/containers/SessionContext';
 import {
     PatientUser,
-    isAdmin,
+    isPatient,
     isPractitioner,
     isSuperAdmin,
     isUnprivileged,
@@ -34,7 +34,7 @@ export class RoleSwitch extends React.Component<Props, {}> {
             const renderFn = mapping[UserRole.SuperAdminRole] || defaultRenderFn;
 
             return renderFn({ user });
-        } else if (isAdmin(user) && role === UserRole.PatientRole) {
+        } else if (isPatient(user) && role === UserRole.PatientRole) {
             const renderFn = mapping[UserRole.PatientRole] || defaultRenderFn;
 
             return renderFn({ user });
@@ -52,6 +52,10 @@ export class RoleSwitch extends React.Component<Props, {}> {
     }
 
     public render() {
-        return <SessionContext.Consumer>{({ user, role }) => this.renderContent(user, role)}</SessionContext.Consumer>;
+        return (
+            <SessionContext.Consumer>
+                {({ user, role }) => this.renderContent(user, role)}
+            </SessionContext.Consumer>
+        );
     }
 }
