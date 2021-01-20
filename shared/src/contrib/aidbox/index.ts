@@ -26475,6 +26475,10 @@ export interface QuestionnaireItem {
      * Text, questions and other groups to be nested beneath a question or group.
      */
     item?: QuestionnaireItem[];
+    /**
+     * An indication, when true, that field is disabled.
+     */
+    hidden?: boolean;
 }
 /**
  * A constraint indicating that this item should only be enabled (displayed/allow answers to be captured) when the specified condition is true.

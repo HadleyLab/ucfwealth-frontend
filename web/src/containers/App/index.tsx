@@ -88,7 +88,7 @@ export function App() {
             const user = userRD.data;
             return (
                 <Switch>
-                    <Route path="/app">
+                    <Route path="/">
                         <SessionContext.Provider value={{ user, role: getUserRole(user), logout }}>
                             <RoleSwitch>
                                 {{
@@ -100,7 +100,7 @@ export function App() {
                             </RoleSwitch>
                         </SessionContext.Provider>
                     </Route>
-                    <Redirect to={referrer !== '/' ? referrer : '/app'} />
+                    <Redirect to={referrer !== '/' ? referrer : '/'} />
                 </Switch>
             );
         }
