@@ -69,10 +69,8 @@ export function App() {
     function renderAnonymousRoutes() {
         return (
             <Switch>
-                <Route path="/signup" exact render={() => <SignUp />} />
+                <Route path="/signup" exact render={() => <SignUp setToken={setToken} />} />
                 <Route path="/login" exact render={() => <Login setToken={setToken} />} />
-                {/*<Route path="/reset-password" exact render={(props) => <ResetPassword {...props} />} />*/}
-                {/*<Route path="/set-password/:code" exact render={(props) => <SetPasswordWrapper {...props} />} />*/}
                 <Redirect
                     to={{
                         pathname: '/login',
@@ -84,7 +82,6 @@ export function App() {
     }
 
     const renderAuthenticatedRoutes = () => {
-        const referrer = history?.location?.state?.referrer;
         if (isSuccess(userRD)) {
             const user = userRD.data;
             return (
@@ -101,7 +98,7 @@ export function App() {
                             </RoleSwitch>
                         </SessionContext.Provider>
                     </Route>
-                    <Redirect to={referrer !== '/' ? referrer : '/app'} />
+                    <Redirect to={'/app'} />
                 </Switch>
             );
         }
