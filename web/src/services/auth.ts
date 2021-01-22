@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 import { RemoteDataResult } from 'aidbox-react/src/libs/remoteData';
 import { service } from 'aidbox-react/src/services/service';
 import { Token } from 'aidbox-react/src/services/token';
@@ -23,31 +21,21 @@ export function signin(data: SigninBody): Promise<RemoteDataResult<Token>> {
     });
 }
 
-export function googleSignin(code: string): Promise<RemoteDataResult<Token>> {
-    return service({
-        url: '/auth/token',
-        method: 'POST',
-        data: {
-            client_id: 'google-client',
-            grant_type: 'authorization_code',
-            code,
-        },
-    });
-}
-
 export interface SignupBody {
     email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    birthDate?: string;
+    gender?: string;
+    ssn?: string;
 }
 
 export function signup(data: SignupBody): Promise<RemoteDataResult<any>> {
-    const formData = new FormData();
-    formData.append('username', data.email);
-    _.each(['email'], (key) => formData.append(key, data[key] || ''));
-
     return service({
-        url: '/auth/signup',
+        url: '/auth/$register',
         method: 'POST',
-        data: formData,
+        data: data,
     });
 }
 

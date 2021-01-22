@@ -1,70 +1,9 @@
-import { Checkbox as ACheckbox, Radio as ARadio, Form, Input as AInput, Select } from 'antd';
-import { FormItemProps } from 'antd/lib/form';
+import { Checkbox as ACheckbox, Radio as ARadio, Form } from 'antd';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Field } from 'react-final-form';
 
-import './styles.css';
-
-export { SelectField } from './SelectField';
-
-export function getFormItemProps(meta: any): Pick<FormItemProps, 'validateStatus' | 'help'> {
-    const hasOwnError = meta.touched && !meta.valid && _.isString(meta.error);
-    const hasSubmitError =
-        meta.touched && !meta.valid && !meta.dirtySinceLastSubmit && _.isString(meta.submitError);
-    const help =
-        (_.isString(meta.error) && meta.error) ||
-        (_.isString(meta.submitError) && meta.submitError);
-    const validateStatus = hasOwnError || hasSubmitError ? 'error' : 'validating';
-
-    return { help, validateStatus };
-}
-
-export interface FieldProps {
-    fieldProps?: any;
-    formItemProps?: any;
-    name: string;
-    label?: string | React.ReactNode;
-    className?: string;
-
-    [x: string]: any;
-}
-
-interface InputFieldProps {
-    helpText?: string;
-    placeholder?: string;
-    append?: string;
-    allowClear?: boolean;
-}
-
-export function InputField({
-    name,
-    fieldProps,
-    formItemProps,
-    label,
-    helpText,
-    type,
-    ...props
-}: FieldProps & InputFieldProps) {
-    return (
-        <Field name={name} {...fieldProps} type={type}>
-            {({ input, meta }) => {
-                const Component = type === 'textarea' ? AInput.TextArea : AInput;
-
-                return (
-                    <Form.Item
-                        {...formItemProps}
-                        label={label}
-                        {...getFormItemProps(meta)}
-                        extra={helpText}
-                    >
-                        <Component {...input} {...props} />
-                    </Form.Item>
-                );
-            }}
-        </Field>
-    );
-}
+import { FieldProps, getFormItemProps } from 'src/components/fields';
 
 interface ChooseFieldOption<T> {
     value: T;
@@ -178,68 +117,6 @@ export function ChooseField<T = any>({
                         </Form.Item>
                     );
                 }
-            }}
-        </Field>
-    );
-}
-
-export interface SimpleSelectFieldOption {
-    label: string;
-    value: string | number;
-}
-
-export function SimpleSelectField({
-    fieldProps,
-    formItemProps,
-    name,
-    label,
-    helpText,
-    options,
-    ...props
-}: FieldProps & { allowClear?: boolean; options: SimpleSelectFieldOption[] }) {
-    return (
-        <Field name={name} {...fieldProps}>
-            {({ input, meta }) => {
-                return (
-                    <Form.Item
-                        {...formItemProps}
-                        extra={helpText}
-                        label={label}
-                        {...getFormItemProps(meta)}
-                    >
-                        {/* <Select {...input} {...props} showSearch={true} value={input.value ? input.value : undefined}> */}
-                        <Select {...input} {...props} value={input.value ? input.value : undefined}>
-                            {_.map(options, (item, index) => (
-                                <Select.Option key={index} value={item.value}>
-                                    {item.label}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-                );
-            }}
-        </Field>
-    );
-}
-
-export function CheckBoxField({
-    fieldProps,
-    formItemProps,
-    name,
-    label,
-    helpText,
-    ...props
-}: FieldProps) {
-    return (
-        <Field name={name} type="checkbox" {...fieldProps}>
-            {({ input, meta }) => {
-                return (
-                    <Form.Item {...formItemProps} extra={helpText} {...getFormItemProps(meta)}>
-                        <ACheckbox {...input} {...props}>
-                            {label}
-                        </ACheckbox>
-                    </Form.Item>
-                );
             }}
         </Field>
     );

@@ -1,4 +1,4 @@
-import { Layout, Form, Row, Col, Alert, Button, Card } from 'antd';
+import { Alert, Button, Card, Col, Form, Layout, Row } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { FORM_ERROR } from 'final-form';
 import _ from 'lodash';
@@ -10,19 +10,32 @@ import { Token } from 'aidbox-react/src/services/token';
 
 import { CustomForm } from 'src/components/CustomForm';
 import { InputField } from 'src/components/fields';
-import { signin, SigninBody } from 'src/services/auth';
+import { ChooseField } from 'src/components/fields/ChooseField';
+import { DateTimePickerField } from 'src/components/fields/DateTimePickerField';
+import { signin, signup, SignupBody } from 'src/services/auth';
 
 import validate from './validation';
 
-interface LoginProps {
+interface SignUpProps {
     setToken: (token: Token) => void;
 }
 
-export function Login({ setToken }: LoginProps) {
-    async function onSubmit(values: SigninBody) {
-        const response = await signin(values);
+export function SignUp({ setToken }: SignUpProps) {
+    async function onSubmit(values: SignupBody) {
+        const response = await signup(values);
         if (isSuccess(response)) {
-            setToken(response.data);
+            const resp = await signin(values);
+            if (isSuccess(resp)) {
+                setToken(resp.data);
+            } else {
+                let error = 'Wrong credentials';
+                if (_.isString(resp.error)) {
+                    error = resp.error;
+                } else if (_.get(resp.error, 'error_description')) {
+                    error = resp.error.error_description;
+                }
+                return { [FORM_ERROR]: error };
+            }
         } else {
             let error = 'Wrong credentials';
             if (_.isString(response.error)) {
@@ -30,6 +43,7 @@ export function Login({ setToken }: LoginProps) {
             } else if (_.get(response.error, 'error_description')) {
                 error = response.error.error_description;
             }
+            console.log(error);
             return { [FORM_ERROR]: error };
         }
         return;
@@ -64,7 +78,7 @@ export function Login({ setToken }: LoginProps) {
                 <Row style={{ height: '100vh' }}>
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
                         <Card style={{ marginTop: '10%', paddingTop: '15px' }}>
-                            <CustomForm<SigninBody>
+                            <CustomForm<SignupBody>
                                 onSubmit={onSubmit}
                                 validate={validate}
                                 formItemLayout={formItemLayout}
@@ -72,8 +86,34 @@ export function Login({ setToken }: LoginProps) {
                                 {({ submitError, submitting }) => (
                                     <>
                                         <Form.Item {...tailFormItemLayout}>
-                                            <h1>Login</h1>
+                                            <h1>Sign Up</h1>
                                         </Form.Item>
+                                        <InputField
+                                            name="firstName"
+                                            placeholder="First Name"
+                                            label="First Name"
+                                        />
+                                        <InputField
+                                            name="lastName"
+                                            placeholder="Last Name"
+                                            label="Last Name"
+                                        />
+                                        <DateTimePickerField
+                                            name="birthDate"
+                                            label="Birth date"
+                                            showTime={false}
+                                            className={'date-time-narrow'}
+                                        />
+                                        <ChooseField
+                                            name="gender"
+                                            label="Gender"
+                                            options={[
+                                                { label: 'Female', value: 'female' },
+                                                { label: 'Male', value: 'male' },
+                                                { label: 'Other', value: 'other' },
+                                            ]}
+                                        />
+                                        <InputField name="ssn" placeholder="SSN" label="SSN" />
                                         <InputField
                                             name="email"
                                             placeholder="Email"
@@ -99,10 +139,10 @@ export function Login({ setToken }: LoginProps) {
                                                 disabled={submitting}
                                                 loading={submitting}
                                             >
-                                                Login
+                                                Sign Up
                                             </Button>
                                             {'  '}
-                                            <Link to="/signup">Sign Up</Link>
+                                            <Link to="/login">Log In</Link>
                                             {/*<br />*/}
                                             {/*<Link to="/reset-password">Forgot password?</Link>*/}
                                         </Form.Item>

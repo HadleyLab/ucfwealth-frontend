@@ -14,6 +14,7 @@ import { RoleSwitch } from 'src/components/RoleSwitch';
 import { Login } from 'src/containers/Login';
 import { PractitionerApp } from 'src/containers/ParactitonerApp';
 import { PatientApp } from 'src/containers/PatientApp';
+import { SignUp } from 'src/containers/SignUp';
 import { SuperAdminApp } from 'src/containers/SuperAdminApp';
 import { UnprivilegedApp } from 'src/containers/UnprivilegedApp';
 import { getUserInfo } from 'src/services/auth';
@@ -66,12 +67,8 @@ export function App() {
     function renderAnonymousRoutes() {
         return (
             <Switch>
-                {/*<Route path="/signup" exact render={(props) => <Signup {...props} />} />*/}
-                <Route path="/login" exact>
-                    <Login setToken={setToken} />
-                </Route>
-                {/*<Route path="/reset-password" exact render={(props) => <ResetPassword {...props} />} />*/}
-                {/*<Route path="/set-password/:code" exact render={(props) => <SetPasswordWrapper {...props} />} />*/}
+                <Route path="/signup" exact render={() => <SignUp setToken={setToken} />} />
+                <Route path="/login" exact render={() => <Login setToken={setToken} />} />
                 <Redirect
                     to={{
                         pathname: '/login',
@@ -83,12 +80,11 @@ export function App() {
     }
 
     const renderAuthenticatedRoutes = () => {
-        const referrer = history?.location?.state?.referrer;
         if (isSuccess(userRD)) {
             const user = userRD.data;
             return (
                 <Switch>
-                    <Route path="/">
+                    <Route path="/app">
                         <SessionContext.Provider value={{ user, role: getUserRole(user), logout }}>
                             <RoleSwitch>
                                 {{
@@ -100,7 +96,7 @@ export function App() {
                             </RoleSwitch>
                         </SessionContext.Provider>
                     </Route>
-                    <Redirect to={referrer !== '/' ? referrer : '/'} />
+                    <Redirect to={'/app'} />
                 </Switch>
             );
         }
