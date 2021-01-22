@@ -6,22 +6,36 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
+import { Token } from 'aidbox-react/src/services/token';
 
 import { CustomForm } from 'src/components/CustomForm';
 import { InputField } from 'src/components/fields';
 import { ChooseField } from 'src/components/fields/ChooseField';
 import { DateTimePickerField } from 'src/components/fields/DateTimePickerField';
-import { signup, SignupBody } from 'src/services/auth';
+import { signin, signup, SignupBody } from 'src/services/auth';
 
 import validate from './validation';
 
-interface SignUpProps {}
+interface SignUpProps {
+    setToken: (token: Token) => void;
+}
 
-export function SignUp({}: SignUpProps) {
+export function SignUp({ setToken }: SignUpProps) {
     async function onSubmit(values: SignupBody) {
         const response = await signup(values);
         if (isSuccess(response)) {
-            console.log(response.data);
+            const resp = await signin(values);
+            if (isSuccess(resp)) {
+                setToken(resp.data);
+            } else {
+                let error = 'Wrong credentials';
+                if (_.isString(resp.error)) {
+                    error = resp.error;
+                } else if (_.get(resp.error, 'error_description')) {
+                    error = resp.error.error_description;
+                }
+                return { [FORM_ERROR]: error };
+            }
         } else {
             let error = 'Wrong credentials';
             if (_.isString(response.error)) {
