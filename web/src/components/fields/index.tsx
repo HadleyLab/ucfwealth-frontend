@@ -10,14 +10,17 @@ export { SelectField } from './SelectField';
 
 export function getFormItemProps(meta: any): Pick<FormItemProps, 'validateStatus' | 'help'> {
     const hasOwnError = meta.touched && !meta.valid && _.isString(meta.error);
-    const hasSubmitError = meta.touched && !meta.valid && !meta.dirtySinceLastSubmit && _.isString(meta.submitError);
-    const help = (_.isString(meta.error) && meta.error) || (_.isString(meta.submitError) && meta.submitError);
+    const hasSubmitError =
+        meta.touched && !meta.valid && !meta.dirtySinceLastSubmit && _.isString(meta.submitError);
+    const help =
+        (_.isString(meta.error) && meta.error) ||
+        (_.isString(meta.submitError) && meta.submitError);
     const validateStatus = hasOwnError || hasSubmitError ? 'error' : 'validating';
 
     return { help, validateStatus };
 }
 
-interface FieldProps {
+export interface FieldProps {
     fieldProps?: any;
     formItemProps?: any;
     name: string;
@@ -49,7 +52,12 @@ export function InputField({
                 const Component = type === 'textarea' ? AInput.TextArea : AInput;
 
                 return (
-                    <Form.Item {...formItemProps} label={label} {...getFormItemProps(meta)} extra={helpText}>
+                    <Form.Item
+                        {...formItemProps}
+                        label={label}
+                        {...getFormItemProps(meta)}
+                        extra={helpText}
+                    >
                         <Component {...input} {...props} />
                     </Form.Item>
                 );
@@ -69,7 +77,11 @@ interface ChooseFieldProps<T> {
     multiple?: boolean;
     options: Array<ChooseFieldOption<T>>;
     isEqual?: (first: T, second: T) => boolean;
-    renderOptionContent?: (option: ChooseFieldOption<T>, index: number, value: T | T[]) => React.ReactNode;
+    renderOptionContent?: (
+        option: ChooseFieldOption<T>,
+        index: number,
+        value: T | T[],
+    ) => React.ReactNode;
     radioButton?: boolean;
     onChange?: (v: any) => void;
     className?: string;
@@ -104,7 +116,9 @@ export function ChooseField<T = any>({
                             className={className}
                         >
                             {_.map(options, (option, index) => {
-                                const isSelected = _.findIndex(input.value, (x: T) => isEqual(x, option.value)) !== -1;
+                                const isSelected =
+                                    _.findIndex(input.value, (x: T) => isEqual(x, option.value)) !==
+                                    -1;
 
                                 return (
                                     <React.Fragment key={`${option.value}-${index}`}>
@@ -115,7 +129,9 @@ export function ChooseField<T = any>({
                                                 if (event.target.checked) {
                                                     value = [...input.value, option.value];
                                                 } else {
-                                                    value = _.reject(input.value, (x) => isEqual(x, option.value));
+                                                    value = _.reject(input.value, (x) =>
+                                                        isEqual(x, option.value),
+                                                    );
                                                 }
                                                 input.onChange(value);
                                                 if (onChange) {
@@ -125,7 +141,8 @@ export function ChooseField<T = any>({
                                         >
                                             {option.label}
                                         </ACheckbox>
-                                        {renderOptionContent && renderOptionContent(option, index, input.value)}
+                                        {renderOptionContent &&
+                                            renderOptionContent(option, index, input.value)}
                                     </React.Fragment>
                                 );
                             })}
@@ -142,7 +159,9 @@ export function ChooseField<T = any>({
                                         <RadioElement
                                             checked={isSelected}
                                             onChange={(event) => {
-                                                const value = event.target.checked ? option.value : undefined;
+                                                const value = event.target.checked
+                                                    ? option.value
+                                                    : undefined;
                                                 input.onChange(value);
                                                 if (onChange) {
                                                     onChange(value);
@@ -151,7 +170,8 @@ export function ChooseField<T = any>({
                                         >
                                             {option.label}
                                         </RadioElement>
-                                        {renderOptionContent && renderOptionContent(option, index, input.value)}
+                                        {renderOptionContent &&
+                                            renderOptionContent(option, index, input.value)}
                                     </React.Fragment>
                                 );
                             })}
@@ -181,7 +201,12 @@ export function SimpleSelectField({
         <Field name={name} {...fieldProps}>
             {({ input, meta }) => {
                 return (
-                    <Form.Item {...formItemProps} extra={helpText} label={label} {...getFormItemProps(meta)}>
+                    <Form.Item
+                        {...formItemProps}
+                        extra={helpText}
+                        label={label}
+                        {...getFormItemProps(meta)}
+                    >
                         {/* <Select {...input} {...props} showSearch={true} value={input.value ? input.value : undefined}> */}
                         <Select {...input} {...props} value={input.value ? input.value : undefined}>
                             {_.map(options, (item, index) => (
@@ -197,7 +222,14 @@ export function SimpleSelectField({
     );
 }
 
-export function CheckBoxField({ fieldProps, formItemProps, name, label, helpText, ...props }: FieldProps) {
+export function CheckBoxField({
+    fieldProps,
+    formItemProps,
+    name,
+    label,
+    helpText,
+    ...props
+}: FieldProps) {
     return (
         <Field name={name} type="checkbox" {...fieldProps}>
             {({ input, meta }) => {

@@ -3,6 +3,7 @@ import { Content } from 'antd/es/layout/layout';
 import { FORM_ERROR } from 'final-form';
 import _ from 'lodash';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { Token } from 'aidbox-react/src/services/token';
@@ -101,7 +102,7 @@ export function Login({ setToken }: LoginProps) {
                                                 Login
                                             </Button>
                                             {'  '}
-                                            {/*<Link to="/signup">Sign Up</Link>*/}
+                                            <Link to="/signup">Sign Up</Link>
                                             {/*<br />*/}
                                             {/*<Link to="/reset-password">Forgot password?</Link>*/}
                                         </Form.Item>

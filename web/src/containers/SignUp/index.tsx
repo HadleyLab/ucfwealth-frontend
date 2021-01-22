@@ -1,17 +1,40 @@
 import { Alert, Button, Card, Col, Form, Layout, Row } from 'antd';
 import { Content } from 'antd/es/layout/layout';
+import { FORM_ERROR } from 'final-form';
+import _ from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { isSuccess } from 'aidbox-react/src/libs/remoteData';
+
 import { CustomForm } from 'src/components/CustomForm';
 import { InputField } from 'src/components/fields';
-import { SignupBody } from 'src/services/auth';
+import { ChooseField } from 'src/components/fields/ChooseField';
+import { DateTimePickerField } from 'src/components/fields/DateTimePickerField';
+import { signup, SignupBody } from 'src/services/auth';
 
 import validate from './validation';
 
 interface SignUpProps {}
 
 export function SignUp({}: SignUpProps) {
+    async function onSubmit(values: SignupBody) {
+        const response = await signup(values);
+        if (isSuccess(response)) {
+            console.log(response.data);
+        } else {
+            let error = 'Wrong credentials';
+            if (_.isString(response.error)) {
+                error = response.error;
+            } else if (_.get(response.error, 'error_description')) {
+                error = response.error.error_description;
+            }
+            console.log(error);
+            return { [FORM_ERROR]: error };
+        }
+        return;
+    }
+
     const formItemLayout = {
         labelCol: {
             xs: { span: 2 },
@@ -42,7 +65,7 @@ export function SignUp({}: SignUpProps) {
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
                         <Card style={{ marginTop: '10%', paddingTop: '15px' }}>
                             <CustomForm<SignupBody>
-                                onSubmit={console.log}
+                                onSubmit={onSubmit}
                                 validate={validate}
                                 formItemLayout={formItemLayout}
                             >
@@ -61,15 +84,20 @@ export function SignUp({}: SignUpProps) {
                                             placeholder="Last Name"
                                             label="Last Name"
                                         />
-                                        <InputField
+                                        <DateTimePickerField
                                             name="birthDate"
-                                            placeholder="Birth Date"
-                                            label="Birth Date"
+                                            label="Birth date"
+                                            showTime={false}
+                                            className={'date-time-narrow'}
                                         />
-                                        <InputField
+                                        <ChooseField
                                             name="gender"
-                                            placeholder="Gender"
                                             label="Gender"
+                                            options={[
+                                                { label: 'Female', value: 'female' },
+                                                { label: 'Male', value: 'male' },
+                                                { label: 'Other', value: 'other' },
+                                            ]}
                                         />
                                         <InputField name="ssn" placeholder="SSN" label="SSN" />
                                         <InputField

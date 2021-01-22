@@ -14,6 +14,7 @@ import { RoleSwitch } from 'src/components/RoleSwitch';
 import { Login } from 'src/containers/Login';
 import { PractitionerApp } from 'src/containers/ParactitonerApp';
 import { PatientApp } from 'src/containers/PatientApp';
+import { SignUp } from 'src/containers/SignUp';
 import { SuperAdminApp } from 'src/containers/SuperAdminApp';
 import { UnprivilegedApp } from 'src/containers/UnprivilegedApp';
 import { getUserInfo } from 'src/services/auth';
@@ -52,8 +53,10 @@ function useApp() {
 
     useEffect(() => {
         (async () => {
-            const userRemoteData = await getUserInfo();
-            setUserRD(userRemoteData);
+            if (appToken) {
+                const userRemoteData = await getUserInfo();
+                setUserRD(userRemoteData);
+            }
         })();
     }, [appToken]);
 
@@ -66,10 +69,8 @@ export function App() {
     function renderAnonymousRoutes() {
         return (
             <Switch>
-                {/*<Route path="/signup" exact render={(props) => <Signup {...props} />} />*/}
-                <Route path="/login" exact>
-                    <Login setToken={setToken} />
-                </Route>
+                <Route path="/signup" exact render={() => <SignUp />} />
+                <Route path="/login" exact render={() => <Login setToken={setToken} />} />
                 {/*<Route path="/reset-password" exact render={(props) => <ResetPassword {...props} />} />*/}
                 {/*<Route path="/set-password/:code" exact render={(props) => <SetPasswordWrapper {...props} />} />*/}
                 <Redirect

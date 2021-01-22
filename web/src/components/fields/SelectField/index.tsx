@@ -1,7 +1,7 @@
+import { Form } from 'antd';
 import classNames from 'classnames';
 import * as React from 'react';
 import { Field } from 'react-final-form';
-import { Form } from 'antd';
 import Select from 'react-select';
 
 import '../styles.css';
@@ -45,7 +45,12 @@ export class SelectField<T> extends React.Component<Props<T>, {}> {
                     const genericFormItemProps = getFormItemProps(meta);
 
                     return (
-                        <Form.Item {...formItemProps} label={label} {...genericFormItemProps} extra={helpText}>
+                        <Form.Item
+                            {...formItemProps}
+                            label={label}
+                            {...genericFormItemProps}
+                            extra={helpText}
+                        >
                             <Select
                                 isDisabled={readOnly}
                                 options={options}
