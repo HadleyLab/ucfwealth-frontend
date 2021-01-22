@@ -435,7 +435,9 @@ function isQuestionEnabled(
     const iterFn = enableBehavior === 'any' ? _.some : _.every;
 
     return iterFn(enableWhen, ({ question, answer, operator }) => {
-        const check = getChecker(operator);
+        const check = getChecker(operator);        
+
+        console.log(parentPath);
 
         if (_.includes(parentPath, question)) {
             // TODO: handle double-nested values
