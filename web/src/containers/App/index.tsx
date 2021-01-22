@@ -53,10 +53,8 @@ function useApp() {
 
     useEffect(() => {
         (async () => {
-            if (appToken) {
-                const userRemoteData = await getUserInfo();
-                setUserRD(userRemoteData);
-            }
+            const userRemoteData = await getUserInfo();
+            setUserRD(userRemoteData);
         })();
     }, [appToken]);
 
