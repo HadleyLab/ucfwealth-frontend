@@ -1,3 +1,4 @@
+import { Spin } from 'antd';
 import * as React from 'react';
 
 import {
@@ -22,7 +23,7 @@ function renderFailureDefault<E>(error: E) {
 }
 
 function renderLoadingDefault() {
-    return <p>Loading...</p>;
+    return <Spin />;
 }
 
 // TODO: Add fabric that binds optional functions to RenderRemoteData component

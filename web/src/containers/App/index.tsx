@@ -96,7 +96,7 @@ export function App() {
                             </RoleSwitch>
                         </SessionContext.Provider>
                     </Route>
-                    <Redirect to={'/app'} />
+                    <Redirect to={'/app/questionnaire'} />
                 </Switch>
             );
         }
