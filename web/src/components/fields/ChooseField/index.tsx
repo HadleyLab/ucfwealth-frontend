@@ -1,4 +1,5 @@
 import { Checkbox as ACheckbox, Radio as ARadio, Form } from 'antd';
+import { CheckboxOptionType } from 'antd/lib/checkbox';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { Field } from 'react-final-form';
@@ -54,11 +55,17 @@ export function ChooseField<T = any>({
                             extra={helpText}
                             className={className}
                         >
-                            {_.map(options, (option, index) => {
-                                const isSelected =
-                                    _.findIndex(input.value, (x: T) => isEqual(x, option.value)) !==
-                                    -1;
+                            <ACheckbox.Group 
+                                options={options as any} 
+                                onChange={(list: any) => {
+                                    console.log(list);
+                                }}
 
+                            />
+
+
+                            {/* {_.map(options, (option, index) => {
+                                const isSelected = _.findIndex(input.value, (x: T) => isEqual(x, option.value)) !== -1;
                                 return (
                                     <React.Fragment key={`${option.value}-${index}`}>
                                         <ACheckbox
@@ -80,11 +87,10 @@ export function ChooseField<T = any>({
                                         >
                                             {option.label}
                                         </ACheckbox>
-                                        {renderOptionContent &&
-                                            renderOptionContent(option, index, input.value)}
+                                        {renderOptionContent && renderOptionContent(option, index, input.value)}
                                     </React.Fragment>
                                 );
-                            })}
+                            })} */}
                         </Form.Item>
                     );
                 } else {
