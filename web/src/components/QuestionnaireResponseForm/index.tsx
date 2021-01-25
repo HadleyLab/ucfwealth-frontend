@@ -2,16 +2,14 @@ import { FormApi, Unsubscribe } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import _ from 'lodash';
 import * as React from 'react';
-import { Field, Form as FinalForm, FormRenderProps } from 'react-final-form';
+import { Field, FormRenderProps } from 'react-final-form';
 
-import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import { Questionnaire, QuestionnaireItem, QuestionnaireItemAnswerOption, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
 import { Button } from 'src/components/Button';
-import { ChoiceField } from 'src/components/ChoiceField';
 import { DateTimePickerField } from 'src/components/DateTimePickerField';
-import { InputField } from 'src/components/InputField';
+import { InputField } from 'src/components/fields';
 import {
-    FormAnswerItems,
     FormItems,
     getEnabledQuestions,
     interpolateAnswers,
@@ -19,6 +17,9 @@ import {
     mapFormToResponse,
     mapResponseToForm,
 } from 'src/utils/questionnaire';
+
+import { CustomForm } from '../CustomForm';
+import { ChooseField } from '../fields/ChooseField';
 
 
 interface Props {
@@ -142,16 +143,17 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
     ) {
         const { linkId, text, item, hidden } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
+        const name = [...fieldPath, 'value', 'string'].join('.')
 
         return (
             <div style={hidden ? { opacity: '0.3' } : {}}>
-                <Field name={[...fieldPath, 'value', 'string'].join('.')}>
+                <Field name={name}>
                     {({ input, meta }) => {
                         const inputProps = {
                             ...input,
                             ...(hidden ? { disabled: true } : {}),
                         };
-                        return <InputField input={inputProps} meta={meta} label={text} />;
+                        return <InputField name={name} input={inputProps} meta={meta} label={text} />;
                     }}
                 </Field>
                 {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
@@ -165,24 +167,15 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         formParams: FormRenderProps,
         index = 0
     ) => {
-        const { linkId, text, type, item, hidden } = questionItem;
+        const { linkId, text, type, item, required, hidden } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
 
         const inputFieldPath = [...fieldPath, 'value', type];
+        const name = inputFieldPath.join('.')
 
         return (
             <>
-                <Field name={inputFieldPath.join('.')}>
-                    {({ input, meta }) => {
-                        const inputProps = {
-                            ...input,
-                            ...(hidden ? { disabled: true } : {}),
-                        };
-                        return <InputField input={inputProps} meta={meta} label={text} />;
-                    }}
-                </Field>
-                {/* <Field
-                    name={inputFieldPath.join('.')}
+                <Field name={name}
                     fieldProps={{
                         parse: (value: any) =>
                             value ? (type === 'integer' ? _.parseInt(value) : parseFloat(value)) : undefined,
@@ -190,9 +183,15 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                             ? (inputValue: any) => (_.isUndefined(inputValue) ? 'Required' : undefined)
                             : undefined,
                     }}
-                    type="number"
-                    label={text}
-                /> */}
+                >
+                    {({ input, meta }) => {
+                        const inputProps = {
+                            ...input,
+                            ...(hidden ? { disabled: true } : {}),
+                        };
+                        return <InputField input={inputProps} name={name} meta={meta} label={text} />;
+                    }}
+                </Field>
                 {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
             </>
         );
@@ -226,37 +225,36 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         const fieldName = fieldPath.join('.');
 
         return (
-            <ChoiceField<FormAnswerItems>
-                key={`choiceOption-${fieldName}`}
-                name={fieldName}
-                label={text}
-                options={_.map(answerOption, (opt) => {
-                    return {
-                    value: opt.value,
-                    label: opt.value.Coding!.display!,
-                }})}
-                initialValue={{
-                    value: 'mobile',
-                }}
-                fieldProps={{
-                    validate: required
-                        ? (inputValue: any) => {
-                            if (repeats) {
-                                if (!inputValue?.length) {
-                                    return 'Choose at least one option';
+            <>
+                <ChooseField<QuestionnaireItemAnswerOption['value']>
+                    key={`choiceOption-${fieldName}`}
+                    name={fieldName}
+                    label={text}
+                    options={_.map(answerOption, (opt) => ({
+                        value: opt.value,
+                        label: opt.value.Coding!.display!,
+                    }))}
+                    multiple={questionItem.repeats}
+                    fieldProps={{
+                        validate: required
+                            ? (inputValue: any) => {
+                                if (repeats) {
+                                    if (!inputValue?.length) {
+                                        return 'Choose at least one option';
+                                    }
+                                } else {
+                                    if (!inputValue) {
+                                        return 'Required';
+                                    }
                                 }
-                            } else {
-                                if (!inputValue) {
-                                    return 'Required';
-                                }
-                            }
 
-                            return undefined;
-                        }
-                        : undefined,
-                }}
-                isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
-            />
+                                return undefined;
+                            }
+                            : undefined,
+                    }}
+                    isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
+                />
+            </>
         );
     }
 
@@ -297,7 +295,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                                                                         (_val, valIndex: number) => valIndex !== index,
                                                                     );
                                                                     input.onChange({ items: [...filteredArray] });
-                                                                }}                                                                
+                                                                }}
                                                             >
                                                                 <span>
                                                                     Remove
@@ -380,7 +378,10 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
     }
 
     public renderQuestions(items: QuestionnaireItem[], parentPath: string[], formParams: FormRenderProps) {
-        return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
+        // return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
+        //     <div key={index}>{this.renderAnswer(item, parentPath, formParams)}</div>
+        // ));
+        return _.map(items, (item, index) => (
             <div key={index}>{this.renderAnswer(item, parentPath, formParams)}</div>
         ));
     }
@@ -426,8 +427,9 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         const { questionnaire } = this.props;
 
         return (
-            <FinalForm<FormValues>
+            <CustomForm<FormValues>
                 onSubmit={this.onSave}
+                layout={'vertical'}
                 initialValues={this.toFormValues()}
                 initialValuesEqual={_.isEqual}
                 decorators={[this.onFormChange]}
@@ -440,7 +442,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                     // return this.renderForm(items, { ...params, values: params.values });
                     return this.renderForm(items, params);
                 }}
-            </FinalForm>
+            </CustomForm>
         );
     }
 }
