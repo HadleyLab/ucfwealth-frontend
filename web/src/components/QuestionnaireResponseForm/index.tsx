@@ -4,7 +4,12 @@ import _ from 'lodash';
 import * as React from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
 
-import { Questionnaire, QuestionnaireItem, QuestionnaireItemAnswerOption, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import {
+    Questionnaire,
+    QuestionnaireItem,
+    QuestionnaireItemAnswerOption,
+    QuestionnaireResponse,
+} from 'shared/src/contrib/aidbox';
 
 import { Button } from 'src/components/Button';
 import { DateTimePickerField } from 'src/components/DateTimePickerField';
@@ -20,7 +25,6 @@ import {
 
 import { CustomForm } from '../CustomForm';
 import { ChooseField } from '../fields/ChooseField';
-
 
 interface Props {
     resource: QuestionnaireResponse;
@@ -58,8 +62,10 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
 
     public toFormValues(): FormValues {
         const { resource, questionnaire } = this.props;
-
+        console.log('TFV resource', resource);
+        console.log('TFV questionnaire', questionnaire);
         const initial = mapResponseToForm(resource, questionnaire);
+        console.log('TFV MRTF', initial);
         return initial;
     }
 
@@ -92,39 +98,52 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                         <div>
                             <div>{text}</div>
 
-                            {_.map(input.value.length ? input.value : [{}], (elem, index: number) => {
-                                if (index > 0 && !input.value[index]) {
-                                    return null;
-                                }
+                            {_.map(
+                                input.value.length ? input.value : [{}],
+                                (elem, index: number) => {
+                                    if (index > 0 && !input.value[index]) {
+                                        return null;
+                                    }
 
-                                return (
-                                    <div key={`repeatsAnswer-${index}`} className="d-flex">
-                                        <div className="flex-grow-1">
-                                            {renderAnswer(questionItem, parentPath, formParams, index)}
-                                        </div>
-                                        {index > 0 ? (
-                                            <div
-                                                style={{ width: 40, height: 40 }}
-                                                className="d-flex align-items-center justify-content-center"
-                                                onClick={() =>
-                                                    input.onChange(
-                                                        _.filter(
-                                                            input.value,
-                                                            (val, valIndex: number) => valIndex !== index,
-                                                        ),
-                                                    )
-                                                }
-                                            >
-                                                Delete{' '}
+                                    return (
+                                        <div key={`repeatsAnswer-${index}`} className="d-flex">
+                                            <div className="flex-grow-1">
+                                                {renderAnswer(
+                                                    questionItem,
+                                                    parentPath,
+                                                    formParams,
+                                                    index,
+                                                )}
                                             </div>
-                                        ) : (
+                                            {index > 0 ? (
+                                                <div
+                                                    style={{ width: 40, height: 40 }}
+                                                    className="d-flex align-items-center justify-content-center"
+                                                    onClick={() =>
+                                                        input.onChange(
+                                                            _.filter(
+                                                                input.value,
+                                                                (val, valIndex: number) =>
+                                                                    valIndex !== index,
+                                                            ),
+                                                        )
+                                                    }
+                                                >
+                                                    Delete{' '}
+                                                </div>
+                                            ) : (
                                                 <div style={{ width: 40 }} />
                                             )}
-                                    </div>
-                                );
-                            })}
+                                        </div>
+                                    );
+                                },
+                            )}
                             <Button
-                                onClick={() => input.onChange(input.value.length ? [...input.value, {}] : [{}, {}])}
+                                onClick={() =>
+                                    input.onChange(
+                                        input.value.length ? [...input.value, {}] : [{}, {}],
+                                    )
+                                }
                             >
                                 Add another answer
                             </Button>
@@ -143,7 +162,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
     ) {
         const { linkId, text, item, hidden } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
-        const name = [...fieldPath, 'value', 'string'].join('.')
+        const name = [...fieldPath, 'value', 'string'].join('.');
 
         return (
             <div style={hidden ? { opacity: '0.3' } : {}}>
@@ -153,7 +172,9 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                             ...input,
                             ...(hidden ? { disabled: true } : {}),
                         };
-                        return <InputField name={name} input={inputProps} meta={meta} label={text} />;
+                        return (
+                            <InputField name={name} input={inputProps} meta={meta} label={text} />
+                        );
                     }}
                 </Field>
                 {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
@@ -165,33 +186,35 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
-        index = 0
+        index = 0,
     ) => {
         const { linkId, text, type, item, required, hidden } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
 
         const inputFieldPath = [...fieldPath, 'value', type];
-        const name = inputFieldPath.join('.')
 
         return (
             <>
-                <Field name={name}
+                <InputField
+                    name={inputFieldPath.join('.')}
                     fieldProps={{
                         parse: (value: any) =>
-                            value ? (type === 'integer' ? _.parseInt(value) : parseFloat(value)) : undefined,
+                            value
+                                ? type === 'integer'
+                                    ? _.parseInt(value)
+                                    : parseFloat(value)
+                                : undefined,
                         validate: required
-                            ? (inputValue: any) => (_.isUndefined(inputValue) ? 'Required' : undefined)
+                            ? (inputValue: any) =>
+                                  _.isUndefined(inputValue) ? 'Required' : undefined
                             : undefined,
                     }}
-                >
-                    {({ input, meta }) => {
-                        const inputProps = {
-                            ...input,
-                            ...(hidden ? { disabled: true } : {}),
-                        };
-                        return <InputField input={inputProps} name={name} meta={meta} label={text} />;
-                    }}
-                </Field>
+                    type="number"
+                    label={text}
+                    disabled={hidden}
+                    // helpText={helpText}
+                    // addonAfter={unit && unit.display!}
+                />
                 {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
             </>
         );
@@ -219,7 +242,11 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         );
     }
 
-    public renderAnswerChoice(questionItem: QuestionnaireItem, parentPath: string[], _formParams: FormRenderProps) {
+    public renderAnswerChoice(
+        questionItem: QuestionnaireItem,
+        parentPath: string[],
+        _formParams: FormRenderProps,
+    ) {
         const { linkId, text, answerOption, repeats, required } = questionItem;
         const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0']), 'value', 'string'];
         const fieldName = fieldPath.join('.');
@@ -238,18 +265,18 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                     fieldProps={{
                         validate: required
                             ? (inputValue: any) => {
-                                if (repeats) {
-                                    if (!inputValue?.length) {
-                                        return 'Choose at least one option';
-                                    }
-                                } else {
-                                    if (!inputValue) {
-                                        return 'Required';
-                                    }
-                                }
+                                  if (repeats) {
+                                      if (!inputValue?.length) {
+                                          return 'Choose at least one option';
+                                      }
+                                  } else {
+                                      if (!inputValue) {
+                                          return 'Required';
+                                      }
+                                  }
 
-                                return undefined;
-                            }
+                                  return undefined;
+                              }
                             : undefined,
                     }}
                     isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
@@ -278,34 +305,43 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                                     <p>{text}</p>
                                     <div>
                                         {_.map(
-                                            input.value.items && input.value.items.length ? input.value.items : [{}],
+                                            input.value.items && input.value.items.length
+                                                ? input.value.items
+                                                : [{}],
                                             (_elem, index: number) => {
                                                 if (index > 0 && !input.value.items[index]) {
                                                     return null;
                                                 }
                                                 return (
-                                                    <div key={`group-${index}`} >
+                                                    <div key={`group-${index}`}>
                                                         <div>
-                                                            <span>{`${questionItem.text
-                                                                } #${index + 1}`}</span>
+                                                            <span>{`${questionItem.text} #${
+                                                                index + 1
+                                                            }`}</span>
                                                             <div
                                                                 onClick={() => {
                                                                     const filteredArray = _.filter(
                                                                         input.value.items,
-                                                                        (_val, valIndex: number) => valIndex !== index,
+                                                                        (_val, valIndex: number) =>
+                                                                            valIndex !== index,
                                                                     );
-                                                                    input.onChange({ items: [...filteredArray] });
+                                                                    input.onChange({
+                                                                        items: [...filteredArray],
+                                                                    });
                                                                 }}
                                                             >
-                                                                <span>
-                                                                    Remove
-                                                                </span>
+                                                                <span>Remove</span>
                                                             </div>
                                                         </div>
                                                         <div>
                                                             {this.renderQuestions(
                                                                 item,
-                                                                [...parentPath, linkId, 'items', index.toString()],
+                                                                [
+                                                                    ...parentPath,
+                                                                    linkId,
+                                                                    'items',
+                                                                    index.toString(),
+                                                                ],
                                                                 formParams,
                                                             )}
                                                         </div>
@@ -340,7 +376,11 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         return null;
     }
 
-    public renderAnswer(rawQuestionItem: QuestionnaireItem, parentPath: string[], formParams: FormRenderProps): any {
+    public renderAnswer(
+        rawQuestionItem: QuestionnaireItem,
+        parentPath: string[],
+        formParams: FormRenderProps,
+    ): any {
         const questionItem = {
             ...rawQuestionItem,
             text: interpolateAnswers(rawQuestionItem.text!, parentPath, formParams.values),
@@ -349,15 +389,30 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         const { type } = questionItem;
 
         if (type === 'string' || type === 'text') {
-            return this.renderRepeatsAnswer(this.renderAnswerText, questionItem, parentPath, formParams);
+            return this.renderRepeatsAnswer(
+                this.renderAnswerText,
+                questionItem,
+                parentPath,
+                formParams,
+            );
         }
 
         if (type === 'integer' || type === 'decimal') {
-            return this.renderRepeatsAnswer(this.renderAnswerNumeric, questionItem, parentPath, formParams);
+            return this.renderRepeatsAnswer(
+                this.renderAnswerNumeric,
+                questionItem,
+                parentPath,
+                formParams,
+            );
         }
 
         if (type === 'date' || type === 'dateTime') {
-            return this.renderRepeatsAnswer(this.renderAnswerDateTime, questionItem, parentPath, formParams);
+            return this.renderRepeatsAnswer(
+                this.renderAnswerDateTime,
+                questionItem,
+                parentPath,
+                formParams,
+            );
         }
 
         if (type === 'choice') {
@@ -377,7 +432,11 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         return null;
     }
 
-    public renderQuestions(items: QuestionnaireItem[], parentPath: string[], formParams: FormRenderProps) {
+    public renderQuestions(
+        items: QuestionnaireItem[],
+        parentPath: string[],
+        formParams: FormRenderProps,
+    ) {
         // return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
         //     <div key={index}>{this.renderAnswer(item, parentPath, formParams)}</div>
         // ));
@@ -391,8 +450,9 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         const { handleSubmit, submitting } = formParams;
 
         return (
-            <form autoComplete="off">
+            <>
                 {this.renderQuestions(items, [], formParams)}
+                <pre>{JSON.stringify(formParams.values, undefined, 2)}</pre>
                 {!readOnly && (
                     <div className="questionnaire-form-actions">
                         <Button onClick={handleSubmit} disabled={submitting}>
@@ -400,7 +460,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                         </Button>
                     </div>
                 )}
-            </form>
+            </>
         );
     };
 
@@ -429,18 +489,18 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         return (
             <CustomForm<FormValues>
                 onSubmit={this.onSave}
-                layout={'vertical'}
+                // layout={'vertical'}
                 initialValues={this.toFormValues()}
                 initialValuesEqual={_.isEqual}
                 decorators={[this.onFormChange]}
                 mutators={{ ...arrayMutators }}
-            // debug={console.log}
+                // debug={console.log}
             >
                 {(params) => {
                     const items = getEnabledQuestions(questionnaire.item!, [], params.values);
 
-                    // return this.renderForm(items, { ...params, values: params.values });
-                    return this.renderForm(items, params);
+                    return this.renderForm(items, { ...params, values: params.values });
+                    // return this.renderForm(items, params);
                 }}
             </CustomForm>
         );
