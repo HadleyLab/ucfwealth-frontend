@@ -88,10 +88,6 @@ export function ChooseField<T = any>({
                         </Form.Item>
                     );
                 } else {
-                    console.log('formItemProps', formItemProps);
-                    console.log('label', label);
-                    console.log('getFormItemProps(meta)', getFormItemProps(meta));
-                    console.log('options', options);
                     const RadioElement = radioButton ? ARadio.Button : ARadio;
                     return (
                         <Form.Item {...formItemProps} label={label} {...getFormItemProps(meta)}>

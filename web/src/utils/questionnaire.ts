@@ -1,7 +1,6 @@
 import _ from 'lodash';
 
 import {
-    AidboxReference,
     Observation,
     QuestionnaireItem,
     QuestionnaireItemEnableWhen,
@@ -43,8 +42,7 @@ export function getDisplay(value: AnswerValue): string {
         return `${value.Quantity?.value} ${code ? code : value.Quantity?.code}`;
     }
     //@ts-ignore
-    const output = value[valueType];
-    return output;
+    return value[valueType];
 }
 
 export function getValueInteger(answer: QuestionnaireResponseItemAnswer): number | undefined {
@@ -59,11 +57,11 @@ export function getValueCoding(answer: QuestionnaireResponseItemAnswer): string 
     return answer?.value?.Coding?.code;
 }
 
-export function getValueReference(
-    answer: QuestionnaireResponseItemAnswer,
-): AidboxReference<any> | undefined {
-    return answer?.value?.Reference;
-}
+// export function getValueReference(
+//     answer: QuestionnaireResponseItemAnswer,
+// ): AidboxReference<any> | undefined {
+//     return answer?.value?.Reference;
+// }
 
 export function isValueEqual(firstValue: AnswerValue, secondValue: AnswerValue) {
     const firstValueType = _.keys(firstValue)[0];
@@ -460,8 +458,6 @@ function isQuestionEnabled(
 
     return iterFn(enableWhen, ({ question, answer, operator }) => {
         const check = getChecker(operator);
-
-        console.log(parentPath);
 
         if (_.includes(parentPath, question)) {
             // TODO: handle double-nested values

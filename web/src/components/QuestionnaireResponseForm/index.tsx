@@ -461,7 +461,6 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         return (
             <>
                 {this.renderQuestions(items, [], formParams)}
-                <pre>{JSON.stringify(formParams.values, undefined, 2)}</pre>
                 {!readOnly && (
                     <div className="questionnaire-form-actions">
                         <Button onClick={handleSubmit} disabled={submitting}>
