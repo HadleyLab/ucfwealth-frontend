@@ -1,0 +1,23 @@
+.signInAlertText {
+    font-size: 12px !important;
+}
+
+.signLinkContainer {
+    padding-top: 5px;
+    margin-left: 20px;
+}
+
+.ant-form-item {
+    padding-top: 15px !important;
+}
+
+.ant-form-item-explain-validating {
+    position: relative !important;
+    top: 5px !important;
+}
+
+.ant-layout-footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

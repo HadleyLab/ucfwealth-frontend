@@ -14,6 +14,8 @@ import { signin, SigninBody } from 'src/services/auth';
 
 import validate from './validation';
 
+import './styles.css';
+
 interface LoginProps {
     setToken: (token: Token) => void;
 }
@@ -88,21 +90,27 @@ export function Login({ setToken }: LoginProps) {
 
                                         {submitError ? (
                                             <Form.Item {...tailFormItemLayout}>
-                                                <Alert message={submitError} type="error" />
+                                                <div className="signInAlertText">
+                                                    <Alert message={submitError} type="error" />
+                                                </div>                                                
                                             </Form.Item>
                                         ) : null}
 
                                         <Form.Item {...tailFormItemLayout}>
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                                disabled={submitting}
-                                                loading={submitting}
-                                            >
-                                                Login
-                                            </Button>
-                                            {'  '}
-                                            <Link to="/signup">Sign Up</Link>
+                                            <Row>
+                                                <Col>
+                                                    <Button
+                                                        type="primary"
+                                                        htmlType="submit"
+                                                        disabled={submitting}
+                                                        loading={submitting}
+                                                    >Login</Button>
+                                                </Col>
+                                                <Col className="signLinkContainer">
+                                                    <Link to="/signup">Sign Up</Link>
+                                                </Col>
+                                            </Row>
+
                                             {/*<br />*/}
                                             {/*<Link to="/reset-password">Forgot password?</Link>*/}
                                         </Form.Item>

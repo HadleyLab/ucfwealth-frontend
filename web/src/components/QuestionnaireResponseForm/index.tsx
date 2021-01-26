@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import { FormApi, Unsubscribe } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import _ from 'lodash';
@@ -6,7 +7,6 @@ import { Field, FormRenderProps } from 'react-final-form';
 
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-import { Button } from 'src/components/Button';
 import { DateTimePickerField } from 'src/components/DateTimePickerField';
 import { InputField } from 'src/components/fields';
 import {
@@ -22,6 +22,17 @@ import {
 
 import { CustomForm } from '../CustomForm';
 import { ChooseField } from '../fields/ChooseField';
+
+const formItemLayout = {
+    labelCol: {
+        xs: { span: 2 },
+        sm: { span: 7 },
+    },
+    wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 12 },
+    },
+};
 
 interface Props {
     resource: QuestionnaireResponse;
@@ -499,6 +510,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                 initialValuesEqual={_.isEqual}
                 decorators={[this.onFormChange]}
                 mutators={{ ...arrayMutators }}
+                formItemLayout={formItemLayout}
             >
                 {(params) => {
                     const items = getEnabledQuestions(questionnaire.item!, [], params.values);

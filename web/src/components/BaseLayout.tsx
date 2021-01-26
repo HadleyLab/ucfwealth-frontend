@@ -83,66 +83,68 @@ export function BaseLayout(props: BaseLayoutProps) {
     }
 
     return (
-        <Layout>
-            <Header>
-                <a href="/app">
-                    <h2 style={{ color: 'white' }}>Covidimaging</h2>
-                </a>
-                {user && (
-                    <div className="userpanel__wrapper">
-                        <Button shape="circle" icon={<UserOutlined />} />
-                        <Dropdown
-                            className="userpanel__dropdown"
-                            trigger={['click']}
-                            overlay={
-                                <Menu>
-                                    <Menu.Item
-                                        key="logout"
-                                        onClick={async () => {
-                                            await logout();
-                                            history.push('/');
-                                        }}
-                                    >
-                                        <PoweroffOutlined />
+        <>
+            <Layout className={'baseLayout'}>
+                <Header>
+                    <a href="/app">
+                        <h2 style={{ color: 'white' }}>Covidimaging</h2>
+                    </a>
+                    {user && (
+                        <div className="userpanel__wrapper">
+                            <Button shape="circle" icon={<UserOutlined />} />
+                            <Dropdown
+                                className="userpanel__dropdown"
+                                trigger={['click']}
+                                overlay={
+                                    <Menu>
+                                        <Menu.Item
+                                            key="logout"
+                                            onClick={async () => {
+                                                await logout();
+                                                history.push('/');
+                                            }}
+                                        >
+                                            <PoweroffOutlined />
                                         Logout
                                     </Menu.Item>
-                                </Menu>
-                            }
-                        >
-                            <Button type="link">
-                                <span style={{ color: 'white' }}>
-                                    {user.email} ({role}):
+                                    </Menu>
+                                }
+                            >
+                                <Button type="link">
+                                    <span style={{ color: 'white' }}>
+                                        {user.email} ({role})
                                 </span>
-                                <DownOutlined />
-                            </Button>
-                        </Dropdown>
-                    </div>
-                )}
-            </Header>
-            <Layout>
-                <Sider collapsible theme="light">
-                    {routeList && (
-                        <Menu
-                            mode="inline"
-                            defaultSelectedKeys={_.map(
-                                getActiveKeys(routeList),
-                                ({ path, title }) => path || title,
-                            )}
-                            style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
-                        >
-                            {renderMenu(routeList)}
-                        </Menu>
+                                    <DownOutlined />
+                                </Button>
+                            </Dropdown>
+                        </div>
                     )}
-                </Sider>
-                <Content>
-                    <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                        {children}
-                    </div>
-                </Content>
+                </Header>
+                <Layout>
+                    <Sider theme="light">
+                        {routeList && (
+                            <Menu
+                                mode="inline"
+                                defaultSelectedKeys={_.map(
+                                    getActiveKeys(routeList),
+                                    ({ path, title }) => path || title,
+                                )}
+                                style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
+                            >
+                                {renderMenu(routeList)}
+                            </Menu>
+                        )}
+                    </Sider>
+                    <Content>
+                        <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+                            {children}
+                        </div>
+                    </Content>
+                </Layout>
             </Layout>
             <Footer>
                 <div>Covidimaging</div>
             </Footer>
-        </Layout>
+        </>
     );
 }

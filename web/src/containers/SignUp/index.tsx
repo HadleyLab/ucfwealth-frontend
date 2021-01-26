@@ -133,16 +133,21 @@ export function SignUp({ setToken }: SignUpProps) {
                                         ) : null}
 
                                         <Form.Item {...tailFormItemLayout}>
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                                disabled={submitting}
-                                                loading={submitting}
-                                            >
-                                                Sign Up
-                                            </Button>
-                                            {'  '}
-                                            <Link to="/login">Log In</Link>
+                                            <Row>
+                                                <Col>
+                                                    <Button
+                                                        type="primary"
+                                                        htmlType="submit"
+                                                        disabled={submitting}
+                                                        loading={submitting}
+                                                    >
+                                                        Sign Up
+                                                    </Button>
+                                                </Col>
+                                                <Col className="signLinkContainer">
+                                                    <Link to="/login">Log In</Link>
+                                                </Col>
+                                            </Row>
                                             {/*<br />*/}
                                             {/*<Link to="/reset-password">Forgot password?</Link>*/}
                                         </Form.Item>
