@@ -56,7 +56,7 @@ build_test_release:
     - ./web/coverage
     - ./mobile/coverage
 
-deploy_web:
+.deploy_web:
   stage: deploy
   image: registry.bro.engineering/ansible_deploy/helm_deploy:3
   variables:

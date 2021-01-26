@@ -89,7 +89,9 @@ export function App() {
                             <RoleSwitch>
                                 {{
                                     [UserRole.SuperAdminRole]: () => <SuperAdminApp />,
-                                    [UserRole.PatientRole]: () => <PatientApp />,
+                                    [UserRole.PatientRole]: (data) => (
+                                        <PatientApp user={data.user} />
+                                    ),
                                     [UserRole.PractitionerRole]: () => <PractitionerApp />,
                                     default: () => <UnprivilegedApp />,
                                 }}
