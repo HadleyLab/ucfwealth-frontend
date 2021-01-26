@@ -446,10 +446,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         parentPath: string[],
         formParams: FormRenderProps,
     ) {
-        // return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
-        //     <div key={index}>{this.renderAnswer(item, parentPath, formParams)}</div>
-        // ));
-        return _.map(items, (item, index) => (
+        return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
             <div key={index}>{this.renderAnswer(item, parentPath, formParams)}</div>
         ));
     }

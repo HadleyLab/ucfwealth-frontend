@@ -20,9 +20,9 @@ interface QuestionnaireResponseFormData {
     questionnaireResponse: QuestionnaireResponse;
 }
 
-function useQuestionnaireForm(patient) {
+function useQuestionnaireForm(patient: Patient) {
     const questionnaireId = 'covid19';
-    const [questFormRespRD] = useService<Questionnaire>(async () => {
+    const [questFormRespRD] = useService<QuestionnaireResponseFormData>(async () => {
         const questRD = await getFHIRResource({
             resourceType: 'Questionnaire',
             id: questionnaireId,
@@ -31,20 +31,21 @@ function useQuestionnaireForm(patient) {
             console.log(questRD.error);
             return;
         }
-        const populatedQuestRespRD = await getQR(patient);
-        if (isSuccessAll([questRD, populatedQuestRespRD])) {
+        
+        const populatedQuestRespRD = await getQR();
+        if (isSuccessAll([questRD, populatedQuestRespRD!])) {
             return success({
                 questionnaire: questRD.data,
-                questionnaireResponse: populatedQuestRespRD.data,
+                questionnaireResponse: populatedQuestRespRD!.data,
             });
         }
     }, []);
 
-    const saveQR = async (data: QuestionnaireResponse) => {
+    const saveQR = async (data: QuestionnaireResponse): Promise<void> => {
         const preparedQR: QuestionnaireResponse = {
             ...data,
             status: 'final',
-            subject: { resourceType: 'Patient', id: patient.id },
+            subject: { resourceType: 'Patient', id: patient.id! },
         };
         const response = await saveFHIRResource<QuestionnaireResponse>(preparedQR);
         if (isFailure(response)) {
@@ -53,7 +54,7 @@ function useQuestionnaireForm(patient) {
         }
         if (isSuccess(response)) {
             notification.success({ message: 'Questionnaire saved' });
-            // window.location.reload();
+            window.location.reload();
         }
     };
 
@@ -74,7 +75,7 @@ function useQuestionnaireForm(patient) {
     }
 
     async function getPopulatedQR() {
-        const response = service<QuestionnaireResponse>({
+        const response = await service<QuestionnaireResponse>({
             method: 'POST',
             url: `/Questionnaire/${questionnaireId}/$populate`,
             data: {
