@@ -61,7 +61,6 @@ function useQuestionnaireForm(patient) {
         if (isFailure(existingQRRD)) {
             return getPopulatedQR();
         }
-        console.log(existingQRRD);
         return existingQRRD;
 
         // return getPopulatedQR(patientResource);
@@ -92,7 +91,6 @@ interface QuestionnaireFormProps {
 
 export const QuestionnaireForm = (props: QuestionnaireFormProps) => {
     const [questFormRespRD, saveQR] = useQuestionnaireForm(props.patient);
-    console.log(questFormRespRD);
     return (
         <div>
             <RenderRemoteData<QuestionnaireResponseFormData> remoteData={questFormRespRD}>

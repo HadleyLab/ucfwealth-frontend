@@ -4,18 +4,15 @@ import _ from 'lodash';
 import * as React from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
 
-import {
-    Questionnaire,
-    QuestionnaireItem,
-    QuestionnaireItemAnswerOption,
-    QuestionnaireResponse,
-} from 'shared/src/contrib/aidbox';
+import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
 import { Button } from 'src/components/Button';
 import { DateTimePickerField } from 'src/components/DateTimePickerField';
 import { InputField } from 'src/components/fields';
 import {
+    FormAnswerItems,
     FormItems,
+    getDisplay,
     getEnabledQuestions,
     interpolateAnswers,
     isValueEqual,
@@ -62,11 +59,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
 
     public toFormValues(): FormValues {
         const { resource, questionnaire } = this.props;
-        console.log('TFV resource', resource);
-        console.log('TFV questionnaire', questionnaire);
-        const initial = mapResponseToForm(resource, questionnaire);
-        console.log('TFV MRTF', initial);
-        return initial;
+        return mapResponseToForm(resource, questionnaire);
     }
 
     public renderRepeatsAnswer(
@@ -242,48 +235,64 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         );
     }
 
-    public renderAnswerChoice(
+    public renderAnswerChoice = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
-        _formParams: FormRenderProps,
-    ) {
-        const { linkId, text, answerOption, repeats, required } = questionItem;
-        const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0']), 'value', 'string'];
+        formParams: FormRenderProps,
+    ) => {
+        const { linkId, text, answerOption, item, repeats, required } = questionItem;
+        const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
         const fieldName = fieldPath.join('.');
 
         return (
-            <>
-                <ChooseField<QuestionnaireItemAnswerOption['value']>
-                    key={`choiceOption-${fieldName}`}
-                    name={fieldName}
-                    label={text}
-                    options={_.map(answerOption, (opt) => ({
-                        value: opt.value,
-                        label: opt.value.Coding!.display!,
-                    }))}
-                    multiple={questionItem.repeats}
-                    fieldProps={{
-                        validate: required
-                            ? (inputValue: any) => {
-                                  if (repeats) {
-                                      if (!inputValue?.length) {
-                                          return 'Choose at least one option';
-                                      }
-                                  } else {
-                                      if (!inputValue) {
-                                          return 'Required';
-                                      }
+            <ChooseField<FormAnswerItems>
+                name={fieldName}
+                label={text}
+                multiple={repeats}
+                inline={!item && !repeats}
+                options={_.map(answerOption, (opt) => ({
+                    value: { value: opt.value },
+                    label: getDisplay(opt.value),
+                }))}
+                fieldProps={{
+                    validate: required
+                        ? (inputValue: any) => {
+                              if (repeats) {
+                                  if (!inputValue?.length) {
+                                      return 'Choose at least one option';
                                   }
-
-                                  return undefined;
+                              } else {
+                                  if (!inputValue) {
+                                      return 'Required';
+                                  }
                               }
-                            : undefined,
-                    }}
-                    isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
-                />
-            </>
+
+                              return undefined;
+                          }
+                        : undefined,
+                }}
+                isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
+                renderOptionContent={(option, index, value) => {
+                    const selectedIndex = _.findIndex(
+                        _.isArray(value) ? value : [value],
+                        (answer) => isValueEqual(answer.value, option.value.value),
+                    );
+
+                    if (item && selectedIndex !== -1) {
+                        const subItemParentPath = [
+                            ...fieldPath,
+                            ...(repeats ? [_.toString(selectedIndex)] : []),
+                            'items',
+                        ];
+
+                        return this.renderQuestions(item, subItemParentPath, formParams);
+                    }
+
+                    return null;
+                }}
+            />
         );
-    }
+    };
 
     public renderGroup(
         questionItem: QuestionnaireItem,
@@ -489,18 +498,17 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         return (
             <CustomForm<FormValues>
                 onSubmit={this.onSave}
-                // layout={'vertical'}
+                layout={'vertical'}
                 initialValues={this.toFormValues()}
                 initialValuesEqual={_.isEqual}
                 decorators={[this.onFormChange]}
                 mutators={{ ...arrayMutators }}
-                // debug={console.log}
             >
                 {(params) => {
                     const items = getEnabledQuestions(questionnaire.item!, [], params.values);
 
-                    return this.renderForm(items, { ...params, values: params.values });
-                    // return this.renderForm(items, params);
+                    // return this.renderForm(items, { ...params, values: params.values });
+                    return this.renderForm(items, params);
                 }}
             </CustomForm>
         );
