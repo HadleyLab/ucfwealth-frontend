@@ -110,7 +110,9 @@ export function BaseLayout(props: BaseLayoutProps) {
                             }
                         >
                             <Button type="link">
-                                <span style={{ color: 'white' }}>{role}:</span>
+                                <span style={{ color: 'white' }}>
+                                    {user.email} ({role}):
+                                </span>
                                 <DownOutlined />
                             </Button>
                         </Dropdown>

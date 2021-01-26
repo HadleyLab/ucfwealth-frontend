@@ -1,3 +1,4 @@
+import { notification } from 'antd';
 import React from 'react';
 
 import { useService } from 'aidbox-react/src/hooks/service';
@@ -20,7 +21,7 @@ interface QuestionnaireResponseFormData {
 }
 
 function useQuestionnaireForm(patient) {
-    const questionnaireId = 'q1';
+    const questionnaireId = 'covid19';
     const [questFormRespRD] = useService<Questionnaire>(async () => {
         const questRD = await getFHIRResource({
             resourceType: 'Questionnaire',
@@ -40,13 +41,19 @@ function useQuestionnaireForm(patient) {
     }, []);
 
     const saveQR = async (data: QuestionnaireResponse) => {
-        const preparedQR: QuestionnaireResponse = { ...data, status: 'final' };
+        const preparedQR: QuestionnaireResponse = {
+            ...data,
+            status: 'final',
+            subject: { resourceType: 'Patient', id: patient.id },
+        };
         const response = await saveFHIRResource<QuestionnaireResponse>(preparedQR);
         if (isFailure(response)) {
             console.log('Error!', response.error);
+            notification.error({ message: JSON.stringify(response.error) });
         }
         if (isSuccess(response)) {
-            window.location.reload();
+            notification.success({ message: 'Questionnaire saved' });
+            // window.location.reload();
         }
     };
 
@@ -61,7 +68,6 @@ function useQuestionnaireForm(patient) {
         if (isFailure(existingQRRD)) {
             return getPopulatedQR();
         }
-        console.log(existingQRRD);
         return existingQRRD;
 
         // return getPopulatedQR(patientResource);
@@ -92,9 +98,9 @@ interface QuestionnaireFormProps {
 
 export const QuestionnaireForm = (props: QuestionnaireFormProps) => {
     const [questFormRespRD, saveQR] = useQuestionnaireForm(props.patient);
-    console.log(questFormRespRD);
     return (
         <div>
+            <h2>Covid 19 questionnaire</h2>
             <RenderRemoteData<QuestionnaireResponseFormData> remoteData={questFormRespRD}>
                 {(data) => (
                     <QuestionnaireResponseForm
