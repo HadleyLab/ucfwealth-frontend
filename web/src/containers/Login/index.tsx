@@ -92,7 +92,7 @@ export function Login({ setToken }: LoginProps) {
                                             <Form.Item {...tailFormItemLayout}>
                                                 <div className="signInAlertText">
                                                     <Alert message={submitError} type="error" />
-                                                </div>                                                
+                                                </div>
                                             </Form.Item>
                                         ) : null}
 
@@ -104,10 +104,14 @@ export function Login({ setToken }: LoginProps) {
                                                         htmlType="submit"
                                                         disabled={submitting}
                                                         loading={submitting}
-                                                    >Login</Button>
+                                                    >
+                                                        Login
+                                                    </Button>
                                                 </Col>
                                                 <Col className="signLinkContainer">
-                                                    <Link to="/signup">Sign Up</Link>
+                                                    <Link to="/signup" className="signup">
+                                                        Sign Up
+                                                    </Link>
                                                 </Col>
                                             </Row>
 

@@ -1,4 +1,5 @@
 export interface RouteItem {
-    path: string;
+    url?: string;
+    path?: string;
     title: string;
 }

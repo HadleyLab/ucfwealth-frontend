@@ -31,7 +31,7 @@ function useQuestionnaireForm(patient: Patient) {
             console.log(questRD.error);
             return;
         }
-        
+
         const populatedQuestRespRD = await getQR();
         if (isSuccessAll([questRD, populatedQuestRespRD!])) {
             return success({
@@ -53,8 +53,8 @@ function useQuestionnaireForm(patient: Patient) {
             notification.error({ message: JSON.stringify(response.error) });
         }
         if (isSuccess(response)) {
+            window.scrollTo(0, 0);
             notification.success({ message: 'Questionnaire saved' });
-            window.location.reload();
         }
     };
 

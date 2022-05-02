@@ -5,10 +5,9 @@ import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 import { useService } from 'aidbox-react/src/hooks/service';
 import { getFHIRResource } from 'aidbox-react/src/services/fhir';
 
-import { Patient, User } from 'shared/contrib/aidbox';
+import { Patient, User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
-import { MedicalData } from 'src/containers/MedicalData';
 import { RouteItem } from 'src/utils/route';
 
 import { QuestionnaireForm } from './QuestionnaireForm/QuestionnaireForm';
@@ -21,18 +20,30 @@ export function PatientApp({ user }: PatientAppProps) {
     let match = useRouteMatch();
     const routes: RouteItem[] = [
         {
-            path: `${match.url}/questionnaire`,
-            title: 'Questionnaire',
+            url: `https://beda.software/breast-cancer/`,
+            title: 'Home',
         },
         {
-            path: `${match.url}/medical-data`,
+            path: `${match.url}/questionnaire`,
+            title: 'Profile data',
+        },
+        {
+            url: `https://uci.beda.software/`,
             title: 'Medical data',
+        },
+        {
+            url: `https://community.covidimaging.app/`,
+            title: 'Community',
         },
     ];
 
     const patientRef = user.data.patient;
 
-    const [patientRD] = useService<Patient>(() => getFHIRResource<Patient>(patientRef));
+    if (patientRef === undefined) {
+        console.error('patientRef undefined');
+    }
+
+    const [patientRD] = useService<Patient>(() => getFHIRResource<Patient>(patientRef!));
 
     return (
         <RenderRemoteData<Patient> remoteData={patientRD}>
@@ -44,11 +55,6 @@ export function PatientApp({ user }: PatientAppProps) {
                                 path={`${match.url}/questionnaire`}
                                 exact
                                 render={() => <QuestionnaireForm patient={patient} />}
-                            />
-                            <Route
-                                path={`${match.url}/medical-data`}
-                                exact
-                                render={() => <MedicalData />}
                             />
                             <Route path={'/'} render={() => <p>Page not found</p>} />
                         </Switch>

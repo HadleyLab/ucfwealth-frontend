@@ -15,6 +15,7 @@ import { SessionContext } from 'src/containers/SessionContext';
 const { Header, Content, Sider, Footer } = Layout;
 
 interface RouteItem {
+    url?: string;
     path?: string;
     exact?: boolean;
     title: string;
@@ -55,6 +56,20 @@ export function BaseLayout(props: BaseLayoutProps) {
                 return (
                     <Menu.Item key={route.path}>
                         <Link to={route.path}>{renderMenuTitle(route)}</Link>
+                    </Menu.Item>
+                );
+            }
+
+            if (route.url) {
+                return (
+                    <Menu.Item key={route.path}>
+                        <Link
+                            to={{ pathname: route.url }}
+                            target="_blank"
+                            onClick={() => history.push('/app/questionnaire')}
+                        >
+                            {renderMenuTitle(route)}
+                        </Link>
                     </Menu.Item>
                 );
             }
@@ -105,15 +120,15 @@ export function BaseLayout(props: BaseLayoutProps) {
                                             }}
                                         >
                                             <PoweroffOutlined />
-                                        Logout
-                                    </Menu.Item>
+                                            Logout
+                                        </Menu.Item>
                                     </Menu>
                                 }
                             >
                                 <Button type="link">
                                     <span style={{ color: 'white' }}>
                                         {user.email} ({role})
-                                </span>
+                                    </span>
                                     <DownOutlined />
                                 </Button>
                             </Dropdown>
@@ -129,6 +144,7 @@ export function BaseLayout(props: BaseLayoutProps) {
                                     getActiveKeys(routeList),
                                     ({ path, title }) => path || title,
                                 )}
+                                selectedKeys={[window.location.pathname]}
                                 style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
                             >
                                 {renderMenu(routeList)}

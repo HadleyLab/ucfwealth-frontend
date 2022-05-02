@@ -16,6 +16,8 @@ import { signin, signup, SignupBody } from 'src/services/auth';
 
 import validate from './validation';
 
+import './styles.css';
+
 interface SignUpProps {
     setToken: (token: Token) => void;
 }
@@ -145,7 +147,9 @@ export function SignUp({ setToken }: SignUpProps) {
                                                     </Button>
                                                 </Col>
                                                 <Col className="signLinkContainer">
-                                                    <Link to="/login">Log In</Link>
+                                                    <Link to="/login" className="login">
+                                                        Log In
+                                                    </Link>
                                                 </Col>
                                             </Row>
                                             {/*<br />*/}

@@ -7,6 +7,10 @@
     margin-left: 20px;
 }
 
+.signup {
+    color: #eab800 !important;
+}
+
 .ant-form-item {
     padding-top: 15px !important;
 }
