@@ -11,6 +11,7 @@ import { useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { SessionContext } from 'src/containers/SessionContext';
+import { Logo } from 'src/images/Logo';
 
 const { Header, Content, Sider, Footer } = Layout;
 
@@ -101,9 +102,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         <>
             <Layout className={'baseLayout'}>
                 <Header>
-                    <a href="/app">
-                        <h2 style={{ color: 'white' }}>Covidimaging</h2>
-                    </a>
+                    <Logo onClick={() => history.push('/app')} style={{ cursor: 'pointer' }} />
                     {user && (
                         <div className="userpanel__wrapper">
                             <Button
