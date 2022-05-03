@@ -1,3 +1,4 @@
+import yaml from 'js-yaml';
 import _ from 'lodash';
 
 import {
@@ -573,4 +574,20 @@ export function extractAnswersDisplay(
     return extractAnswersByLinkId(questionnaireResponse, linkId).map(({ value }) =>
         getDisplay(value!),
     );
+}
+
+export function objectToDisplay(resource: object) {
+    const preparedResource = _.omit(resource, 'meta');
+
+    if (_.isEmpty(resource)) {
+        return '';
+    }
+
+    try {
+        const yamlString: string = yaml.dump(preparedResource);
+        return yamlString;
+    } catch (e) {
+        console.log(e);
+        return JSON.stringify(preparedResource, undefined, 2);
+    }
 }

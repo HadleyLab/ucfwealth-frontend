@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 
 import { BaseLayout } from 'src/components/BaseLayout';
+import { PatientDetails } from 'src/components/PatientDetails';
 import { RouteItem } from 'src/utils/route';
 
 import { PatientListContainer } from './PatientListContainer';
@@ -21,6 +22,7 @@ export function SuperAdminApp({}: SuperAdminAppProps) {
         <Router>
             <BaseLayout routes={routes}>
                 <Switch>
+                    <Route path="/patients/:id" render={() => <PatientDetails />} exact />
                     <Route path={`${match.url}/`} exact render={() => <PatientListContainer />} />
                     <Route path={'/'} render={() => <p>Page not found</p>} />
                 </Switch>
