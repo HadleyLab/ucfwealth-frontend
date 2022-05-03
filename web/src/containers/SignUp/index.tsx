@@ -79,7 +79,7 @@ export function SignUp({ setToken }: SignUpProps) {
             <Content>
                 <Row style={{ height: '100vh' }}>
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
-                        <Card style={{ marginTop: '10%', paddingTop: '15px' }}>
+                        <Card style={{ marginTop: '10%', paddingTop: '15px', marginBottom: '10%' }}>
                             <CustomForm<SignupBody>
                                 onSubmit={onSubmit}
                                 validate={validate}
