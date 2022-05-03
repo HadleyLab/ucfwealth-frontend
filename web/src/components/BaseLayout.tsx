@@ -27,10 +27,11 @@ interface RouteItem {
 interface BaseLayoutProps {
     routes?: RouteItem[];
     children: any;
+    setIsSuccessQuestionnaire?: (state: boolean) => void;
 }
 
 export function BaseLayout(props: BaseLayoutProps) {
-    const { routes: routeList, children } = props;
+    const { routes: routeList, children, setIsSuccessQuestionnaire } = props;
     const { user, role, logout } = useContext(SessionContext);
     let history = useHistory();
 
@@ -56,7 +57,16 @@ export function BaseLayout(props: BaseLayoutProps) {
             if (route.path) {
                 return (
                     <Menu.Item key={route.path}>
-                        <Link to={route.path}>{renderMenuTitle(route)}</Link>
+                        <Link
+                            to={route.path}
+                            onClick={() => {
+                                if (setIsSuccessQuestionnaire) {
+                                    setIsSuccessQuestionnaire(false);
+                                }
+                            }}
+                        >
+                            {renderMenuTitle(route)}
+                        </Link>
                     </Menu.Item>
                 );
             }

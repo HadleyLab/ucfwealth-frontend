@@ -1,3 +1,6 @@
+//TODO fix types
+//@ts-nocheck
+
 import { notification } from 'antd';
 import React from 'react';
 
@@ -20,7 +23,12 @@ interface QuestionnaireResponseFormData {
     questionnaireResponse: QuestionnaireResponse;
 }
 
-function useQuestionnaireForm(patient: Patient) {
+interface Props {
+    patient: Patient;
+    setIsSuccessQuestionnaire: (state: boolean) => void;
+}
+
+function useQuestionnaireForm({ patient, setIsSuccessQuestionnaire }: Props) {
     const questionnaireId = 'covid19';
     const [questFormRespRD] = useService<QuestionnaireResponseFormData>(async () => {
         const questRD = await getFHIRResource({
@@ -54,7 +62,7 @@ function useQuestionnaireForm(patient: Patient) {
         }
         if (isSuccess(response)) {
             window.scrollTo(0, 0);
-            notification.success({ message: 'Questionnaire saved' });
+            setIsSuccessQuestionnaire(true);
         }
     };
 
@@ -95,10 +103,11 @@ function useQuestionnaireForm(patient: Patient) {
 
 interface QuestionnaireFormProps {
     patient: Patient;
+    setIsSuccessQuestionnaire: (state: boolean) => void;
 }
 
 export const QuestionnaireForm = (props: QuestionnaireFormProps) => {
-    const [questFormRespRD, saveQR] = useQuestionnaireForm(props.patient);
+    const [questFormRespRD, saveQR] = useQuestionnaireForm(props);
     return (
         <div>
             <h2>Covid 19 questionnaire</h2>
