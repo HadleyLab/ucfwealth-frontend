@@ -106,7 +106,10 @@ export function BaseLayout(props: BaseLayoutProps) {
                     </a>
                     {user && (
                         <div className="userpanel__wrapper">
-                            <Button shape="circle" icon={<UserOutlined />} />
+                            <Button
+                                shape="circle"
+                                icon={<UserOutlined style={userOutlinedStyle} />}
+                            />
                             <Dropdown
                                 className="userpanel__dropdown"
                                 trigger={['click']}
@@ -164,3 +167,5 @@ export function BaseLayout(props: BaseLayoutProps) {
         </>
     );
 }
+
+const userOutlinedStyle = { color: '#000000', backgroundColor: '#eab800' };

@@ -17,7 +17,7 @@ import {
     parseFHIRDateTime,
 } from 'src/utils/date';
 
-import './styles.css';
+import './styles.scss';
 
 export function DateTimePickerField({
     fieldProps,

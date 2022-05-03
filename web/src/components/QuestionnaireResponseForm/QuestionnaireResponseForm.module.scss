@@ -1,0 +1,14 @@
+@use '../../styles/colors.scss';
+
+.questionnaireFormActions {
+    button {
+        background: colors.$yellow !important;
+        border-color: colors.$yellow !important;
+        color: colors.$white;
+
+        &:hover {
+            background: colors.$yellowlight !important;
+            color: colors.$white;
+        }
+    }
+}

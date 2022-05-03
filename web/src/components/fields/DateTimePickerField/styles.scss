@@ -1,13 +1,15 @@
+@use '../../../styles/colors.scss';
+
 .date-time-narrow {
     width: 130px !important;
 }
 
 .date-time-narrow:focus {
-    border-color: #eab800 !important;
+    border-color: colors.$yellow !important;
     -webkit-box-shadow: 0 0 0 2px rgba(226, 233, 87, 0.2) !important;
     box-shadow: 0 0 0 2px rgba(226, 233, 87, 0.2) !important;
 }
 
 .date-time-narrow:hover {
-    border-color: #eab800 !important;
+    border-color: colors.$yellow !important;
 }

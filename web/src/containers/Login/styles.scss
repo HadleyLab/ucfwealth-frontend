@@ -1,3 +1,5 @@
+@use '../../styles/colors.scss';
+
 .signInAlertText {
     font-size: 12px !important;
 }
@@ -8,7 +10,7 @@
 }
 
 .signup {
-    color: #eab800 !important;
+    color: colors.$yellow !important;
 }
 
 .ant-form-item {
@@ -24,4 +26,11 @@
     position: relative;
     bottom: 0;
     width: 100%;
+}
+
+.login-button {
+    &:hover {
+        background: colors.$yellowlight !important;
+        color: colors.$white;
+    }
 }

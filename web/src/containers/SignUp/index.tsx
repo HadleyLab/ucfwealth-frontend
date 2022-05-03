@@ -16,7 +16,7 @@ import { signin, signup, SignupBody } from 'src/services/auth';
 
 import validate from './validation';
 
-import './styles.css';
+import './styles.scss';
 
 interface SignUpProps {
     setToken: (token: Token) => void;

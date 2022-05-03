@@ -14,7 +14,7 @@ import { signin, SigninBody } from 'src/services/auth';
 
 import validate from './validation';
 
-import './styles.css';
+import './styles.scss';
 
 interface LoginProps {
     setToken: (token: Token) => void;
@@ -104,6 +104,7 @@ export function Login({ setToken }: LoginProps) {
                                                         htmlType="submit"
                                                         disabled={submitting}
                                                         loading={submitting}
+                                                        className="login-button"
                                                     >
                                                         Login
                                                     </Button>

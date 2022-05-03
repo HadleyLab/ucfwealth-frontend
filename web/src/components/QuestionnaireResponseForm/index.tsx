@@ -22,6 +22,7 @@ import {
 
 import { CustomForm } from '../CustomForm';
 import { ChooseField } from '../fields/ChooseField';
+import s from './QuestionnaireResponseForm.module.scss';
 
 const formItemLayout = {
     labelCol: {
@@ -470,8 +471,12 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
             <>
                 {this.renderQuestions(items, [], formParams)}
                 {!readOnly && (
-                    <div className="questionnaire-form-actions">
-                        <Button onClick={handleSubmit} disabled={submitting}>
+                    <div className={s.questionnaireFormActions}>
+                        <Button
+                            onClick={handleSubmit}
+                            disabled={submitting}
+                            className={s.saveButton}
+                        >
                             Save
                         </Button>
                     </div>
