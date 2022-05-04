@@ -10,5 +10,10 @@
             background: colors.$yellowlight !important;
             color: colors.$white;
         }
+
+        &:focus {
+            background: colors.$yellow !important;
+            color: colors.$white;
+        }
     }
 }
