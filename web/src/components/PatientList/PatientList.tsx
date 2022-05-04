@@ -2,43 +2,38 @@ import { Table } from 'antd';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Patient } from 'shared/src/contrib/aidbox';
-
+import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientListContainer/usePatientList';
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
+import { formatHumanDateTime } from 'src/utils/date';
 
-import { LastActivity } from './LastActivity';
 import s from './PatientList.module.scss';
-import { Questionnaires } from './Questionnaires';
+import { QuestionnaireAvailable } from './QuestionnaireAvailable';
 
 interface Props {
-    patientList: Patient[];
+    patientList: ExtendedPatient[];
 }
 
 export const PatientList = ({ patientList }: Props) => {
     const history = useHistory();
 
-    // TODO refactor questionnaireResponseRD in one request
-    const dataSource = patientList.map((patient) => {
+    const goToDetails = (patient: ExtendedPatient) =>
+        history.push({
+            pathname: `/patients/${patient.id}`,
+            state: { patient },
+        });
+
+    const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
             key: patient.id,
-            questionnaires: <Questionnaires patient={patient} />,
-            participant: patient.name?.[0].text,
-            lastActivity: <LastActivity patient={patient} />,
+            questionnaires: <QuestionnaireAvailable questionnaire={patient.questionnaire} />,
+            participant: patient.email,
+            lastActivity: formatHumanDateTime(patient.lastActivity),
             dicomFiles: 'empty',
             details: (
-                <div
-                    onClick={() =>
-                        history.push({
-                            pathname: `/patients/${patient.id}`,
-                            state: { patient },
-                        })
-                    }
-                >
-                    {
-                        <div className={s.rightArrow}>
-                            <RightArrowIcon />
-                        </div>
-                    }
+                <div onClick={() => goToDetails(patient)}>
+                    <div className={s.rightArrow}>
+                        <RightArrowIcon />
+                    </div>
                 </div>
             ),
         };

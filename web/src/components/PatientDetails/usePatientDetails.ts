@@ -1,24 +1,18 @@
-import './styles.css';
 import { useLocation } from 'react-router-dom';
 
-import { useService } from 'aidbox-react/src/hooks/service';
-import { getFHIRResources } from 'aidbox-react/src/services/fhir';
-
-import { QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientListContainer/usePatientList';
+import { objectToDisplay } from 'src/utils/questionnaire';
 
 export const usePatientDetails = () => {
     const location = useLocation<any>();
 
-    const patient = location.state.patient;
+    const patient = location.state.patient as ExtendedPatient;
 
-    const searchText = patient.id;
+    if (!patient.questionnaire) {
+        return { patient };
+    }
 
-    const [questionnaireResponseRD] = useService(
-        async () =>
-            await getFHIRResources<QuestionnaireResponse>('QuestionnaireResponse', {
-                _ilike: `%${searchText}%`,
-            }),
-    );
+    const questionnaire = objectToDisplay(patient.questionnaire);
 
-    return { questionnaireResponseRD, patient };
+    return { patient, questionnaire };
 };
