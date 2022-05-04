@@ -28,6 +28,7 @@ interface BaseLayoutProps {
     routes?: RouteItem[];
     children: any;
     setIsSuccessQuestionnaire?: (state: boolean) => void;
+    disableMenu?: boolean;
 }
 
 export function BaseLayout(props: BaseLayoutProps) {
@@ -148,21 +149,23 @@ export function BaseLayout(props: BaseLayoutProps) {
                     )}
                 </Header>
                 <Layout>
-                    <Sider theme="light">
-                        {routeList && (
-                            <Menu
-                                mode="inline"
-                                defaultSelectedKeys={_.map(
-                                    getActiveKeys(routeList),
-                                    ({ path, title }) => path || title,
-                                )}
-                                selectedKeys={[window.location.pathname]}
-                                style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
-                            >
-                                {renderMenu(routeList)}
-                            </Menu>
-                        )}
-                    </Sider>
+                    {!props.disableMenu && (
+                        <Sider theme="light">
+                            {routeList && (
+                                <Menu
+                                    mode="inline"
+                                    defaultSelectedKeys={_.map(
+                                        getActiveKeys(routeList),
+                                        ({ path, title }) => path || title,
+                                    )}
+                                    selectedKeys={[window.location.pathname]}
+                                    style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
+                                >
+                                    {renderMenu(routeList)}
+                                </Menu>
+                            )}
+                        </Sider>
+                    )}
                     <Content>
                         <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
                             {children}

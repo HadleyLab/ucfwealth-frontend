@@ -1,4 +1,4 @@
-import { Layout, Form, Row, Col, Alert, Button, Card } from 'antd';
+import { Form, Row, Col, Alert, Button, Card } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { FORM_ERROR } from 'final-form';
 import _ from 'lodash';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { Token } from 'aidbox-react/src/services/token';
 
+import { BaseLayout } from 'src/components/BaseLayout';
 import { CustomForm } from 'src/components/CustomForm';
 import { InputField } from 'src/components/fields';
 import { signin, SigninBody } from 'src/services/auth';
@@ -61,7 +62,7 @@ export function Login({ setToken }: LoginProps) {
     };
 
     return (
-        <Layout className="layout">
+        <BaseLayout disableMenu={true}>
             <Content>
                 <Row style={{ height: '100vh' }}>
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
@@ -126,6 +127,6 @@ export function Login({ setToken }: LoginProps) {
                     </Col>
                 </Row>
             </Content>
-        </Layout>
+        </BaseLayout>
     );
 }

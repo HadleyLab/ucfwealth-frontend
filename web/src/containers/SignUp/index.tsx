@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Form, Layout, Row } from 'antd';
+import { Alert, Button, Card, Col, Form, Row } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { FORM_ERROR } from 'final-form';
 import _ from 'lodash';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { Token } from 'aidbox-react/src/services/token';
 
+import { BaseLayout } from 'src/components/BaseLayout';
 import { CustomForm } from 'src/components/CustomForm';
 import { InputField } from 'src/components/fields';
 import { ChooseField } from 'src/components/fields/ChooseField';
@@ -75,11 +76,11 @@ export function SignUp({ setToken }: SignUpProps) {
     };
 
     return (
-        <Layout className="layout">
-            <Content>
+        <BaseLayout disableMenu={true}>
+            <Content style={{ marginBottom: '10%' }}>
                 <Row style={{ height: '100vh' }}>
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
-                        <Card style={{ marginTop: '10%', paddingTop: '15px', marginBottom: '10%' }}>
+                        <Card style={{ marginTop: '10%', paddingTop: '15px' }}>
                             <CustomForm<SignupBody>
                                 onSubmit={onSubmit}
                                 validate={validate}
@@ -162,6 +163,6 @@ export function SignUp({ setToken }: SignUpProps) {
                     </Col>
                 </Row>
             </Content>
-        </Layout>
+        </BaseLayout>
     );
 }
