@@ -1,10 +1,40 @@
+.container {
+    width: 85%;
+    min-width: 540px;
+}
+
 .progress {
+    display: flex;
+    width: 100%;
     padding-bottom: 20px;
     padding-left: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.progressTitle {
+    font-size: 38px;
+    font-weight: 600;
+}
+
+.totalContainer {
+    display: flex;
+    align-items: center;
+}
+
+.totalCount {
+    font-size: 38px;
+    font-weight: 600;
+    padding-right: 12px;
+}
+
+.totalAbout {
+    font-size: 12px;
+    font-weight: 500;
+    width: 77px;
 }
 
 .rightArrow {
     cursor: pointer;
     width: 100%;
-    padding-left: 18px;
 }

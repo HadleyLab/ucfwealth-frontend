@@ -49,35 +49,49 @@ export const PatientList = ({ patientList }: Props) => {
             title: <b>Participant</b>,
             dataIndex: 'participant',
             key: 'participant',
+            width: '20%',
+            align: 'center' as 'center',
         },
         {
             title: <b>Questionnaires</b>,
             dataIndex: 'questionnaires',
             key: 'questionnaires',
+            width: '20%',
+            align: 'center' as 'center',
         },
         {
             title: <b>Last Activity</b>,
             dataIndex: 'lastActivity',
             key: 'lastActivity',
+            width: '20%',
+            align: 'center' as 'center',
         },
         {
             title: <b>Dicom Files</b>,
             dataIndex: 'dicomFiles',
             key: 'dicomFiles',
+            width: '20%',
+            align: 'center' as 'center',
         },
         {
             title: <b>Details</b>,
             dataIndex: 'details',
             key: 'details',
+            width: '20%',
+            align: 'center' as 'center',
         },
     ];
 
     return (
-        <div>
+        <div className={s.container}>
             <div className={s.progress}>
-                Progress: <b>{patientList.length}</b> participants total
+                <div className={s.progressTitle}>Progress</div>
+                <div className={s.totalContainer}>
+                    <div className={s.totalCount}>{patientList.length}</div>
+                    <div className={s.totalAbout}>participants total</div>
+                </div>
             </div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} bordered />
         </div>
     );
 };

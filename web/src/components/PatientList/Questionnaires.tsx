@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import * as React from 'react';
 import { SVGProps } from 'react';
 
@@ -23,14 +22,14 @@ export const Questionnaires = ({ patient }: QuestionnairesProps) => {
     return (
         <RenderRemoteData
             remoteData={questionnaireResponseRD}
-            renderLoading={() => <Spin />}
+            renderLoading={() => <div>Loading...</div>}
             renderFailure={(error) => <div>{JSON.stringify(error)}</div>}
         >
             {(questionnaireResponse) => {
                 if (questionnaireResponse.entry && questionnaireResponse.entry?.length > 0) {
-                    return <SuccessIcon style={{ marginLeft: '50px' }} />;
+                    return <SuccessIcon />;
                 }
-                return <EmptyIcon style={{ marginLeft: '50px' }} />;
+                return <EmptyIcon />;
             }}
         </RenderRemoteData>
     );

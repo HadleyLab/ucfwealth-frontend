@@ -1,4 +1,3 @@
-import { Spin } from 'antd';
 import * as React from 'react';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
@@ -24,7 +23,7 @@ export const LastActivity = ({ patient }: LastActivityProps) => {
     return (
         <RenderRemoteData
             remoteData={questionnaireResponseRD}
-            renderLoading={() => <Spin />}
+            renderLoading={() => <div>Loading...</div>}
             renderFailure={(error) => <div>{JSON.stringify(error)}</div>}
         >
             {(questionnaireResponse) => {
