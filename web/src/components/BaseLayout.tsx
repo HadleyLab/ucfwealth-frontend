@@ -29,6 +29,7 @@ interface BaseLayoutProps {
     children: any;
     setIsSuccessQuestionnaire?: (state: boolean) => void;
     disableMenu?: boolean;
+    footerStyle?: React.CSSProperties;
 }
 
 export function BaseLayout(props: BaseLayoutProps) {
@@ -173,7 +174,7 @@ export function BaseLayout(props: BaseLayoutProps) {
                     </Content>
                 </Layout>
             </Layout>
-            <Footer>
+            <Footer style={props.footerStyle}>
                 <div>Covidimaging</div>
             </Footer>
         </>

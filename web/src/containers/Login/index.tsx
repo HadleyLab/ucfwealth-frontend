@@ -62,9 +62,9 @@ export function Login({ setToken }: LoginProps) {
     };
 
     return (
-        <BaseLayout disableMenu={true}>
+        <BaseLayout disableMenu={true} footerStyle={{ marginTop: '5%' }}>
             <Content>
-                <Row style={{ height: '100vh' }}>
+                <Row>
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
                         <Card style={{ marginTop: '10%', paddingTop: '15px' }}>
                             <CustomForm<SigninBody>

@@ -76,9 +76,9 @@ export function SignUp({ setToken }: SignUpProps) {
     };
 
     return (
-        <BaseLayout disableMenu={true}>
-            <Content style={{ marginBottom: '10%' }}>
-                <Row style={{ height: '100vh' }}>
+        <BaseLayout disableMenu={true} footerStyle={{ marginTop: '5%' }}>
+            <Content>
+                <Row>
                     <Col xs={{ span: 24, offset: 0 }} lg={{ span: 12, offset: 6 }}>
                         <Card style={{ marginTop: '10%', paddingTop: '15px' }}>
                             <CustomForm<SignupBody>
