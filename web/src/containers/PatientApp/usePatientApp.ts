@@ -24,7 +24,7 @@ export const usePatientApp = ({ user }: Props) => {
             title: 'Profile data',
         },
         {
-            url: `https://uci.beda.software/`,
+            url: `https://uci.beda.software/${user.data.patient?.id}`,
             title: 'Medical data',
         },
         {
