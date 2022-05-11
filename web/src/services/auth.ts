@@ -2,6 +2,8 @@ import { RemoteDataResult } from 'aidbox-react/src/libs/remoteData';
 import { service } from 'aidbox-react/src/services/service';
 import { Token } from 'aidbox-react/src/services/token';
 
+import config from 'shared/src/config';
+
 export interface SigninBody {
     email: string;
     password: string;
@@ -84,4 +86,30 @@ export function getUserInfo(): Promise<RemoteDataResult<any>> {
             'Content-Type': 'application/json',
         },
     });
+}
+
+export interface OAuthState {
+    nextUrl?: string;
+}
+
+export function parseOAuthState(state?: string): OAuthState {
+    try {
+        return state ? JSON.parse(atob(state)) : {};
+    } catch {}
+
+    return {};
+}
+
+export function formatOAuthState(state: OAuthState) {
+    return btoa(JSON.stringify(state));
+}
+
+export function getAuthorizeUrl(state?: OAuthState) {
+    return `${config.baseURL}/auth/authorize${makeWebAuthSearchParams(state)}`;
+}
+
+export function makeWebAuthSearchParams(state?: OAuthState) {
+    const stateStr = state ? `&state=${formatOAuthState(state)}` : '';
+
+    return `?client_id=${config.clientId}&response_type=token${stateStr}`;
 }

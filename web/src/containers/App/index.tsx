@@ -6,6 +6,7 @@ import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { RemoteData } from 'aidbox-react/src/libs/remoteData';
 import { resetInstanceToken, setInstanceBaseURL } from 'aidbox-react/src/services/instance';
 import { setInstanceToken } from 'aidbox-react/src/services/instance';
+import { service } from 'aidbox-react/src/services/service';
 import { Token } from 'aidbox-react/src/services/token';
 
 import { User } from 'shared/src/contrib/aidbox';
@@ -24,6 +25,7 @@ import { getUserRole, UserRole } from 'src/services/role';
 import { removeToken, retrieveToken, saveToken } from 'src/services/token';
 
 import { SessionContext } from '../SessionContext';
+import { Auth } from './Auth';
 
 (function init() {
     setInstanceBaseURL(baseURL);
@@ -51,6 +53,14 @@ function useApp() {
 
     const [userRD, setUserRD] = useState<RemoteData<User>>(notAsked);
 
+    const logout = async () => {
+        await service({
+            method: 'DELETE',
+            url: '/Session',
+        });
+        resetToken();
+    };
+
     useEffect(() => {
         (async () => {
             const userRemoteData = await getUserInfo();
@@ -58,7 +68,7 @@ function useApp() {
         })();
     }, [appToken]);
 
-    return { appToken, setToken, userRD, logout: resetToken };
+    return { appToken, setToken, userRD, logout };
 }
 
 export function App() {
@@ -67,12 +77,15 @@ export function App() {
     function renderAnonymousRoutes() {
         return (
             <Switch>
+                <Route path="/auth" exact>
+                    <Auth setToken={setToken} />
+                </Route>
                 <Route path="/signup" exact render={() => <SignUp setToken={setToken} />} />
-                <Route path="/login" exact render={() => <Login setToken={setToken} />} />
+                <Route path="/login" exact render={() => <Login />} />
                 <Redirect
                     to={{
                         pathname: '/login',
-                        state: { referrer: history.location.pathname },
+                        state: { nextUrl: history.location.pathname },
                     }}
                 />
             </Switch>

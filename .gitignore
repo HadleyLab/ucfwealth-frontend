@@ -9,3 +9,4 @@ htmlcov
 shared/src/config.ts
 sentry.properties
 .env.test.local
+.vscode
