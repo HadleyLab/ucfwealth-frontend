@@ -22,13 +22,20 @@ export const PatientList = ({ patientList }: Props) => {
             state: { patient },
         });
 
+    const goToPatientFileList = (patient: ExtendedPatient) =>
+        history.push({ pathname: `/patients/${patient.id}/files` });
+
     const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
             key: patient.id,
             questionnaires: <QuestionnaireAvailable questionnaire={patient.questionnaire} />,
             participant: patient.email,
             lastActivity: formatHumanDateTime(patient.lastActivity),
-            dicomFiles: 'empty',
+            dicomFiles: (
+                <div onClick={() => goToPatientFileList(patient)}>
+                    <div className={s.rightArrow}>File List</div>
+                </div>
+            ),
             details: (
                 <div onClick={() => goToDetails(patient)}>
                     <div className={s.rightArrow}>

@@ -3,9 +3,8 @@ import React from 'react';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
-import { PatientList } from 'src/components/PatientList/PatientList';
-
 import { usePatientList } from './usePatientList';
+import { PatientList } from 'src/components/PatientList';
 
 export const PatientListContainer = () => {
     const { patientListRD } = usePatientList();

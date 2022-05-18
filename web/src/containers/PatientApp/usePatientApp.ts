@@ -28,7 +28,7 @@ export const usePatientApp = ({ user }: Props) => {
             title: 'Medical data',
         },
         {
-            url: `https://community.covidimaging.app/`,
+            url: `https://community.covidimaging.app/auth/oauth2_basic`, // TODO config COMMUNITY_URL
             title: 'Community',
         },
     ];

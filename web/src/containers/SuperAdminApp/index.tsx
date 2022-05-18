@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 
 
 import { BaseLayout } from 'src/components/BaseLayout';
 import { PatientDetails } from 'src/components/PatientDetails';
+import { PatientFileList } from 'src/components/PatientFileList';
 import { RouteItem } from 'src/utils/route';
 
 import { PatientListContainer } from './PatientListContainer';
@@ -23,10 +24,11 @@ export function SuperAdminApp({}: SuperAdminAppProps) {
             <BaseLayout routes={routes}>
                 <Switch>
                     <Route path="/patients/:id" render={() => <PatientDetails />} exact />
+                    <Route path="/patients/:id/files" render={() => <PatientFileList />} exact />
                     <Route path={`${match.url}/`} exact render={() => <PatientListContainer />} />
                     <Route path={'/'} render={() => <p>Page not found</p>} />
                 </Switch>
-                <Redirect to={`${match.url}/`} />
+                <Redirect to={`${match.url}`} />
             </BaseLayout>
         </Router>
     );
