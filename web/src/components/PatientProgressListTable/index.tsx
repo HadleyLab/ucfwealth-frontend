@@ -2,18 +2,19 @@ import { Table } from 'antd';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientListContainer/usePatientList';
+import { QuestionnaireAvailableBadge } from 'src/components/QuestionnaireAvailableBadge';
+import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
 import { formatHumanDateTime } from 'src/utils/date';
 
-import s from './PatientList.module.scss';
-import { QuestionnaireAvailable } from './QuestionnaireAvailable';
+import s from './PatientProgressListTable.module.scss';
 
 interface Props {
     patientList: ExtendedPatient[];
+    patientCount?: number;
 }
 
-export const PatientList = ({ patientList }: Props) => {
+export const PatientProgressListTable = ({ patientList, patientCount }: Props) => {
     const history = useHistory();
 
     const goToDetails = (patient: ExtendedPatient) =>
@@ -28,7 +29,7 @@ export const PatientList = ({ patientList }: Props) => {
     const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
             key: patient.id,
-            questionnaires: <QuestionnaireAvailable questionnaire={patient.questionnaire} />,
+            questionnaires: <QuestionnaireAvailableBadge questionnaire={patient.questionnaire} />,
             participant: patient.email,
             lastActivity: formatHumanDateTime(patient.lastActivity),
             dicomFiles: (
@@ -89,7 +90,7 @@ export const PatientList = ({ patientList }: Props) => {
             <div className={s.progress}>
                 <div className={s.progressTitle}>Progress</div>
                 <div className={s.totalContainer}>
-                    <div className={s.totalCount}>{patientList.length}</div>
+                    <div className={s.totalCount}>{patientCount}</div>
                     <div className={s.totalAbout}>participants total</div>
                 </div>
             </div>

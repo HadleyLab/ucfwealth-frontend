@@ -7,7 +7,7 @@ import {
     success,
 } from 'aidbox-react/src/libs/remoteData';
 import { getFHIRResources } from 'aidbox-react/src/services/fhir';
-import { service } from 'aidbox-react/src/services/service';
+import { sequenceMap, service } from 'aidbox-react/src/services/service';
 
 import { Bundle, Patient, Questionnaire } from 'shared/src/contrib/aidbox';
 
@@ -18,6 +18,10 @@ export interface ExtendedPatient extends Patient {
 }
 
 const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
+    if (isFailure(remoteData)) {
+        console.log(JSON.stringify(remoteData.error));
+        return failure(remoteData.error);
+    }
     if (isSuccess(remoteData)) {
         if (remoteData.data.entry === undefined) {
             console.error('remoteData.data.entry === undefined');
@@ -37,7 +41,11 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
                     return { ...patient };
                 }
 
-                const email = userResponse.data.entry[0].resource.email;
+                const email = `${
+                    patient?.name && patient?.name[0].given
+                        ? patient?.name[0]?.given[0].toLowerCase() + '@gmail.com'
+                        : userResponse.data.entry[0].resource.email
+                }`;
 
                 const questionnaireResponse = await service({
                     method: 'GET',
@@ -59,15 +67,14 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
                 if (questionnaireLastUpdated !== undefined) {
                     lastActivity = questionnaireLastUpdated;
                 }
-
                 return { ...patient, email, questionnaire, lastActivity };
             }),
         );
         return patientList;
-    } else return {}
+    }
 };
 
-export const usePatientList = () => {
+export const usePatientProgressList = () => {
     const [patientListRD] = useService(async () => {
         const response = await getFHIRResources<Patient>('Patient', {
             _sort: '-lastUpdated',
@@ -78,10 +85,24 @@ export const usePatientList = () => {
             return failure(response);
         }
 
-        const patientList = await getPatientList(response);
+        const patientList = await getPatientList(response); // TODO error here
 
         return success((patientList as unknown) as ExtendedPatient[]);
     }, []);
 
-    return { patientListRD };
+    const [patientCountRD] = useService(async () => {
+        const response = await getFHIRResources<Patient>('Patient', { _count: 0 });
+        if (isFailure(response)) {
+            console.error(response.error);
+            return response;
+        }
+        return success(response.data.total);
+    });
+
+    const patientListWithCountRD = sequenceMap({
+        patientList: patientListRD,
+        patientCount: patientCountRD,
+    });
+
+    return { patientListWithCountRD };
 };

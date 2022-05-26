@@ -2,10 +2,10 @@ import './styles.css';
 import React from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 
-import { usePatientDetails } from './usePatientDetails';
+import { usePatientQuestionnaireResult } from './usePatientQuestionnaireResult';
 
-export const PatientDetails = () => {
-    const { patient, questionnaire } = usePatientDetails();
+export const PatientQuestionnaireResult = () => {
+    const { patient, questionnaire } = usePatientQuestionnaireResult();
 
     return (
         <div>

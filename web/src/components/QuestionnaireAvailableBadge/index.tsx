@@ -7,7 +7,7 @@ interface Props {
     questionnaire?: Questionnaire;
 }
 
-export const QuestionnaireAvailable = ({ questionnaire }: Props) => {
+export const QuestionnaireAvailableBadge = ({ questionnaire }: Props) => {
     if (questionnaire) {
         return <SuccessIcon />;
     }

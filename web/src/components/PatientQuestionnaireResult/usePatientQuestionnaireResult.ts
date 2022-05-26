@@ -1,9 +1,9 @@
 import { useLocation } from 'react-router-dom';
 
-import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientListContainer/usePatientList';
+import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
 import { objectToDisplay } from 'src/utils/questionnaire';
 
-export const usePatientDetails = () => {
+export const usePatientQuestionnaireResult = () => {
     const location = useLocation<any>();
 
     const patient = location.state.patient as ExtendedPatient;

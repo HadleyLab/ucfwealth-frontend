@@ -1,8 +1,10 @@
-import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 import { Spin } from 'antd';
 import React from 'react';
-import { usePatientFileList } from './usePatientFileList';
+
+import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
+
 import s from './PatientFileList.module.scss';
+import { usePatientFileList } from './usePatientFileList';
 
 export const PatientFileList = () => {
     const { fileListRD, downloadFile, removePatientIdFromFileKey } = usePatientFileList();

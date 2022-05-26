@@ -1,7 +1,8 @@
+import { useLocation } from 'react-router-dom';
+
 import { useService } from 'aidbox-react/src/hooks/service';
 import { isFailure, isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { service } from 'aidbox-react/src/services/service';
-import { useLocation } from 'react-router-dom';
 
 const downloadFile = async (key: string) => {
     const result = await service({
