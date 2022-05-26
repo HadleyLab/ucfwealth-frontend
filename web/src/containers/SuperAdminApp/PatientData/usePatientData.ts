@@ -9,7 +9,13 @@ import {
 } from 'aidbox-react/src/services/fhir';
 import { mapSuccess } from 'aidbox-react/src/services/service';
 
-import { DiagnosticReport, Observation, Patient } from 'shared/src/contrib/aidbox';
+import {
+    Condition,
+    DiagnosticReport,
+    ImagingStudy,
+    Observation,
+    Patient,
+} from 'shared/src/contrib/aidbox';
 
 export const usePatientData = () => {
     const location = useLocation();
@@ -59,5 +65,41 @@ export const usePatientData = () => {
         });
     }, []);
 
-    return { patientResourceRD, observationListRD, diagnosticReportListRD };
+    const [conditionListRD] = useService(async () => {
+        const response = await getFHIRResources<Condition>('Condition', {
+            _sort: '-lastUpdated',
+            _include: `subject:uri=urnuuid${patientId}`,
+        });
+
+        if (isFailure(response)) {
+            console.log(response.error);
+        }
+
+        return mapSuccess(response, (bundle) => {
+            return extractBundleResources(bundle).Condition;
+        });
+    }, []);
+
+    const [imagingStudyListRD] = useService(async () => {
+        const response = await getFHIRResources<ImagingStudy>('ImagingStudy', {
+            _sort: '-lastUpdated',
+            _include: `subject:uri=urnuuid${patientId}`,
+        });
+
+        if (isFailure(response)) {
+            console.log(response.error);
+        }
+
+        return mapSuccess(response, (bundle) => {
+            return extractBundleResources(bundle).ImagingStudy;
+        });
+    }, []);
+
+    return {
+        patientResourceRD,
+        observationListRD,
+        diagnosticReportListRD,
+        conditionListRD,
+        imagingStudyListRD,
+    };
 };
