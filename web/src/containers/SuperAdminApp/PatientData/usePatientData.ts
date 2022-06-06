@@ -22,6 +22,12 @@ export const usePatientData = () => {
 
     const patientId = location.pathname.split('/')[2];
 
+    const defaultSearchParams = {
+        _sort: '-lastUpdated',
+        _count: 300,
+        _ilike: patientId,
+    };
+
     const [patientResourceRD] = useService(async () => {
         const response = await getFHIRResource<Patient>({
             resourceType: 'Patient',
@@ -36,10 +42,7 @@ export const usePatientData = () => {
     }, []);
 
     const [observationListRD] = useService(async () => {
-        const response = await getFHIRResources<Observation>('Observation', {
-            _sort: '-lastUpdated',
-            _include: `subject:uri=urnuuid${patientId}`,
-        });
+        const response = await getFHIRResources<Observation>('Observation', defaultSearchParams);
 
         if (isFailure(response)) {
             console.log(response.error);
@@ -51,10 +54,10 @@ export const usePatientData = () => {
     }, []);
 
     const [diagnosticReportListRD] = useService(async () => {
-        const response = await getFHIRResources<DiagnosticReport>('DiagnosticReport', {
-            _sort: '-lastUpdated',
-            _include: `subject:uri=urnuuid${patientId}`,
-        });
+        const response = await getFHIRResources<DiagnosticReport>(
+            'DiagnosticReport',
+            defaultSearchParams,
+        );
 
         if (isFailure(response)) {
             console.log(response.error);
@@ -66,10 +69,7 @@ export const usePatientData = () => {
     }, []);
 
     const [conditionListRD] = useService(async () => {
-        const response = await getFHIRResources<Condition>('Condition', {
-            _sort: '-lastUpdated',
-            _include: `subject:uri=urnuuid${patientId}`,
-        });
+        const response = await getFHIRResources<Condition>('Condition', defaultSearchParams);
 
         if (isFailure(response)) {
             console.log(response.error);
@@ -81,10 +81,7 @@ export const usePatientData = () => {
     }, []);
 
     const [imagingStudyListRD] = useService(async () => {
-        const response = await getFHIRResources<ImagingStudy>('ImagingStudy', {
-            _sort: '-lastUpdated',
-            _include: `subject:uri=urnuuid${patientId}`,
-        });
+        const response = await getFHIRResources<ImagingStudy>('ImagingStudy', defaultSearchParams);
 
         if (isFailure(response)) {
             console.log(response.error);
@@ -105,10 +102,6 @@ export const usePatientData = () => {
 
     return {
         patientResourceRD,
-        observationListRD,
-        diagnosticReportListRD,
-        conditionListRD,
-        imagingStudyListRD,
         patientInfoRD,
     };
 };
