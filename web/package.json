@@ -3,10 +3,11 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
+        "@hashgraph/sdk": "^2.13.1",
         "@types/react-select": "^3.0.26",
         "aidbox-react": "git+https://github.com/beda-software/aidbox-react.git#753b85286b51a62bfd36cd129f3c6ecbffd24094",
         "antd": "^4.10.3",
-        "classnames": "^2.2.6", 
+        "classnames": "^2.2.6",
         "codemirror": "^5.64.0",
         "final-form": "^4.20.1",
         "final-form-arrays": "^3.0.2",
@@ -21,7 +22,8 @@
         "react-scripts": "3.4.0",
         "react-select": "^3.1.1",
         "shared": "0.0.1",
-        "query-string": "~7.1.1"
+        "query-string": "~7.1.1",
+        "buffer": "^6.0.3"
     },
     "scripts": {
         "start": "react-app-rewired start",

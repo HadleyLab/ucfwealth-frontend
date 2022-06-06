@@ -8,7 +8,7 @@ import { PatientProgressListTable } from 'src/components/PatientProgressListTabl
 import { usePatientProgressList } from './usePatientProgressList';
 
 export const PatientProgressList = () => {
-    const { patientListWithCountRD } = usePatientProgressList();
+    const { patientListWithCountRD, celebrate } = usePatientProgressList();
 
     return (
         <RenderRemoteData
@@ -22,6 +22,7 @@ export const PatientProgressList = () => {
                 <PatientProgressListTable
                     patientList={data.patientList}
                     patientCount={data.patientCount}
+                    celebrate={celebrate}
                 />
             )}
         </RenderRemoteData>

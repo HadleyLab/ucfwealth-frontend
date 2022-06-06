@@ -7,7 +7,7 @@ import {
 import { Layout, Menu, Dropdown, Button } from 'antd';
 import * as _ from 'lodash';
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { SessionContext } from 'src/containers/SessionContext';
@@ -93,26 +93,17 @@ export function BaseLayout(props: BaseLayoutProps) {
         });
     }
 
-    function getActiveKeys(routes: RouteItem[]): RouteItem[] {
-        return _.filter(routes, ({ path, submenu }) => {
-            if (path) {
-                return (
-                    history.location.pathname === path ||
-                    history.location.pathname.startsWith(`${path}/`)
-                );
-            }
+    const [selectedKeys, setSelectedKeys] = useState([history.location.pathname]);
 
-            if (submenu) {
-                return _.some(submenu, getActiveKeys(submenu));
-            }
+    const location = history.location.pathname;
 
-            return false;
-        });
-    }
+    useEffect(() => {
+        setSelectedKeys([location]);
+    }, [location]);
 
     return (
         <>
-            <Layout className={'baseLayout'}>
+            <Layout style={baseLayoutStyle}>
                 <Header>
                     <Logo onClick={() => history.push('/app')} style={{ cursor: 'pointer' }} />
                     {user && (
@@ -133,8 +124,7 @@ export function BaseLayout(props: BaseLayoutProps) {
                                                 history.push('/');
                                             }}
                                         >
-                                            <PoweroffOutlined />
-                                            Logout
+                                            <PoweroffOutlined /> Logout
                                         </Menu.Item>
                                     </Menu>
                                 }
@@ -155,11 +145,10 @@ export function BaseLayout(props: BaseLayoutProps) {
                             {routeList && (
                                 <Menu
                                     mode="inline"
-                                    defaultSelectedKeys={_.map(
-                                        getActiveKeys(routeList),
-                                        ({ path, title }) => path || title,
-                                    )}
-                                    selectedKeys={[window.location.pathname]}
+                                    onClick={() => {
+                                        setSelectedKeys([history.location.pathname]);
+                                    }}
+                                    selectedKeys={selectedKeys}
                                     style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
                                 >
                                     {renderMenu(routeList)}
@@ -181,4 +170,8 @@ export function BaseLayout(props: BaseLayoutProps) {
     );
 }
 
-const userOutlinedStyle = { color: '#000000', backgroundColor: '#eab800' };
+const userOutlinedStyle = { color: '#000000' };
+
+const baseLayoutStyle = {
+    minHeight: `calc(100vh - 70px)`,
+}

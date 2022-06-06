@@ -2,6 +2,8 @@ import { Table } from 'antd';
 import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { Patient } from 'shared/src/contrib/aidbox';
+
 import { QuestionnaireAvailableBadge } from 'src/components/QuestionnaireAvailableBadge';
 import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
@@ -12,9 +14,10 @@ import s from './PatientProgressListTable.module.scss';
 interface Props {
     patientList: ExtendedPatient[];
     patientCount?: number;
+    celebrate: (patient: Patient) => Promise<void>;
 }
 
-export const PatientProgressListTable = ({ patientList, patientCount }: Props) => {
+export const PatientProgressListTable = ({ patientList, patientCount, celebrate }: Props) => {
     const history = useHistory();
 
     const goToDetails = (patient: ExtendedPatient) =>
@@ -44,6 +47,11 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
                     </div>
                 </div>
             ),
+            hedera: (
+                <div onClick={() => celebrate(patient)} style={{ cursor: 'pointer' }}>
+                    Celebrate
+                </div>
+            ),
         };
     });
 
@@ -52,35 +60,41 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
             title: <b>Participant</b>,
             dataIndex: 'participant',
             key: 'participant',
-            width: '20%',
             align: 'center' as 'center',
         },
         {
             title: <b>Questionnaires</b>,
             dataIndex: 'questionnaires',
             key: 'questionnaires',
-            width: '20%',
+            width: '15%',
             align: 'center' as 'center',
         },
         {
             title: <b>Last Activity</b>,
             dataIndex: 'lastActivity',
             key: 'lastActivity',
-            width: '20%',
+            width: '15%',
             align: 'center' as 'center',
         },
         {
             title: <b>Dicom Files</b>,
             dataIndex: 'dicomFiles',
             key: 'dicomFiles',
-            width: '20%',
+            width: '15%',
             align: 'center' as 'center',
         },
         {
             title: <b>Details</b>,
             dataIndex: 'details',
             key: 'details',
-            width: '20%',
+            width: '15%',
+            align: 'center' as 'center',
+        },
+        {
+            title: <b>Celebrate participant</b>,
+            dataIndex: 'hedera',
+            key: 'hedera',
+            width: '15%',
             align: 'center' as 'center',
         },
     ];

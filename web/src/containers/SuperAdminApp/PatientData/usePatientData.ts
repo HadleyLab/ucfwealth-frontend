@@ -7,7 +7,7 @@ import {
     getFHIRResource,
     getFHIRResources,
 } from 'aidbox-react/src/services/fhir';
-import { mapSuccess } from 'aidbox-react/src/services/service';
+import { mapSuccess, sequenceMap } from 'aidbox-react/src/services/service';
 
 import {
     Condition,
@@ -95,11 +95,20 @@ export const usePatientData = () => {
         });
     }, []);
 
+    const patientInfoRD = sequenceMap({
+        patientResource: patientResourceRD,
+        observationList: observationListRD,
+        diagnosticReportList: diagnosticReportListRD,
+        conditionList: conditionListRD,
+        imagingStudy: imagingStudyListRD,
+    });
+
     return {
         patientResourceRD,
         observationListRD,
         diagnosticReportListRD,
         conditionListRD,
         imagingStudyListRD,
+        patientInfoRD,
     };
 };

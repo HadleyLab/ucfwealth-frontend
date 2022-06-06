@@ -64,10 +64,13 @@
 }
 
 .ant-menu-item-active {
+    &:hover {
+        background-color: colors.$yellowlight !important;
+    }
     a:hover {
         color: #ffffff !important;
     }
-    background-color: colors.$yellowlight !important;
+    background-color: #ffffff !important;
 }
 
 .ant-menu-item-selected a,
