@@ -25,7 +25,11 @@ export function CustomForm<R = any, UI = any>(props: Props<R, UI>) {
     return (
         <FinalForm<R & { _ui?: UI }>
             onSubmit={(values, form) =>
-                onSubmit(trimWhitespaces(removeEmptyValues(_.omit(values, ['_ui']))), values._ui, form)
+                onSubmit(
+                    trimWhitespaces(removeEmptyValues(_.omit(values, ['_ui']))),
+                    values._ui,
+                    form,
+                )
             }
             initialValuesEqual={_.isEqual}
             {...rest}
@@ -37,6 +41,8 @@ export function CustomForm<R = any, UI = any>(props: Props<R, UI>) {
                     }}
                     {...formItemLayout}
                 >
+                    {/*
+                    // @ts-ignore */}
                     {children(formRenderProps)}
                 </Form>
             )}

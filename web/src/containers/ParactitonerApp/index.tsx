@@ -4,9 +4,7 @@ import { BrowserRouter as Router, Switch, Route, useRouteMatch } from 'react-rou
 import { BaseLayout } from 'src/components/BaseLayout';
 import { RouteItem } from 'src/utils/route';
 
-interface PractitionerAppProps {}
-
-export function PractitionerApp({}: PractitionerAppProps) {
+export function PractitionerApp() {
     let match = useRouteMatch();
     const routes: RouteItem[] = [
         {

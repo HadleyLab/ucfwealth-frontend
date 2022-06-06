@@ -119,7 +119,7 @@ export function App() {
             return (
                 <div>
                     Something went wrong while loading your user data. Refresh the page or{' '}
-                    <a onClick={logout}>logout</a> and login again.
+                    <button onClick={logout}>logout</button> and login again.
                 </div>
             );
         }

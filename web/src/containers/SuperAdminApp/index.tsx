@@ -10,9 +10,7 @@ import { RouteItem } from 'src/utils/route';
 
 import { PatientProgressList } from './PatientProgressList';
 
-interface SuperAdminAppProps {}
-
-export function SuperAdminApp({}: SuperAdminAppProps) {
+export function SuperAdminApp() {
     let match = useRouteMatch();
 
     const routes: RouteItem[] = [

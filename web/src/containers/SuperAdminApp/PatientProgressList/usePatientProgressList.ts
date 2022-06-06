@@ -184,7 +184,12 @@ export const usePatientProgressList = () => {
     const celebrate = async (patient: Patient) => {
         console.log('Patient ID: ', patient.id);
 
-        const { tokenId, CID } = await createNewNFT();
+        if (!patient.id) {
+            console.error('Patient ID is undefined');
+            return;
+        }
+
+        const { tokenId, CID } = await createNewNFT(patient.id);
 
         if (patient.id && tokenId) {
             const response = await getPatientHederaAccount(patient.id);

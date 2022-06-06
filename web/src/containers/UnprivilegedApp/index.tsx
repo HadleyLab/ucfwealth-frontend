@@ -1,8 +1,6 @@
 import React from 'react';
 
-interface UnprivilegedAppProps {}
-
-export function UnprivilegedApp({}: UnprivilegedAppProps) {
+export function UnprivilegedApp() {
     return (
         <>
             <h2>UnprivilegedApp</h2>

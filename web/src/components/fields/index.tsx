@@ -236,6 +236,8 @@ export function CheckBoxField({
                 return (
                     <Form.Item {...formItemProps} extra={helpText} {...getFormItemProps(meta)}>
                         <ACheckbox {...input} {...props}>
+                            {/*
+                            // @ts-ignore */}
                             {label}
                         </ACheckbox>
                     </Form.Item>

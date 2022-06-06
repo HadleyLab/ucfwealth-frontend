@@ -25,13 +25,7 @@ export type TimeLineArray = {
     text?: string | (string[] | undefined)[];
 }[];
 
-const sortArrayByDate = (
-    array: {
-        date?: string;
-        type: string;
-        text?: string | (string[] | undefined)[];
-    }[],
-) => {
+const sortArrayByDate = (array: TimeLineArray) => {
     array.sort((a, b) => {
         if (a.date! > b.date!) {
             return -1;
@@ -54,7 +48,7 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
     const timeLineArray: TimeLineArray = [];
 
     if (checkedList.includes('Observations')) {
-        data.observationList.map((observation) => {
+        data.observationList.map((observation) =>
             timeLineArray.push({
                 date: observation.effective?.dateTime,
                 type: 'Observation',
@@ -64,12 +58,12 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
                     observation.value?.Quantity?.value +
                     ' ' +
                     observation.value?.Quantity?.unit,
-            });
-        });
+            }),
+        );
     }
 
     if (checkedList.includes('Diagnostic Reports')) {
-        data.diagnosticReportList.map((diagnosticReport) => {
+        data.diagnosticReportList.map((diagnosticReport) =>
             timeLineArray.push({
                 date: diagnosticReport.effective?.dateTime,
                 type: 'Diagnostic Report',
@@ -79,30 +73,30 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
                     ) +
                     ' ' +
                     diagnosticReport.status,
-            });
-        });
+            }),
+        );
     }
 
     if (checkedList.includes('Conditions')) {
-        data.conditionList.map((condition) => {
+        data.conditionList.map((condition) =>
             timeLineArray.push({
                 date: condition.onset?.dateTime,
                 type: 'Condition',
                 text: condition.category?.map((category) =>
                     category.coding?.map((code) => code.display + ' '),
                 ),
-            });
-        });
+            }),
+        );
     }
 
     if (checkedList.includes('Imaging Studies')) {
-        data.imagingStudy.map((imagingStudy) => {
+        data.imagingStudy.map((imagingStudy) =>
             timeLineArray.push({
                 date: imagingStudy.started,
                 type: 'Imaging Study',
                 text: imagingStudy.series?.[0].bodySite?.display,
-            });
-        });
+            }),
+        );
     }
 
     sortArrayByDate(timeLineArray);
@@ -111,10 +105,9 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
 };
 
 const plainOptions = ['Observations', 'Diagnostic Reports', 'Conditions', 'Imaging Studies'];
-const defaultCheckedList = ['Observations', 'Diagnostic Reports', 'Conditions', 'Imaging Studies'];
 
 export const useTimeline = () => {
-    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(defaultCheckedList);
+    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(plainOptions);
     const [indeterminate, setIndeterminate] = useState(true);
     const [checkAll, setCheckAll] = useState(false);
 
@@ -134,8 +127,8 @@ export const useTimeline = () => {
         onCheckAllChange,
         onChange,
         warning,
-        configureTimelineArray
-    }
+        configureTimelineArray,
+    };
 
     return {
         checkedList,

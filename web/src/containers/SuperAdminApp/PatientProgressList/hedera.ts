@@ -28,7 +28,7 @@ const supplyKey = PrivateKey.generate();
 const freezeKey = PrivateKey.generate();
 const wipeKey = PrivateKey.generate();
 
-export const createNewNFT = async () => {
+export const createNewNFT = async (patientId: string) => {
     // DEFINE CUSTOM FEE SCHEDULE
     const nftCustomFee = new CustomRoyaltyFee()
         .setNumerator(5)
@@ -38,11 +38,11 @@ export const createNewNFT = async () => {
 
     // IPFS CONTENT IDENTIFIERS FOR WHICH WE WILL CREATE NFTs
     const CID = CID_ARRAY;
-
+    
     // CREATE NFT WITH CUSTOM FEE
     const nftCreate = await new TokenCreateTransaction()
-        .setTokenName('{Pexels random photos}')
-        .setTokenSymbol('pexels')
+        .setTokenName(patientId)
+        .setTokenSymbol(patientId.substring(0, 8))
         .setTokenType(TokenType.NonFungibleUnique)
         .setDecimals(0)
         .setInitialSupply(0)
