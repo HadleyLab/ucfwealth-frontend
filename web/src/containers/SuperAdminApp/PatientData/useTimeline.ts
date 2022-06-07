@@ -4,12 +4,15 @@ import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import { useState } from 'react';
 
 import {
+    AidboxResource,
     Condition,
     DiagnosticReport,
     ImagingStudy,
     Observation,
     Patient,
 } from 'shared/src/contrib/aidbox';
+
+import { ResourceDetailsContent } from 'src/components/ResourceDetailsContent';
 
 export interface PatientData {
     patientResource: Patient;
@@ -20,6 +23,7 @@ export interface PatientData {
 }
 
 export type TimeLineArray = {
+    data: AidboxResource;
     date?: string;
     type: string;
     text?: string | (string[] | undefined)[];
@@ -37,19 +41,13 @@ const sortArrayByDate = (array: TimeLineArray) => {
     });
 };
 
-const warning = () => {
-    Modal.warning({
-        title: 'This is a warning message',
-        content: 'some messages...some messages...',
-    });
-};
-
 const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueType[]) => {
     const timeLineArray: TimeLineArray = [];
 
     if (checkedList.includes('Observations')) {
         data.observationList.map((observation) =>
             timeLineArray.push({
+                data: observation,
                 date: observation.effective?.dateTime,
                 type: 'Observation',
                 text:
@@ -65,6 +63,7 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
     if (checkedList.includes('Diagnostic Reports')) {
         data.diagnosticReportList.map((diagnosticReport) =>
             timeLineArray.push({
+                data: diagnosticReport,
                 date: diagnosticReport.effective?.dateTime,
                 type: 'Diagnostic Report',
                 text:
@@ -80,6 +79,7 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
     if (checkedList.includes('Conditions')) {
         data.conditionList.map((condition) =>
             timeLineArray.push({
+                data: condition,
                 date: condition.onset?.dateTime,
                 type: 'Condition',
                 text: condition.category?.map((category) =>
@@ -92,6 +92,7 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
     if (checkedList.includes('Imaging Studies')) {
         data.imagingStudy.map((imagingStudy) =>
             timeLineArray.push({
+                data: imagingStudy,
                 date: imagingStudy.started,
                 type: 'Imaging Study',
                 text: imagingStudy.series?.[0].bodySite?.display,
@@ -102,6 +103,16 @@ const configureTimelineArray = (data: PatientData, checkedList: CheckboxValueTyp
     sortArrayByDate(timeLineArray);
 
     return timeLineArray;
+};
+
+const openResourceDetails = (resource: AidboxResource) => {
+    Modal.info({
+        icon: false,
+        mask: true,
+        width: '50vw',
+        content: ResourceDetailsContent({ resource }),
+        okText: 'Close',
+    });
 };
 
 const plainOptions = ['Observations', 'Diagnostic Reports', 'Conditions', 'Imaging Studies'];
@@ -126,8 +137,8 @@ export const useTimeline = () => {
     const timelineManager = {
         onCheckAllChange,
         onChange,
-        warning,
         configureTimelineArray,
+        openResourceDetails,
     };
 
     return {

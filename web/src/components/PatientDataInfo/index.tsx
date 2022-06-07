@@ -59,7 +59,7 @@ export const PatientDataInfo = ({ patient }: Props) => {
             onBack={() => window.history.back()}
             title={
                 patient.name
-                    ? `${patient.name[0].prefix} ${patient.name[0].given} ${patient.name[0].family}`
+                    ? `${patient.name[0].prefix || ''} ${patient.name[0].given || ''} ${patient.name[0].family || ''}`
                     : 'Name not provided'
             }
             subTitle={patient.identifier ? `SSN: ${patient.identifier[2].value}` : 'SSN: Empty'}

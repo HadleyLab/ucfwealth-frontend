@@ -24,7 +24,7 @@ export const usePatientData = () => {
 
     const defaultSearchParams = {
         _sort: '-lastUpdated',
-        _count: 300,
+        _count: 1000,
         _ilike: patientId,
     };
 

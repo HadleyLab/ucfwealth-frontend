@@ -105,7 +105,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         <>
             <Layout style={baseLayoutStyle}>
                 <Header>
-                    <Logo onClick={() => history.push('/app')} style={{ cursor: 'pointer' }} />
+                    <Logo />
                     {user && (
                         <div className="userpanel__wrapper">
                             <Button
