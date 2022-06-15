@@ -34,7 +34,7 @@ export const createNewNFT = async (patientId: string) => {
         .setNumerator(5)
         .setDenominator(10)
         .setFeeCollectorAccountId(TREASURY_ID)
-        .setFallbackFee(new CustomFixedFee().setHbarAmount(new Hbar(200)));
+        .setFallbackFee(new CustomFixedFee().setHbarAmount(new Hbar(1)));
 
     // IPFS CONTENT IDENTIFIERS FOR WHICH WE WILL CREATE NFTs
     const CID = CID_ARRAY;

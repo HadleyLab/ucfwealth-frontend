@@ -1,5 +1,3 @@
-import { AccountId, PrivateKey, TokenId } from '@hashgraph/sdk';
-
 import { useService } from 'aidbox-react/src/hooks/service';
 import {
     failure,
@@ -15,7 +13,6 @@ import { Bundle, Patient, Questionnaire } from 'shared/src/contrib/aidbox';
 
 import {
     associateUserAccountWithNFT,
-    createNewAccount,
     createNewNFT,
     patientBalanceCheck,
     transferNFT,
@@ -34,7 +31,7 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
     }
     if (isSuccess(remoteData)) {
         if (remoteData.data.entry === undefined) {
-            console.error('remoteData.data.entry === undefined');
+            console.error('No patients found');
             return {};
         }
         const patientList = await Promise.all(
@@ -98,57 +95,44 @@ const getPatientHederaAccount = async (patientId: string) => {
     return success(response);
 };
 
-const postPatientHederaAccount = async (
-    patientId: string,
-    accountId: AccountId,
-    accountKey: PrivateKey,
-) => {
-    const response = await service({
-        method: 'POST',
-        url: `HederaAccount`,
-        data: {
-            resourceType: 'HederaAccount',
-            patientId,
-            accountId: String(accountId),
-            accountKey: String(accountKey),
-        },
-    });
-
-    if (isSuccess(response)) {
-        console.log(`Account ${String(accountId)} created`);
-    }
-
-    if (isFailure(response)) {
-        console.error(response.error);
-    }
-
-    return response;
-};
-
-const checkIfAccountExists = (response: RemoteData<any, any>) => {
+const checkPatientHederaAccountExists = (response: RemoteData<any, any>) => {
     return isSuccess(response) ? Boolean(response.data.data.entry.length > 0) : false;
 };
 
-const getAccount = async (
-    isAccountExists: boolean,
-    tokenId: TokenId,
-    patientId: string,
-    response: RemoteData<any, any>,
-) => {
-    if (isAccountExists && isSuccess(response)) {
-        const { accountId, accountKey } = response.data.data.entry[0].resource;
-
-        return { accountId, accountKey };
+const celebrate = async (patient: Patient) => {
+    if (!patient.id) {
+        console.error('Patient ID is undefined');
+        return;
     }
 
-    const { accountId, accountKey } = await createNewAccount();
+    console.log('Patient ID: ', patient.id);
 
-    await postPatientHederaAccount(patientId, accountId, accountKey);
+    const response = await getPatientHederaAccount(patient.id);
 
-    return {
-        accountId,
-        accountKey,
-    };
+    if (isFailure(response)) {
+        console.error(response.error);
+        return;
+    }
+
+    const isAccountExists = checkPatientHederaAccountExists(response);
+
+    if (!isAccountExists) {
+        console.error('Hedera account does not exist');
+        return;
+    }
+
+    const { tokenId, CID } = await createNewNFT(patient.id);
+
+    if (!tokenId) {
+        console.error('Failed to create NFT');
+        return;
+    }
+
+    const { accountId, accountKey } = response.data.data.entry[0].resource;
+
+    await associateUserAccountWithNFT(tokenId, accountId, accountKey);
+    await transferNFT(accountId, tokenId, CID);
+    await patientBalanceCheck(accountId, tokenId);
 };
 
 export const usePatientProgressList = () => {
@@ -162,7 +146,7 @@ export const usePatientProgressList = () => {
             return failure(response);
         }
 
-        const patientList = await getPatientList(response); // TODO error here
+        const patientList = await getPatientList(response);
 
         return success(patientList as unknown as ExtendedPatient[]);
     }, []);
@@ -180,33 +164,6 @@ export const usePatientProgressList = () => {
         patientList: patientListRD,
         patientCount: patientCountRD,
     });
-
-    const celebrate = async (patient: Patient) => {
-        console.log('Patient ID: ', patient.id);
-
-        if (!patient.id) {
-            console.error('Patient ID is undefined');
-            return;
-        }
-
-        const { tokenId, CID } = await createNewNFT(patient.id);
-
-        if (patient.id && tokenId) {
-            const response = await getPatientHederaAccount(patient.id);
-
-            const isAccountExists = checkIfAccountExists(response);
-
-            const { accountId, accountKey } = await getAccount(
-                isAccountExists,
-                tokenId,
-                patient.id,
-                response,
-            );
-            await associateUserAccountWithNFT(tokenId, accountId, accountKey);
-            await transferNFT(accountId, tokenId, CID);
-            await patientBalanceCheck(accountId, tokenId);
-        }
-    };
 
     return { patientListWithCountRD, celebrate };
 };

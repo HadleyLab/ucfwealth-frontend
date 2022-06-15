@@ -16,7 +16,7 @@ export const PatientDataInfo = ({ patient }: Props) => {
         <Descriptions size="middle" column={column} colon={false}>
             <Descriptions.Item label="Address" labelStyle={leftColumnLabelStyle}>
                 {patient.address
-                    ? `${patient.address[0].country} {patient.address[0].state} 
+                    ? `${patient.address[0].country} ${patient.address[0].state} 
                 ${patient.address[0].city} ${patient.address[0].line?.[0]}`
                     : 'Empty'}
             </Descriptions.Item>

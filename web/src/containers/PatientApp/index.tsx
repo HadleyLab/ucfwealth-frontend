@@ -15,13 +15,8 @@ interface PatientAppProps {
 }
 
 export function PatientApp({ user }: PatientAppProps) {
-    const {
-        routes,
-        patientRD,
-        match,
-        isSuccessQuestionnaire,
-        setIsSuccessQuestionnaire,
-    } = usePatientApp({ user });
+    const { routes, patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } =
+        usePatientApp({ user });
 
     return (
         <RenderRemoteData<Patient> remoteData={patientRD}>
