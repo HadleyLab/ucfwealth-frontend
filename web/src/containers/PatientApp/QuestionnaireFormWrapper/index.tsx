@@ -2,10 +2,7 @@ import React from 'react';
 
 import { Patient } from 'shared/src/contrib/aidbox';
 
-import { SuccessIcon } from 'src/images/SuccessIcon';
-
-import { QuestionnaireForm } from '../QuestionnaireForm';
-import s from './QuestionnaireFormWrapper.module.scss';
+import { QuestionnaireSteps } from '../QuestionnaireSteps';
 
 interface QuestionnaireFormWrapperProps {
     isSuccessQuestionnaire: boolean;
@@ -18,22 +15,9 @@ export const QuestionnaireFormWrapper = ({
     setIsSuccessQuestionnaire,
     patient,
 }: QuestionnaireFormWrapperProps) => {
-    if (isSuccessQuestionnaire) {
-        return (
-            <div className={s.wrapper}>
-                <SuccessIcon />
-                <div className={s.thankYou}>Thank you! We really appreciate your time</div>
-                <div className={s.asSoonAsWeGet}>
-                    As soon as we get results we will send you an email to scotteaton@gmail.com
-                    <br />
-                    all the details
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <QuestionnaireForm
+        <QuestionnaireSteps
+            isSuccessQuestionnaire={isSuccessQuestionnaire}
             patient={patient}
             setIsSuccessQuestionnaire={setIsSuccessQuestionnaire}
         />

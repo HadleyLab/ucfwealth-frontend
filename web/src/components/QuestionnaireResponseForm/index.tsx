@@ -22,7 +22,7 @@ import {
 
 import { CustomForm } from '../CustomForm';
 import { ChooseField } from '../fields/ChooseField';
-import s from './QuestionnaireResponseForm.module.scss';
+// import s from './QuestionnaireResponseForm.module.scss';
 
 const formItemLayout = {
     labelCol: {
@@ -34,6 +34,17 @@ const formItemLayout = {
         sm: { span: 12 },
     },
 };
+
+export type Params = FormRenderProps<
+    FormItems & {
+        _ui?: any;
+    },
+    Partial<
+        FormItems & {
+            _ui?: any;
+        }
+    >
+>;
 
 interface Props {
     resource: QuestionnaireResponse;
@@ -48,21 +59,33 @@ interface Props {
         ) => React.ReactNode;
     };
     readOnly?: boolean;
+    setFormParams: (params: Params) => void;
+    formParams: Params;
+    choices: any[];
+    setChoices: (value: any[]) => void;
 }
 
 type FormValues = FormItems;
 
 export class QuestionnaireResponseForm extends React.Component<Props> {
+    public addChoiceValueToProgressBar = (choice: any) => {
+        const choices = this.props.choices;
+        if (
+            !choices.find((c) => c.question === choice.question && choice !== '') &&
+            this.props.questionnaire.id !== 'personal-information'
+        ) {
+            this.props.setChoices([...choices, choice]);
+        }
+    };
+
     public onSave = async (values: FormValues) => {
         const { onSave } = this.props;
         const updatedResource = this.fromFormValues(values);
-
         return onSave(updatedResource);
     };
 
     public fromFormValues(values: FormValues) {
         const { questionnaire, resource } = this.props;
-
         return {
             ...resource,
             ...mapFormToResponse(values, questionnaire),
@@ -290,6 +313,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                         (answer) => isValueEqual(answer.value, option.value.value),
                     );
 
+                    this.addChoiceValueToProgressBar({ question: questionItem.text, ...value });
                     if (item && selectedIndex !== -1) {
                         const subItemParentPath = [
                             ...fieldPath,
@@ -464,25 +488,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
     }
 
     public renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
-        const { readOnly } = this.props;
-        const { handleSubmit, submitting } = formParams;
-
-        return (
-            <>
-                {this.renderQuestions(items, [], formParams)}
-                {!readOnly && (
-                    <div className={s.questionnaireFormActions}>
-                        <Button
-                            onClick={handleSubmit}
-                            disabled={submitting}
-                            className={s.saveButton}
-                        >
-                            Save
-                        </Button>
-                    </div>
-                )}
-            </>
-        );
+        return <>{this.renderQuestions(items, [], formParams)}</>;
     };
 
     protected onFormChange = (form: FormApi<FormValues>): Unsubscribe => {
@@ -519,9 +525,10 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
             >
                 {(params) => {
                     const items = getEnabledQuestions(questionnaire.item!, [], params.values);
-
-                    // return this.renderForm(items, { ...params, values: params.values });
-                    return this.renderForm(items, params);
+                    if (!this.props.formParams) {
+                        this.props.setFormParams(params); // TODO refactor
+                    }
+                    return this.renderQuestions(items, [], params);
                 }}
             </CustomForm>
         );
