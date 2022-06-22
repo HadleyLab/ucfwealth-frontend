@@ -4,11 +4,12 @@ module.exports = {
         'jest/globals': true,
     },
     root: true,
-    extends: ['@react-native-community', 'prettier', 'prettier/react'],
+    extends: ['prettier'],
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint', 'jest', 'import'],
     rules: {
-        'react-native/no-inline-styles': 0,
+        'react/jsx-uses-react': 'off',
+        'react/react-in-jsx-scope': 'off',
         'no-restricted-imports': ['error', { patterns: ['aidbox-react/lib'] }],
         'prettier/prettier': 0,
         'import/order': [
