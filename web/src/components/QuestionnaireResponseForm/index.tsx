@@ -67,37 +67,37 @@ interface Props {
 
 type FormValues = FormItems;
 
-export class QuestionnaireResponseForm extends React.Component<Props> {
-    public addChoiceValueToProgressBar = (choice: any) => {
-        const choices = this.props.choices;
+export const QuestionnaireResponseForm = (props: Props) => {
+    const addChoiceValueToProgressBar = (choice: any) => {
+        const choices = props.choices;
         if (
             !choices.find((c) => c.question === choice.question && choice !== '') &&
-            this.props.questionnaire.id !== 'personal-information'
+            props.questionnaire.id !== 'personal-information'
         ) {
-            this.props.setChoices([...choices, choice]);
+            props.setChoices([...choices, choice]);
         }
     };
 
-    public onSave = async (values: FormValues) => {
-        const { onSave } = this.props;
-        const updatedResource = this.fromFormValues(values);
+    const onSave = async (values: FormValues) => {
+        const { onSave } = props;
+        const updatedResource = fromFormValues(values);
         return onSave(updatedResource);
     };
 
-    public fromFormValues(values: FormValues) {
-        const { questionnaire, resource } = this.props;
+    const fromFormValues = (values: FormValues) => {
+        const { questionnaire, resource } = props;
         return {
             ...resource,
             ...mapFormToResponse(values, questionnaire),
         };
-    }
+    };
 
-    public toFormValues(): FormValues {
-        const { resource, questionnaire } = this.props;
+    const toFormValues = (): FormValues => {
+        const { resource, questionnaire } = props;
         return mapResponseToForm(resource, questionnaire);
-    }
+    };
 
-    public renderRepeatsAnswer(
+    const renderRepeatsAnswer = (
         renderAnswer: (
             questionItem: QuestionnaireItem,
             parentPath: string[],
@@ -107,7 +107,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
-    ) {
+    ) => {
         const { linkId, text, required, repeats } = questionItem;
         const baseFieldPath = [...parentPath, linkId];
 
@@ -185,14 +185,14 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                 }}
             </Field>
         );
-    }
+    };
 
-    public renderAnswerText(
+    const renderAnswerText = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
         index = 0,
-    ) {
+    ) => {
         const { linkId, text, item, hidden } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
         const name = [...fieldPath, 'value', 'string'].join('.');
@@ -210,12 +210,12 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                         );
                     }}
                 </Field>
-                {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
+                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
             </div>
         );
-    }
+    };
 
-    public renderAnswerNumeric = (
+    const renderAnswerNumeric = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
@@ -248,17 +248,17 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                     // helpText={helpText}
                     // addonAfter={unit && unit.display!}
                 />
-                {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
+                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
             </>
         );
     };
 
-    public renderAnswerDateTime(
+    const renderAnswerDateTime = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
         index = 0,
-    ) {
+    ) => {
         const { linkId, text, item } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
 
@@ -270,12 +270,12 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                     }}
                 </Field>
 
-                {item ? this.renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
+                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
             </>
         );
-    }
+    };
 
-    public renderAnswerChoice = (
+    const renderAnswerChoice = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
@@ -318,7 +318,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                         (answer) => isValueEqual(answer.value, option.value.value),
                     );
 
-                    this.addChoiceValueToProgressBar({ question: questionItem.text, ...value });
+                    addChoiceValueToProgressBar({ question: questionItem.text, ...value });
                     if (item && selectedIndex !== -1) {
                         const subItemParentPath = [
                             ...fieldPath,
@@ -326,7 +326,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                             'items',
                         ];
 
-                        return this.renderQuestions(item, subItemParentPath, formParams);
+                        return renderQuestions(item, subItemParentPath, formParams);
                     }
 
                     return null;
@@ -335,12 +335,12 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         );
     };
 
-    public renderGroup(
+    const renderGroup = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
         // fieldsRenderConfig: FieldsRenderConfig,
-    ) {
+    ) => {
         const { linkId, item, text, repeats } = questionItem;
 
         if (item) {
@@ -384,7 +384,7 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
                                                             </div>
                                                         </div>
                                                         <div>
-                                                            {this.renderQuestions(
+                                                            {renderQuestions(
                                                                 item,
                                                                 [
                                                                     ...parentPath,
@@ -419,18 +419,18 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
             return (
                 <div style={{ paddingBottom: 10 }}>
                     <p>{text}</p>
-                    {this.renderQuestions(item, [...parentPath, linkId, 'items'], formParams)}
+                    {renderQuestions(item, [...parentPath, linkId, 'items'], formParams)}
                 </div>
             );
         }
         return null;
-    }
+    };
 
-    public renderAnswer(
+    const renderAnswer = (
         rawQuestionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
-    ): any {
+    ) => {
         const questionItem = {
             ...rawQuestionItem,
             text: interpolateAnswers(rawQuestionItem.text!, parentPath, formParams.values),
@@ -439,34 +439,19 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         const { type } = questionItem;
 
         if (type === 'string' || type === 'text') {
-            return this.renderRepeatsAnswer(
-                this.renderAnswerText,
-                questionItem,
-                parentPath,
-                formParams,
-            );
+            return renderRepeatsAnswer(renderAnswerText, questionItem, parentPath, formParams);
         }
 
         if (type === 'integer' || type === 'decimal') {
-            return this.renderRepeatsAnswer(
-                this.renderAnswerNumeric,
-                questionItem,
-                parentPath,
-                formParams,
-            );
+            return renderRepeatsAnswer(renderAnswerNumeric, questionItem, parentPath, formParams);
         }
 
         if (type === 'date' || type === 'dateTime') {
-            return this.renderRepeatsAnswer(
-                this.renderAnswerDateTime,
-                questionItem,
-                parentPath,
-                formParams,
-            );
+            return renderRepeatsAnswer(renderAnswerDateTime, questionItem, parentPath, formParams);
         }
 
         if (type === 'choice') {
-            return this.renderAnswerChoice(questionItem, parentPath, formParams);
+            return renderAnswerChoice(questionItem, parentPath, formParams);
         }
 
         if (type === 'display') {
@@ -474,35 +459,35 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         }
 
         if (type === 'group') {
-            return this.renderGroup(questionItem, parentPath, formParams);
+            return renderGroup(questionItem, parentPath, formParams);
         }
 
         console.error(`TODO: Unsupported item type ${type}`);
 
         return null;
-    }
+    };
 
-    public renderQuestions(
+    const renderQuestions = (
         items: QuestionnaireItem[],
         parentPath: string[],
         formParams: FormRenderProps,
-    ) {
+    ) => {
         return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
-            <div key={index}>{this.renderAnswer(item, parentPath, formParams)}</div>
+            <div key={index}>{renderAnswer(item, parentPath, formParams)}</div>
         ));
-    }
-
-    public renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
-        return <>{this.renderQuestions(items, [], formParams)}</>;
     };
 
-    protected onFormChange = (form: FormApi<FormValues>): Unsubscribe => {
+    const renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
+        return <>{renderQuestions(items, [], formParams)}</>;
+    };
+
+    const onFormChange = (form: FormApi<FormValues>): Unsubscribe => {
         const unsubscribe = form.subscribe(
             ({ values }) => {
-                const { onChange } = this.props;
+                const { onChange } = props;
                 if (onChange) {
-                    if (!_.isEqual(values, this.toFormValues())) {
-                        const updatedResource = this.fromFormValues(values);
+                    if (!_.isEqual(values, toFormValues())) {
+                        const updatedResource = fromFormValues(values);
                         onChange(updatedResource);
                     }
                 }
@@ -515,27 +500,25 @@ export class QuestionnaireResponseForm extends React.Component<Props> {
         };
     };
 
-    public render() {
-        const { questionnaire } = this.props;
+    const { questionnaire } = props;
 
-        return (
-            <CustomForm<FormValues>
-                onSubmit={this.onSave}
-                layout={'vertical'}
-                initialValues={this.toFormValues()}
-                initialValuesEqual={_.isEqual}
-                decorators={[this.onFormChange]}
-                mutators={{ ...arrayMutators }}
-                // formItemLayout={formItemLayout}
-            >
-                {(params) => {
-                    const items = getEnabledQuestions(questionnaire.item!, [], params.values);
-                    if (!this.props.formParams) {
-                        this.props.setFormParams(params); // TODO refactor
-                    }
-                    return this.renderQuestions(items, [], params);
-                }}
-            </CustomForm>
-        );
-    }
-}
+    return (
+        <CustomForm<FormValues>
+            onSubmit={onSave}
+            layout={'vertical'}
+            initialValues={toFormValues()}
+            initialValuesEqual={_.isEqual}
+            decorators={[onFormChange]}
+            mutators={{ ...arrayMutators }}
+            // formItemLayout={formItemLayout}
+        >
+            {(params) => {
+                const items = getEnabledQuestions(questionnaire.item!, [], params.values);
+                if (!props.formParams) {
+                    props.setFormParams(params); // TODO refactor
+                }
+                return renderQuestions(items, [], params);
+            }}
+        </CustomForm>
+    );
+};
