@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { SVGProps } from 'react';
 
 import { Questionnaire } from 'shared/src/contrib/aidbox';

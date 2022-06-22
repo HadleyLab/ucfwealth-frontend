@@ -1,6 +1,4 @@
-import * as React from 'react';
 import { FieldInputProps, FieldMetaState } from 'react-final-form';
-
 
 interface InputFieldProps {
     input: FieldInputProps<string>;

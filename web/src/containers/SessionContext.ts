@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React from 'react';
+
 import { User } from 'shared/src/contrib/aidbox';
 
 import { UserRole } from 'src/services/role';

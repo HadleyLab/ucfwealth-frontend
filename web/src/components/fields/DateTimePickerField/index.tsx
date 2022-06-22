@@ -1,8 +1,8 @@
 import { Form, Input as AInput, DatePicker, Tooltip } from 'antd';
 import { DatePickerProps } from 'antd/lib/date-picker';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment';
-import * as React from 'react';
+import React from 'react';
 import { Field } from 'react-final-form';
 
 import { getFormItemProps, FieldProps } from 'src/components/fields';

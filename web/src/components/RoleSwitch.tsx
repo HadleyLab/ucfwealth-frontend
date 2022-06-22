@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import { User } from 'shared/src/contrib/aidbox';
 
@@ -24,9 +24,9 @@ interface Props {
     };
 }
 
-export class RoleSwitch extends React.Component<Props, {}> {
-    public renderContent(user: User, role: UserRole) {
-        const { children: mapping } = this.props;
+export const RoleSwitch = (props: Props) => {
+    const renderContent = (user: User, role: UserRole) => {
+        const { children: mapping } = props;
 
         const defaultRenderFn = mapping.default ? mapping.default : () => <div />;
 
@@ -49,13 +49,11 @@ export class RoleSwitch extends React.Component<Props, {}> {
         } else {
             return defaultRenderFn({ user });
         }
-    }
+    };
 
-    public render() {
-        return (
-            <SessionContext.Consumer>
-                {({ user, role }) => this.renderContent(user, role)}
-            </SessionContext.Consumer>
-        );
-    }
-}
+    return (
+        <SessionContext.Consumer>
+            {({ user, role }) => renderContent(user, role)}
+        </SessionContext.Consumer>
+    );
+};

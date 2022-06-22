@@ -6,32 +6,12 @@ import { getFHIRResource } from 'aidbox-react/src/services/fhir';
 
 import { Patient, User } from 'shared/src/contrib/aidbox';
 
-import { RouteItem } from 'src/utils/route';
-
 interface Props {
     user: User;
 }
 
 export const usePatientApp = ({ user }: Props) => {
     let match = useRouteMatch();
-    const routes: RouteItem[] = [
-        {
-            url: `https://beda.software/breast-cancer/`,
-            title: 'Home',
-        },
-        {
-            path: `${match.url}/questionnaire`,
-            title: 'Profile data',
-        },
-        {
-            url: `https://uci.beda.software/${user.data.patient?.id}`,
-            title: 'Medical data',
-        },
-        {
-            url: `https://community.covidimaging.app/auth/oauth2_basic`, // TODO config COMMUNITY_URL
-            title: 'Community',
-        },
-    ];
 
     const patientRef = user.data.patient;
 
@@ -43,5 +23,5 @@ export const usePatientApp = ({ user }: Props) => {
 
     const [patientRD] = useService<Patient>(() => getFHIRResource<Patient>(patientRef!));
 
-    return { routes, patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire };
+    return { patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire };
 };

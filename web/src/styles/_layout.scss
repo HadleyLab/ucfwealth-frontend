@@ -1,9 +1,9 @@
 @use 'colors';
 
 .ant-layout-header {
-    background: #323747 !important;
-    height: 56px !important;
-    padding: 0 24px !important;
+    // background: #323747 !important;
+    height: 64px !important;
+    // padding: 0 40px !important;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,32 +11,32 @@
     width: 100%;
 }
 
-.ant-layout-header {
-    background-color: #000000 !important;
+// .ant-layout-header {
+//     background-color: #000000 !important;
 
-    .userpanel__wrapper {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
+//     .userpanel__wrapper {
+//         display: flex;
+//         justify-content: flex-end;
+//         align-items: center;
+//     }
 
-    .userpanel__dropdown {
-        color: white;
-    }
+//     .userpanel__dropdown {
+//         color: white;
+//     }
 
-    .userpanel__userrole {
-        font-weight: 500;
-    }
+//     .userpanel__userrole {
+//         font-weight: 500;
+//     }
 
-    .userpanel__username {
-        padding-left: 4px;
-        font-weight: 30;
-    }
-}
+//     .userpanel__username {
+//         padding-left: 4px;
+//         font-weight: 30;
+//     }
+// }
 
-.ant-layout {
-    background: white !important;
-}
+// .ant-layout {
+    // background: white !important;
+// }
 
 .ant-layout-sider-trigger {
     background: transparent !important;
@@ -47,66 +47,66 @@
     margin-left: 175px;
 }
 
-.ant-checkbox-group {
-    display: block !important;
-    margin-right: 0 !important;
-}
+// .ant-checkbox-group {
+//     display: block !important;
+//     margin-right: 0 !important;
+// }
 
-.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-    background-color: colors.$yellow !important;
-}
+// .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+//     background-color: colors.$yellow !important;
+// }
 
-.ant-menu-vertical .ant-menu-item::after,
-.ant-menu-vertical-left .ant-menu-item::after,
-.ant-menu-vertical-right .ant-menu-item::after,
-.ant-menu-inline .ant-menu-item::after {
-    border-right: 3px solid colors.$yellow !important;
-}
+// .ant-menu-vertical .ant-menu-item::after,
+// .ant-menu-vertical-left .ant-menu-item::after,
+// .ant-menu-vertical-right .ant-menu-item::after,
+// .ant-menu-inline .ant-menu-item::after {
+//     border-right: 3px solid colors.$yellow !important;
+// }
 
-.ant-menu-item-active {
-    &:hover {
-        background-color: colors.$yellowlight !important;
-    }
-    a:hover {
-        color: #ffffff !important;
-    }
-    background-color: #ffffff !important;
-}
+// .ant-menu-item-active {
+    // &:hover {
+        // background-color: colors.$yellowlight !important;
+    // }
+    // a:hover {
+    //     color: #ffffff !important;
+    // }
+    // background-color: #ffffff !important;
+// }
 
-.ant-menu-item-selected a,
-.ant-menu-item-selected a:hover {
-    color: #ffffff;
-}
+// .ant-menu-item-selected a,
+// .ant-menu-item-selected a:hover {
+//     color: #ffffff;
+// }
 
 .ant-radio-inner::after {
-    background-color: colors.$yellow !important;
+    // background-color: colors.$yellow !important;
 }
 
 .ant-radio-checked .ant-radio-inner {
-    border-color: colors.$yellow !important ;
+    // border-color: colors.$yellow !important ;
 }
 
 .ant-radio-checked .ant-radio-inner:after {
-    background-color: colors.$yellow;
+    // background-color: colors.$yellow;
 }
 
 .ant-radio:hover .ant-radio-inner {
-    border-color: colors.$yellow;
+    // border-color: colors.$yellow;
 }
 
 .ant-input:focus {
-    border-color: colors.$yellow !important;
-    -webkit-box-shadow: 0 0 0 2px rgba(226, 233, 87, 0.2) !important;
-    box-shadow: 0 0 0 2px rgba(226, 233, 87, 0.2) !important;
+    // border-color: colors.$yellow !important;
+    // -webkit-box-shadow: 0 0 0 2px rgba(226, 233, 87, 0.2) !important;
+    // box-shadow: 0 0 0 2px rgba(226, 233, 87, 0.2) !important;
 }
 
 .ant-input:hover {
-    border-color: colors.$yellow !important;
+    // border-color: colors.$yellow !important;
 }
 
 .ant-btn-primary {
-    background: colors.$yellow !important;
-    border-color: colors.$yellow !important;
+    // background: colors.$yellow !important;
+    // border-color: colors.$yellow !important;
 }
 
 .ant-btn-circle {

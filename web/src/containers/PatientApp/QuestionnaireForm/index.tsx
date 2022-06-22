@@ -35,7 +35,7 @@ export const QuestionnaireForm = ({
         });
 
     return (
-        <div>
+        <div style={{width: '840px' }}>
             <RenderRemoteData<QuestionnaireResponseFormData>
                 remoteData={questFormRespRD as RemoteData<QuestionnaireResponseFormData, any>}
             >

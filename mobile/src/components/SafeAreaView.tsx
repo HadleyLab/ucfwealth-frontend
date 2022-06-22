@@ -14,7 +14,7 @@ const s = StyleSheet.create({
 });
 
 interface SafeAreaViewProps extends ViewProps {
-    children?: React.ReactNode;
+    children?: any;
     drawBehind?: boolean;
 }
 

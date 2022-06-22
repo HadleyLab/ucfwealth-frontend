@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 function isEmpty(value: any) {
     return value == null || _.isEqual(value, {}) || _.isEqual(value, []);

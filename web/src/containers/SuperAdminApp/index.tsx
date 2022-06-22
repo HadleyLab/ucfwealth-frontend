@@ -8,6 +8,7 @@ import { PatientData } from 'src/containers/SuperAdminApp/PatientData';
 import { PatientList } from 'src/containers/SuperAdminApp/PatientList';
 import { RouteItem } from 'src/utils/route';
 
+import { titleStyle } from '../PatientApp';
 import { PatientProgressList } from './PatientProgressList';
 
 export function SuperAdminApp() {
@@ -16,11 +17,11 @@ export function SuperAdminApp() {
     const routes: RouteItem[] = [
         {
             path: `${match.url}`,
-            title: 'Progress',
+            title: <span style={titleStyle}>Progress</span>,
         },
         {
             path: `${match.url}/patients`,
-            title: 'Patient list',
+            title: <span style={titleStyle}>Patient list</span>,
         },
     ];
 

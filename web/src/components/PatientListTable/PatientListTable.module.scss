@@ -1,9 +1,14 @@
 .container {
     width: 85%;
-    min-width: 540px;
+    min-width: 840px;
 }
 
 .link {
     cursor: pointer;
     padding: 5px 0;
+}
+
+.title {
+    font-size: 38px;
+    font-weight: 600;
 }

@@ -1,7 +1,6 @@
 /* eslint-disable dot-notation */
 import { Descriptions, PageHeader } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import React from 'react';
 
 import { Patient } from 'shared/src/contrib/aidbox';
 

@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import './services/initialize';
 import { App } from './containers/App';
-import 'antd/dist/antd.css';
 import './styles/index.scss';
 import * as serviceWorker from './serviceWorker';
 

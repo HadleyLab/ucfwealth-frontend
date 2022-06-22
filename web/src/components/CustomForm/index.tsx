@@ -1,8 +1,8 @@
 import { Form } from 'antd';
 import { ColProps } from 'antd/lib/grid/col';
 import { FormApi, SubmissionErrors } from 'final-form';
-import * as _ from 'lodash';
-import * as React from 'react';
+import _ from 'lodash';
+import React from 'react';
 import { Form as FinalForm, FormRenderProps, FormProps } from 'react-final-form';
 
 import { trimWhitespaces, removeEmptyValues } from 'src/utils/form';

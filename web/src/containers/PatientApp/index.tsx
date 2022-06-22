@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
@@ -6,6 +5,7 @@ import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 import { Patient, User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
+import { RouteItem } from 'src/utils/route';
 
 import { QuestionnaireFormWrapper } from './QuestionnaireFormWrapper';
 import { usePatientApp } from './usePatientApp';
@@ -15,8 +15,28 @@ interface PatientAppProps {
 }
 
 export function PatientApp({ user }: PatientAppProps) {
-    const { routes, patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } =
-        usePatientApp({ user });
+    const { patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } = usePatientApp({
+        user,
+    });
+
+    const routes: RouteItem[] = [
+        {
+            url: `https://beda.software/breast-cancer/`,
+            title: <span style={titleStyle}>Home</span>,
+        },
+        {
+            path: `${match.url}/questionnaire`,
+            title: <span style={titleStyle}>Profile data</span>,
+        },
+        {
+            url: `https://uci.beda.software/${user.data.patient?.id}`,
+            title: <span style={titleStyle}>Medical data</span>,
+        },
+        {
+            url: `https://community.covidimaging.app/auth/oauth2_basic`, // TODO config COMMUNITY_URL
+            title: <span style={titleStyle}>Community</span>,
+        },
+    ];
 
     return (
         <RenderRemoteData<Patient> remoteData={patientRD}>
@@ -46,3 +66,7 @@ export function PatientApp({ user }: PatientAppProps) {
         </RenderRemoteData>
     );
 }
+
+export const titleStyle = {
+    fontWeight: 600,
+};

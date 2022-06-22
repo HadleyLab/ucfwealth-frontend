@@ -1,7 +1,7 @@
 import { Checkbox as ACheckbox, Radio as ARadio, Form, Input as AInput, Select } from 'antd';
 import { FormItemProps } from 'antd/lib/form';
-import * as _ from 'lodash';
-import * as React from 'react';
+import _ from 'lodash';
+import React from 'react';
 import { Field } from 'react-final-form';
 
 import './styles.css';

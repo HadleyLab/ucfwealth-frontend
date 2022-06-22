@@ -5,15 +5,15 @@ import {
     UserOutlined,
 } from '@ant-design/icons/lib';
 import { Layout, Menu, Dropdown, Button } from 'antd';
-import * as _ from 'lodash';
-import * as React from 'react';
+import _ from 'lodash';
+import React from 'react';
 import { useContext, useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { SessionContext } from 'src/containers/SessionContext';
 import { Logo } from 'src/images/Logo';
 
-const { Header, Content, Sider, Footer } = Layout;
+const { Header, Content, Footer } = Layout;
 
 interface RouteItem {
     url?: string;
@@ -101,71 +101,82 @@ export function BaseLayout(props: BaseLayoutProps) {
         setSelectedKeys([location]);
     }, [location]);
 
+    const menuWidth = routeList!.length > 2 ? '600px' : '300px';
+
     return (
         <>
             <Layout style={baseLayoutStyle}>
                 <Header>
                     <Logo />
-                    {user && (
-                        <div className="userpanel__wrapper">
-                            <Button
-                                shape="circle"
-                                icon={<UserOutlined style={userOutlinedStyle} />}
-                            />
-                            <Dropdown
-                                className="userpanel__dropdown"
-                                trigger={['click']}
-                                overlay={
-                                    <Menu>
-                                        <Menu.Item
-                                            key="logout"
-                                            onClick={async () => {
-                                                await logout();
-                                                history.push('/');
+                    <div style={{ display: 'flex' }}>
+                        {!props.disableMenu && routeList && (
+                            <Menu
+                                mode="horizontal"
+                                onClick={() => {
+                                    setSelectedKeys([history.location.pathname]);
+                                }}
+                                selectedKeys={selectedKeys}
+                                style={{ minWidth: menuWidth, height: '66px' }}
+                            >
+                                {renderMenu(routeList)}
+                            </Menu>
+                        )}
+                        {user && (
+                            <div className="userpanel__wrapper">
+                                <Button
+                                    shape="circle"
+                                    icon={<UserOutlined style={userOutlinedStyle} />}
+                                />
+                                <Dropdown
+                                    className="userpanel__dropdown"
+                                    trigger={['click']}
+                                    overlay={
+                                        <Menu>
+                                            <Menu.Item
+                                                key="logout"
+                                                onClick={async () => {
+                                                    await logout();
+                                                    history.push('/');
+                                                }}
+                                            >
+                                                <PoweroffOutlined /> Logout
+                                            </Menu.Item>
+                                        </Menu>
+                                    }
+                                >
+                                    <Button type="link">
+                                        <span
+                                            style={{
+                                                color: 'white',
+                                                fontSize: '13px',
+                                                fontWeight: 500,
                                             }}
                                         >
-                                            <PoweroffOutlined /> Logout
-                                        </Menu.Item>
-                                    </Menu>
-                                }
-                            >
-                                <Button type="link">
-                                    <span style={{ color: 'white' }}>
-                                        {user.email} ({role})
-                                    </span>
-                                    <DownOutlined />
-                                </Button>
-                            </Dropdown>
-                        </div>
-                    )}
+                                            {user.email} ({role})
+                                        </span>
+                                        <DownOutlined />
+                                    </Button>
+                                </Dropdown>
+                            </div>
+                        )}
+                    </div>
                 </Header>
                 <Layout>
-                    {!props.disableMenu && (
-                        <Sider theme="light">
-                            {routeList && (
-                                <Menu
-                                    mode="inline"
-                                    onClick={() => {
-                                        setSelectedKeys([history.location.pathname]);
-                                    }}
-                                    selectedKeys={selectedKeys}
-                                    style={{ lineHeight: '64px', borderRight: '1px solid #fff' }}
-                                >
-                                    {renderMenu(routeList)}
-                                </Menu>
-                            )}
-                        </Sider>
-                    )}
-                    <Content>
-                        <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                            {children}
-                        </div>
+                    <Content style={contentStyle}>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            height: '100%',
+                            minWidth: '840px',
+                        }}>{children}</div>
                     </Content>
                 </Layout>
             </Layout>
-            <Footer style={props.footerStyle}>
+            {/* <Footer style={props.footerStyle}>
                 <div>Covidimaging</div>
-            </Footer>
+            </Footer> */}
         </>
     );
 }
@@ -173,5 +184,14 @@ export function BaseLayout(props: BaseLayoutProps) {
 const userOutlinedStyle = { color: '#000000' };
 
 const baseLayoutStyle = {
-    minHeight: `calc(100vh - 70px)`,
-}
+    minHeight: 'calc(100vh - 70px)',
+};
+
+const contentStyle = {
+    dispaly: 'flex',
+    alignSelf: 'center',
+    background: '#fff',
+    padding: '24px 40px',
+    minHeight: 'calc(100vh - 66px)',
+    minWidth: '1200px',
+};

@@ -9,7 +9,17 @@ module.exports = {
             plugin: CracoAntDesignPlugin,
             options: {
                 customizeTheme: {
-                    '@primary-color': '#0783C1',
+                    '@font-size-base': '14px',
+                    '@primary-yellow': '#eab800',
+                    '@black': '#000000',
+                    '@white': '#ffffff',
+                    '@menu-bg': '@black',
+                    '@menu-item-color': '@white',
+                    '@menu-highlight-color': '@primary-yellow',
+                    '@menu-item-active-bg': '@black',
+                    '@menu-item-active-danger-bg': '@black',
+                    '@layout-header-background': '@black',
+                    '@menu-item-font-size': '@font-size-base',
                 },
             },
         },

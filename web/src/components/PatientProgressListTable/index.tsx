@@ -1,5 +1,4 @@
 import { Table } from 'antd';
-import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Patient } from 'shared/src/contrib/aidbox';

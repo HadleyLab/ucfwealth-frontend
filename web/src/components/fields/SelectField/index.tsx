@@ -1,6 +1,6 @@
 import { Form } from 'antd';
 import classNames from 'classnames';
-import * as React from 'react';
+import React from 'react';
 import { Field } from 'react-final-form';
 import Select from 'react-select';
 
