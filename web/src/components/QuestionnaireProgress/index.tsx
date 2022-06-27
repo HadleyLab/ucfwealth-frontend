@@ -1,12 +1,11 @@
 import { Progress } from 'antd';
-import React from 'react';
+
+import s from './QuestionnaireProgress.module.scss';
 
 interface Props {
     progress: number;
 }
 
 export const QuestionnaireProgress = ({ progress }: Props) => (
-    <>
-        <Progress percent={progress} status="active" />
-    </>
+    <Progress className={s.progressBar} percent={progress} status="active" />
 );

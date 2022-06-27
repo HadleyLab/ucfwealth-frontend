@@ -9,6 +9,7 @@ import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/
 
 import { DateTimePickerField } from 'src/components/DateTimePickerField';
 import { InputField } from 'src/components/fields';
+import { SaveIcon } from 'src/images/SaveIcon';
 import {
     FormAnswerItems,
     FormItems,
@@ -22,18 +23,8 @@ import {
 
 import { CustomForm } from '../CustomForm';
 import { ChooseField } from '../fields/ChooseField';
-// import s from './QuestionnaireResponseForm.module.scss';
-
-// const formItemLayout = {
-//     labelCol: {
-//         xs: { span: 2 },
-//         sm: { span: 7 },
-//     },
-//     wrapperCol: {
-//         xs: { span: 24 },
-//         sm: { span: 12 },
-//     },
-// };
+import { QuestionnaireProgress } from '../QuestionnaireProgress';
+import s from './QuestionnaireResponseForm.module.scss';
 
 export type Params = FormRenderProps<
     FormItems & {
@@ -49,8 +40,6 @@ export type Params = FormRenderProps<
 interface Props {
     resource: QuestionnaireResponse;
     questionnaire: Questionnaire;
-    onSave: (resource: QuestionnaireResponse) => Promise<any> | void;
-    onChange?: (resource: QuestionnaireResponse) => void;
     customWidgets?: {
         [linkId: string]: (
             questionItem: QuestionnaireItem,
@@ -59,10 +48,14 @@ interface Props {
         ) => React.ReactNode;
     };
     readOnly?: boolean;
-    setFormParams: (params: Params) => void;
-    formParams: Params;
     choices: any[];
+    currentStep: number;
+    questionnaireId: string;
+    progress: number;
+    onSave: (resource: QuestionnaireResponse) => Promise<any> | void;
+    onChange?: (resource: QuestionnaireResponse) => void;
     setChoices: (value: any[]) => void;
+    setCurrentStep: (value: React.SetStateAction<number>) => void;
 }
 
 type FormValues = FormItems;
@@ -193,12 +186,12 @@ export const QuestionnaireResponseForm = (props: Props) => {
         formParams: FormRenderProps,
         index = 0,
     ) => {
-        const { linkId, text, item, hidden } = questionItem;
+        const { linkId, text, item, required, hidden } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
         const name = [...fieldPath, 'value', 'string'].join('.');
 
         return (
-            <div style={hidden ? { opacity: '0.3' } : {}}>
+            <div className={s.inputField} style={hidden ? { opacity: '0.3' } : {}}>
                 <Field name={name}>
                     {({ input, meta }) => {
                         const inputProps = {
@@ -206,7 +199,18 @@ export const QuestionnaireResponseForm = (props: Props) => {
                             ...(hidden ? { disabled: true } : {}),
                         };
                         return (
-                            <InputField name={name} input={inputProps} meta={meta} label={text} />
+                            <InputField
+                                name={name}
+                                input={inputProps}
+                                meta={meta}
+                                label={text}
+                                fieldProps={{
+                                    validate: required
+                                        ? (inputValue: any) =>
+                                              _.isUndefined(inputValue) ? 'Required' : undefined
+                                        : undefined,
+                                }}
+                            />
                         );
                     }}
                 </Field>
@@ -227,7 +231,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
         const inputFieldPath = [...fieldPath, 'value', type];
 
         return (
-            <>
+            <div className={s.inputField}>
                 <InputField
                     name={inputFieldPath.join('.')}
                     fieldProps={{
@@ -249,7 +253,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
                     // addonAfter={unit && unit.display!}
                 />
                 {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </>
+            </div>
         );
     };
 
@@ -266,7 +270,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
             <>
                 <Field name={[...fieldPath, 'value', 'date'].join('.')}>
                     {({ input, meta }) => {
-                        return <DateTimePickerField input={input} meta={meta} label={text} />;
+                        return <DateTimePickerField input={input} meta={meta} label={`${text} `} />;
                     }}
                 </Field>
 
@@ -287,7 +291,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
         return (
             <ChooseField<FormAnswerItems>
                 name={fieldName}
-                label={<b style={{}}>{text}</b>}
+                label={<div className={s.chooseFieldLabel}>{text}</div>}
                 multiple={repeats}
                 inline={!item && !repeats}
                 options={_.map(answerOption, (opt) => ({
@@ -317,18 +321,17 @@ export const QuestionnaireResponseForm = (props: Props) => {
                         _.isArray(value) ? value : [value],
                         (answer) => isValueEqual(answer.value, option.value.value),
                     );
-
-                    addChoiceValueToProgressBar({ question: questionItem.text, ...value });
+                    selectedIndex === 0
+                        ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
+                        : null;
                     if (item && selectedIndex !== -1) {
                         const subItemParentPath = [
                             ...fieldPath,
                             ...(repeats ? [_.toString(selectedIndex)] : []),
                             'items',
                         ];
-
                         return renderQuestions(item, subItemParentPath, formParams);
                     }
-
                     return null;
                 }}
             />
@@ -415,10 +418,16 @@ export const QuestionnaireResponseForm = (props: Props) => {
                     </Field>
                 );
             }
-
+            const paragraphs = _.split(text, '\n');
             return (
-                <div style={{ paddingBottom: 10 }}>
-                    <p>{text}</p>
+                <div style={{ paddingBottom: 10, textAlign: 'left', whiteSpace: 'initial' }}>
+                    {_.map(paragraphs, (paragraph, index) => {
+                        return (
+                            <p key={`group-paragraph-${index}`} className={s.groupParagraph}>
+                                {paragraph}
+                            </p>
+                        );
+                    })}
                     {renderQuestions(item, [...parentPath, linkId, 'items'], formParams)}
                 </div>
             );
@@ -478,7 +487,35 @@ export const QuestionnaireResponseForm = (props: Props) => {
     };
 
     const renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
-        return <>{renderQuestions(items, [], formParams)}</>;
+        const { readOnly } = props;
+        const { submitting, valid, handleSubmit } = formParams;
+
+        const onClick = async () => {
+            await handleSubmit();
+            if (valid) props.setCurrentStep(props.currentStep + 1);
+        };
+
+        return (
+            <>
+                {renderQuestions(items, [], formParams)}
+                {props.questionnaireId === 'screening-questions' && (
+                    <QuestionnaireProgress progress={props.progress} />
+                )}
+                {!readOnly && (
+                    <div className="questionnaire-form-actions">
+                        <Button
+                            type="primary"
+                            className={s.saveButton}
+                            disabled={submitting}
+                            onClick={onClick}
+                        >
+                            <SaveIcon style={{ marginRight: 9 }} />
+                            <span>Save and Continue</span>
+                        </Button>
+                    </div>
+                )}
+            </>
+        );
     };
 
     const onFormChange = (form: FormApi<FormValues>): Unsubscribe => {
@@ -500,8 +537,6 @@ export const QuestionnaireResponseForm = (props: Props) => {
         };
     };
 
-    const { questionnaire } = props;
-
     return (
         <CustomForm<FormValues>
             onSubmit={onSave}
@@ -510,14 +545,14 @@ export const QuestionnaireResponseForm = (props: Props) => {
             initialValuesEqual={_.isEqual}
             decorators={[onFormChange]}
             mutators={{ ...arrayMutators }}
-            // formItemLayout={formItemLayout}
         >
             {(params) => {
-                const items = getEnabledQuestions(questionnaire.item!, [], params.values);
-                if (!props.formParams) {
-                    props.setFormParams(params); // TODO refactor
+                if (!props.questionnaire.item) {
+                    console.error('questionnaire item is missing', props.questionnaire.item);
+                    return;
                 }
-                return renderQuestions(items, [], params);
+                const items = getEnabledQuestions(props.questionnaire.item, [], params.values);
+                return renderForm(items, params);
             }}
         </CustomForm>
     );

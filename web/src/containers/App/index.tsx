@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, Switch, Router, Redirect } from 'react-router-dom';
 
 import { isFailure, notAsked } from 'aidbox-react/src/libs/remoteData';

@@ -28,6 +28,7 @@ interface Props {
 }
 
 export function useQuestionnaireForm({ patient, questionnaireId }: Props) {
+    //TODO: fix types
     //@ts-ignore
     const [questFormRespRD] = useService<QuestionnaireResponseFormData>(async () => {
         const questRD = await getFHIRResource({
@@ -39,7 +40,9 @@ export function useQuestionnaireForm({ patient, questionnaireId }: Props) {
             return;
         }
         const populatedQuestRespRD = await getQR();
-        if (isSuccessAll([questRD, populatedQuestRespRD!])) {
+        //TODO: fix types
+        //@ts-ignore
+        if (isSuccessAll([questRD, populatedQuestRespRD])) {
             return success({
                 questionnaire: questRD.data,
                 questionnaireResponse: populatedQuestRespRD!.data,

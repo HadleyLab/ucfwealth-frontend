@@ -13,7 +13,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { SessionContext } from 'src/containers/SessionContext';
 import { Logo } from 'src/images/Logo';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 interface RouteItem {
     url?: string;

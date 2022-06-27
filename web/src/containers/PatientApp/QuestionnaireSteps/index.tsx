@@ -1,5 +1,5 @@
-import { Button, Steps } from 'antd';
-import React, { useState } from 'react';
+import { Steps } from 'antd';
+import { useState } from 'react';
 
 import { Patient } from 'shared/src/contrib/aidbox';
 
@@ -12,22 +12,12 @@ const { Step } = Steps;
 
 interface Props {
     isSuccessQuestionnaire: boolean;
-    setIsSuccessQuestionnaire: (state: boolean) => void;
     patient: Patient;
+    setIsSuccessQuestionnaire: (state: boolean) => void;
 }
 
-export const QuestionnaireSteps = ({
-    patient,
-}: Props) => {
-    const [current, setCurrent] = useState(0);
-    const [formParams, setFormParams] = useState<any>(false);
-
-    const next = async () => {
-        const { handleSubmit } = formParams;
-        await handleSubmit();
-        setCurrent(current + 1);
-        setFormParams(false);
-    };
+export const QuestionnaireSteps = ({ patient }: Props) => {
+    const [currentStep, setCurrentStep] = useState(0);
 
     const steps = [
         {
@@ -36,8 +26,8 @@ export const QuestionnaireSteps = ({
                 <QuestionnaireForm
                     patient={patient}
                     questionnaireId={'personal-information'}
-                    setFormParams={setFormParams}
-                    formParams={formParams}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
                 />
             ),
         },
@@ -47,8 +37,8 @@ export const QuestionnaireSteps = ({
                 <QuestionnaireForm
                     patient={patient}
                     questionnaireId={'screening-questions'}
-                    setFormParams={setFormParams}
-                    formParams={formParams}
+                    currentStep={currentStep}
+                    setCurrentStep={setCurrentStep}
                 />
             ),
         },
@@ -60,19 +50,14 @@ export const QuestionnaireSteps = ({
 
     return (
         <>
-            <Steps current={current}>
+            <h2 className={s.title}>COVID-19 Questionnaire</h2>
+            <Steps current={currentStep} className={s.steps}>
                 {steps.map((item) => (
                     <Step key={item.title} title={item.title} />
                 ))}
             </Steps>
-            <div className={s.stepsContent}>{steps[current].content}</div>
-            <div className={s.stepsAction}>
-                {current < steps.length - 1 && (
-                    <Button type="primary" onClick={next}>
-                        Next
-                    </Button>
-                )}
-            </div>
+            <div className={s.stepsContent}>{steps[currentStep].content}</div>
+
         </>
     );
 };

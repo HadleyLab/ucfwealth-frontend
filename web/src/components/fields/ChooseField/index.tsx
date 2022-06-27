@@ -11,6 +11,8 @@ interface ChooseFieldOption<T> {
     icon?: { type?: string; component?: React.FC };
 }
 
+import s from './ChooseField.module.scss';
+
 interface ChooseFieldProps<T> {
     helpText?: string;
     multiple?: boolean;
@@ -92,11 +94,16 @@ export function ChooseField<T = any>({
                 } else {
                     const RadioElement = radioButton ? ARadio.Button : ARadio;
                     return (
-                        <Form.Item {...formItemProps} label={label} {...getFormItemProps(meta)}>
+                        <Form.Item
+                            {...formItemProps}
+                            label={label}
+                            {...getFormItemProps(meta)}
+                            className={s.formitem}
+                        >
                             {_.map(options, (option, index) => {
                                 const isSelected = isEqual(input.value, option.value);
                                 return (
-                                    <React.Fragment key={`${option.value}-${index}`}>
+                                    <div key={`${option.value}-${index}`}>
                                         <RadioElement
                                             checked={isSelected}
                                             onChange={(event) => {
@@ -108,12 +115,13 @@ export function ChooseField<T = any>({
                                                     onChange(value);
                                                 }
                                             }}
+                                            className={s.radio}
                                         >
                                             {option.label}
                                         </RadioElement>
                                         {renderOptionContent &&
                                             renderOptionContent(option, index, input.value)}
-                                    </React.Fragment>
+                                    </div>
                                 );
                             })}
                         </Form.Item>
