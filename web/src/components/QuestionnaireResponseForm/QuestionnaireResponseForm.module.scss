@@ -39,3 +39,23 @@
     height: 100%;
     align-items: center;
 }
+
+.requiredRed {
+    position: 'absolute';
+    color: #ff4d4f;
+    font-weight: 500;
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+.requiredGrey {
+    position: 'absolute';
+    color: #00000073;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.datepicker {
+    margin-top: 15px;
+    margin-bottom: 0px;
+}

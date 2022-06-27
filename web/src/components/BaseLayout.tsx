@@ -174,9 +174,6 @@ export function BaseLayout(props: BaseLayoutProps) {
                     </Content>
                 </Layout>
             </Layout>
-            {/* <Footer style={props.footerStyle}>
-                <div>Covidimaging</div>
-            </Footer> */}
         </>
     );
 }

@@ -1,13 +1,13 @@
-import { Button } from 'antd';
+import { Button, DatePicker } from 'antd';
 import { FormApi, Unsubscribe } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import _ from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
 
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-import { DateTimePickerField } from 'src/components/DateTimePickerField';
 import { InputField } from 'src/components/fields';
 import { SaveIcon } from 'src/images/SaveIcon';
 import {
@@ -25,17 +25,6 @@ import { CustomForm } from '../CustomForm';
 import { ChooseField } from '../fields/ChooseField';
 import { QuestionnaireProgress } from '../QuestionnaireProgress';
 import s from './QuestionnaireResponseForm.module.scss';
-
-export type Params = FormRenderProps<
-    FormItems & {
-        _ui?: any;
-    },
-    Partial<
-        FormItems & {
-            _ui?: any;
-        }
-    >
->;
 
 interface Props {
     resource: QuestionnaireResponse;
@@ -257,6 +246,9 @@ export const QuestionnaireResponseForm = (props: Props) => {
         );
     };
 
+    const [validDate, setValidDate] = React.useState(true);
+    const [answerDateTimeChanged, setAnswerDateTimeChanged] = React.useState(false);
+
     const renderAnswerDateTime = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
@@ -265,15 +257,44 @@ export const QuestionnaireResponseForm = (props: Props) => {
     ) => {
         const { linkId, text, item } = questionItem;
         const fieldPath = [...parentPath, linkId, _.toString(index)];
-
+        const dateFormat = 'YYYY-MM-DD';
         return (
             <>
                 <Field name={[...fieldPath, 'value', 'date'].join('.')}>
                     {({ input, meta }) => {
-                        return <DateTimePickerField input={input} meta={meta} label={`${text} `} />;
+                        if (!input.value) {
+                            setValidDate(false);
+                        }
+                        return (
+                            <div className={s.datepicker}>
+                                <div className={s.inputField} style={{ marginBottom: 8 }}>
+                                    {text}
+                                </div>
+                                <DatePicker
+                                    defaultValue={input.value && moment(input.value, dateFormat)}
+                                    onChange={(date, dateString) => {
+                                        setAnswerDateTimeChanged(true);
+                                        if (!dateString || dateString === '') {
+                                            setValidDate(false);
+                                        } else {
+                                            input.onChange(dateString);
+                                            setValidDate(true);
+                                        }
+                                    }}
+                                    format={dateFormat}
+                                    status={!validDate && answerDateTimeChanged ? 'error' : ''}
+                                />
+                                {!validDate && answerDateTimeChanged ? (
+                                    <div className={s.requiredRed}>Required</div>
+                                ) : !answerDateTimeChanged ? (
+                                    <div className={s.requiredGrey}>Required</div>
+                                ) : (
+                                    <div style={{ height: '27px' }} />
+                                )}
+                            </div>
+                        );
                     }}
                 </Field>
-
                 {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
             </>
         );
@@ -492,7 +513,8 @@ export const QuestionnaireResponseForm = (props: Props) => {
 
         const onClick = async () => {
             await handleSubmit();
-            if (valid) props.setCurrentStep(props.currentStep + 1);
+            setAnswerDateTimeChanged(true);
+            if (valid && validDate) props.setCurrentStep(props.currentStep + 1);
         };
 
         return (
