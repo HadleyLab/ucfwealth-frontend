@@ -23,6 +23,7 @@ import { baseURL } from 'src/services/constants';
 import { history } from 'src/services/history';
 import { getUserRole, UserRole } from 'src/services/role';
 import { removeToken, retrieveToken, saveToken } from 'src/services/token';
+import { sharedPatientId } from 'src/sharedState';
 
 import { SessionContext } from '../SessionContext';
 import { Auth } from './Auth';
@@ -95,6 +96,7 @@ export function App() {
     const renderAuthenticatedRoutes = () => {
         if (isSuccess(userRD)) {
             const user = userRD.data;
+            sharedPatientId.setSharedState(user.data.patient?.id || '');
             return (
                 <Switch>
                     <Route path="/app">
