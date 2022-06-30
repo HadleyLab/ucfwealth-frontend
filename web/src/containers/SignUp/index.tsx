@@ -2,7 +2,6 @@ import { Alert, Button, Card, Col, Form, Row } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { FORM_ERROR } from 'final-form';
 import _ from 'lodash';
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';

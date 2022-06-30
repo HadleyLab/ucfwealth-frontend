@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useService } from 'aidbox-react/src/hooks/service';
 import { service } from 'aidbox-react/src/services/service';
 

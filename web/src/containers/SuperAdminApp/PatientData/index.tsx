@@ -1,5 +1,4 @@
 import { Spin } from 'antd';
-import React from 'react';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 

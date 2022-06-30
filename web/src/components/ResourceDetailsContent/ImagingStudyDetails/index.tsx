@@ -1,6 +1,5 @@
 /* eslint-disable dot-notation */
 import { Descriptions } from 'antd';
-import React from 'react';
 
 import { ImagingStudy } from 'shared/src/contrib/aidbox';
 

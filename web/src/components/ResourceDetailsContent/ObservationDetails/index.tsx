@@ -1,5 +1,4 @@
 import { Descriptions } from 'antd';
-import React from 'react';
 
 import { Observation } from 'shared/src/contrib/aidbox';
 

@@ -1,10 +1,11 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
 import { Patient, User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
+import { sharedPatientId } from 'src/sharedState';
 import { RouteItem } from 'src/utils/route';
 
 import { QuestionnaireFormWrapper } from './QuestionnaireFormWrapper';
@@ -18,6 +19,8 @@ export function PatientApp({ user }: PatientAppProps) {
     const { patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } = usePatientApp({
         user,
     });
+
+    sharedPatientId.setSharedState({ id: user.data.patient?.id || '' });
 
     const routes: RouteItem[] = [
         {

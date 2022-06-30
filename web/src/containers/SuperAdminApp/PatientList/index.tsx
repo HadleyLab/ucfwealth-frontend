@@ -1,5 +1,4 @@
 import { Spin } from 'antd';
-import React from 'react';
 
 import { PatientListTable } from 'src/components/PatientListTable';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';

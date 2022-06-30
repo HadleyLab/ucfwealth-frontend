@@ -12,7 +12,7 @@ export const QuestionnaireSuccess = () => {
                 Thank you!
                 <br />
                 Please upload your DICOM files{' '}
-                <a href={`https://uci.beda.software/${patientId}`}>here</a>
+                <a href={`https://uci.beda.software/${patientId.id}`}>here</a>
             </div>
         </div>
     );

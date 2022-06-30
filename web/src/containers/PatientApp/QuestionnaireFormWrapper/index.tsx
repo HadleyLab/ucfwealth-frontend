@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Patient } from 'shared/src/contrib/aidbox';
 
 import { QuestionnaireSteps } from '../QuestionnaireSteps';
