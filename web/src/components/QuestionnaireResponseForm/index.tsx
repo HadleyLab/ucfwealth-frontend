@@ -376,7 +376,6 @@ export const QuestionnaireResponseForm = (props: Props) => {
                         {({ input }) => {
                             return (
                                 <div>
-                                    <p>{text}</p>
                                     <div>
                                         {_.map(
                                             input.value.items && input.value.items.length
@@ -387,12 +386,17 @@ export const QuestionnaireResponseForm = (props: Props) => {
                                                     return null;
                                                 }
                                                 return (
-                                                    <div key={`group-${index}`}>
-                                                        <div>
-                                                            <span>{`${questionItem.text} #${
-                                                                index + 1
-                                                            }`}</span>
+                                                    <div
+                                                        className={s.imagingSiteGroup}
+                                                        key={`group-${index}`}
+                                                    >
+                                                        <div className={s.imagingSiteHeader}>
                                                             <div
+                                                                className={s.groupParagraphHeader}
+                                                            >{`${questionItem.text} #${
+                                                                index + 1
+                                                            }`}</div>
+                                                            <Button
                                                                 onClick={() => {
                                                                     const filteredArray = _.filter(
                                                                         input.value.items,
@@ -405,7 +409,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
                                                                 }}
                                                             >
                                                                 <span>Remove</span>
-                                                            </div>
+                                                            </Button>
                                                         </div>
                                                         <div>
                                                             {renderQuestions(
@@ -424,14 +428,18 @@ export const QuestionnaireResponseForm = (props: Props) => {
                                             },
                                         )}
                                     </div>
-                                    <div
-                                        onClick={() => {
-                                            const existingItems = input.value.items || [];
-                                            const updatedInput = { items: [...existingItems, {}] };
-                                            input.onChange(updatedInput);
-                                        }}
-                                    >
-                                        <p>{`+ Add another ${text}`}</p>
+                                    <div className={s.addAnother}>
+                                        <Button
+                                            onClick={() => {
+                                                const existingItems = input.value.items || [];
+                                                const updatedInput = {
+                                                    items: [...existingItems, {}],
+                                                };
+                                                input.onChange(updatedInput);
+                                            }}
+                                        >
+                                            <p>{`+ Add another ${text}`}</p>
+                                        </Button>
                                     </div>
                                 </div>
                             );
