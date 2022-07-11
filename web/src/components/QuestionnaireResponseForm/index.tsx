@@ -286,7 +286,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
                                 />
                                 {!validDate && answerDateTimeChanged ? (
                                     <div className={s.requiredRed}>Required</div>
-                                ) : !answerDateTimeChanged ? (
+                                ) : !validDate && !answerDateTimeChanged ? (
                                     <div className={s.requiredGrey}>Required</div>
                                 ) : (
                                     <div style={{ height: '27px' }} />
