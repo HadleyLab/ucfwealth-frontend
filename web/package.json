@@ -3,7 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@hashgraph/sdk": "^2.13.1",
         "aidbox-react": "^1.3.3",
         "antd": "^4.16.13",
         "classnames": "^2.2.6",

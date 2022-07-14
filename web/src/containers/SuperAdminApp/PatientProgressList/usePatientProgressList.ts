@@ -11,13 +11,6 @@ import { sequenceMap, service } from 'aidbox-react/src/services/service';
 
 import { Bundle, Patient, Questionnaire } from 'shared/src/contrib/aidbox';
 
-import {
-    associateUserAccountWithNFT,
-    createNewNFT,
-    patientBalanceCheck,
-    transferNFT,
-} from './hedera';
-
 export interface ExtendedPatient extends Patient {
     email?: string;
     questionnaire?: Questionnaire;
@@ -95,6 +88,21 @@ const getPatientHederaAccount = async (patientId: string) => {
     return success(response);
 };
 
+const createNft = async (patientId: string) => {
+    const response = await service({
+        method: 'GET',
+        url: '$create-nft',
+        params: { patientId },
+    });
+
+    if (isFailure(response)) {
+        console.error(response.error);
+        return;
+    }
+
+    return response.data;
+};
+
 const checkPatientHederaAccountExists = (response: RemoteData<any, any>) => {
     return isSuccess(response) ? Boolean(response.data.data.entry.length > 0) : false;
 };
@@ -121,18 +129,9 @@ const celebrate = async (patient: Patient) => {
         return;
     }
 
-    const { tokenId, CID } = await createNewNFT(patient.id);
+    const result = await createNft(patient.id);
 
-    if (!tokenId) {
-        console.error('Failed to create NFT');
-        return;
-    }
-
-    const { accountId, accountKey } = response.data.data.entry[0].resource;
-
-    await associateUserAccountWithNFT(tokenId, accountId, accountKey);
-    await transferNFT(accountId, tokenId, CID);
-    await patientBalanceCheck(accountId, tokenId);
+    console.log('Result:', result);
 };
 
 export const usePatientProgressList = () => {
