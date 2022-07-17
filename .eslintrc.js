@@ -1,12 +1,11 @@
 module.exports = {
     env: {
         browser: true,
-        'jest/globals': true,
     },
     root: true,
     extends: ['prettier'],
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'jest', 'import'],
+    plugins: ['@typescript-eslint', 'import'],
     rules: {
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',

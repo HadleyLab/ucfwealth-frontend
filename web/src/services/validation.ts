@@ -1,7 +1,4 @@
 import Ajv from 'ajv';
-// @ts-ignore
-import ajvErrors from 'ajv-errors';
-// @ts-ignore
 import ajvKeywords from 'ajv-keywords';
 import * as _ from 'lodash';
 
@@ -15,7 +12,6 @@ const ajvInstance = new Ajv({
     extendRefs: true,
 });
 ajvKeywords(ajvInstance);
-ajvErrors(ajvInstance);
 
 interface JsonSchema {
     [x: string]: any;
