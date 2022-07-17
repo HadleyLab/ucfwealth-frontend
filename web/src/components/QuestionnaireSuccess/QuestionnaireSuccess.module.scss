@@ -7,6 +7,7 @@
 }
 
 .thankYou {
+    width: 675px;
     font-size: 24px;
     font-weight: 600;
     padding-top: 20px;
@@ -15,4 +16,27 @@
 .asSoonAsWeGet {
     color: rgba(0, 0, 0, 0.45);
     text-align: center;
+}
+
+.uploadImages {
+    margin-top: 22px;
+    width: 220px !important;
+    height: 50px  !important;
+    font-size: 20px  !important;
+}
+
+.uploadImagesSpan {
+    font-size: 20px  !important;
+    padding-top: 8px;
+}
+
+.whatsNext {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.step {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 22px;
 }
