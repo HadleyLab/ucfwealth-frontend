@@ -1,4 +1,20 @@
+.headerWrapper {
+    display: flex;
+    width: 100%;
+}
+
+.leftArrow {
+    width: 24px;
+    cursor: pointer;
+    padding: 5px;
+    justify-self: flex-start;
+}
+
 .header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-right: 24px;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 10px;

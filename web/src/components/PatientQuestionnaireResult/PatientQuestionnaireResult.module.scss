@@ -1,0 +1,35 @@
+.patientDetails {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    margin-right: 24px;
+}
+
+.patient {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.details {
+    color: rgba(0, 0, 0, 0.45);
+    font-weight: 500;
+    padding-left: 12px;
+}
+
+.headerWrapper {
+    display: flex;
+    width: 1120px;
+}
+
+.leftArrow {
+    width: 24px;
+    cursor: pointer;
+    padding: 5px;
+    justify-self: flex-start;
+}
+
+.codeMirrorWrapper {
+    margin-left: 100px;
+    margin-top: 24px;
+}
