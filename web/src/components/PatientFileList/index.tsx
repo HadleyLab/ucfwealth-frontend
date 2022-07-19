@@ -10,12 +10,10 @@ import s from './PatientFileList.module.scss';
 import { usePatientFileList } from './usePatientFileList';
 
 export const PatientFileList = () => {
-    const { fileListRD, downloadFile, removePatientIdFromFileKey, getPatientId } =
+    const { fileListRD, downloadFile, removePatientIdFromFileKey, patientId } =
         usePatientFileList();
 
     const history = useHistory();
-
-    const patientId = getPatientId();
 
     return (
         <>

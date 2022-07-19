@@ -29,14 +29,6 @@ const removePatientIdFromFileKey = (fileKey: string) => {
         .join('/');
 };
 
-const getPenultimateElement = (array: string[]) => array[array.length - 2];
-
-const getPatientId = () => {
-    const link = window.location.href;
-    const stringArray = link.split('/');
-    return getPenultimateElement(stringArray);
-};
-
 export const usePatientFileList = () => {
     const location = useLocation();
 
@@ -47,10 +39,10 @@ export const usePatientFileList = () => {
             method: 'GET',
             url: '$list-patient-dicom-files',
             params: {
-                patientId: patientId,
+                patientId,
             },
         }),
     );
 
-    return { fileListRD, downloadFile, removePatientIdFromFileKey, getPatientId };
+    return { fileListRD, downloadFile, removePatientIdFromFileKey, patientId };
 };
