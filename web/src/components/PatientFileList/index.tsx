@@ -1,4 +1,4 @@
-import { Spin } from 'antd';
+import { Button, Spin } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
@@ -9,9 +9,12 @@ import s from './PatientFileList.module.scss';
 import { usePatientFileList } from './usePatientFileList';
 
 export const PatientFileList = () => {
-    const { fileListRD, downloadFile, removePatientIdFromFileKey } = usePatientFileList();
+    const { fileListRD, downloadFile, removePatientIdFromFileKey, getPatientId } =
+        usePatientFileList();
 
     const history = useHistory();
+
+    const patientId = getPatientId();
 
     return (
         <>
@@ -23,7 +26,7 @@ export const PatientFileList = () => {
             </div>
             <RenderRemoteData remoteData={fileListRD} renderLoading={() => <Spin />}>
                 {(data) => (
-                    <div>
+                    <div className={s.fileList}>
                         {data.dicomFileList.length > 0 ? (
                             data.dicomFileList.map((fileKey: string, key: string) => (
                                 <div
@@ -37,6 +40,13 @@ export const PatientFileList = () => {
                         ) : (
                             <div>Empty</div>
                         )}
+                        <Button
+                            className={s.uploadImages}
+                            type="primary"
+                            href={`https://uci.beda.software/${patientId}`}
+                        >
+                            Upload images
+                        </Button>
                     </div>
                 )}
             </RenderRemoteData>
