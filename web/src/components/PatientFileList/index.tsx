@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
+import { fileUploaderUrl } from 'src/config.url';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
 
 import s from './PatientFileList.module.scss';
@@ -43,7 +44,7 @@ export const PatientFileList = () => {
                         <Button
                             className={s.uploadImages}
                             type="primary"
-                            href={`https://uci.beda.software/${patientId}`}
+                            href={`${fileUploaderUrl}/${patientId}`}
                         >
                             Upload images
                         </Button>

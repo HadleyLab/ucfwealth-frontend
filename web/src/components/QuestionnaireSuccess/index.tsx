@@ -1,5 +1,6 @@
 import { Button } from 'antd';
 
+import { fileUploaderUrl } from 'src/config.url';
 import { SuccessIcon } from 'src/images/SuccessIcon';
 import { sharedPatientId } from 'src/sharedState';
 
@@ -31,7 +32,7 @@ export const QuestionnaireSuccess = () => {
                 <Button
                     className={s.uploadImages}
                     type="primary"
-                    href={`https://uci.beda.software/${patientId.id}`}
+                        href={`${fileUploaderUrl}/${patientId.id}`}
                 >
                     <span className={s.uploadImagesSpan}>Upload images</span>
                 </Button>
