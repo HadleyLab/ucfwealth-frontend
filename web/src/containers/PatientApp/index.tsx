@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
@@ -10,6 +10,7 @@ import { sharedPatientId } from 'src/sharedState';
 import { RouteItem } from 'src/utils/route';
 
 import { QuestionnaireFormWrapper } from './QuestionnaireFormWrapper';
+import { SummaryOverview } from './SummaryOverview';
 import { usePatientApp } from './usePatientApp';
 
 interface PatientAppProps {
@@ -62,8 +63,14 @@ export function PatientApp({ user }: PatientAppProps) {
                                     />
                                 )}
                             />
+                            <Route
+                                path={`${match.url}/`}
+                                render={() => <SummaryOverview />}
+                                exact
+                            />
                             <Route path={'/'} render={() => <p>Page not found</p>} />
                         </Switch>
+                        <Redirect to={`${match.url}`} />
                     </BaseLayout>
                 </Router>
             )}

@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Switch, Route, useRouteMatch, Redirect } from 'react-router-dom';
 
 import { BaseLayout } from 'src/components/BaseLayout';
-import { PatientFileList } from 'src/components/PatientFileList';
-import { PatientQuestionnaireResult } from 'src/components/PatientQuestionnaireResult';
 import { PatientData } from 'src/containers/SuperAdminApp/PatientData';
+import { PatientFileList } from 'src/containers/SuperAdminApp/PatientFileList';
 import { PatientList } from 'src/containers/SuperAdminApp/PatientList';
+import { PatientQuestionnaireResult } from 'src/containers/SuperAdminApp/PatientQuestionnaireResult';
 import { RouteItem } from 'src/utils/route';
 
 import { titleStyle } from '../PatientApp';
