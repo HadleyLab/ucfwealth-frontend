@@ -1,7 +1,10 @@
-export const QuestionnaireSummary = ({ data }: any) => {
+import { Bundle, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+
+export const QuestionnaireSummary = ({ data }: { data: Bundle<QuestionnaireResponse> }) => {
+    console.log(data);
     const questionnaireNameExpectedList = ['personal-information', 'screening-questions'];
 
-    if (data.entry.length === 0) {
+    if (data.entry?.length === 0) {
         return (
             <div>
                 {questionnaireNameExpectedList.map((questionnaireName, key) => (
@@ -13,9 +16,9 @@ export const QuestionnaireSummary = ({ data }: any) => {
 
     const questionnaireNameResultList: string[] = [];
 
-    data.entry.map((entry: { resource: { questionnaire: string } }) => {
-        const questionnaireName = entry.resource.questionnaire;
-        if (questionnaireNameExpectedList.includes(questionnaireName)) {
+    data.entry?.map((entry) => {
+        const questionnaireName = entry.resource?.questionnaire;
+        if (questionnaireName && questionnaireNameExpectedList.includes(questionnaireName)) {
             questionnaireNameResultList.push(questionnaireName);
         }
     });
