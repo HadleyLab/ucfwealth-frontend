@@ -1,7 +1,10 @@
 import { Bundle, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-export const QuestionnaireSummary = ({ data }: { data: Bundle<QuestionnaireResponse> }) => {
-    console.log(data);
+interface Props {
+    data: Bundle<QuestionnaireResponse>;
+}
+
+export const QuestionnaireSummary = ({ data }: Props) => {
     const questionnaireNameExpectedList = ['personal-information', 'screening-questions'];
 
     if (data.entry?.length === 0) {
