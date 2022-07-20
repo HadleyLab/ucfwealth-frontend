@@ -1,21 +1,15 @@
 import { Button, Spin } from 'antd';
-import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
 import { fileUploaderUrl } from 'src/config.url';
-import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
 
+import { DicomSummary } from './DicomSummary';
 import { QuestionnaireSummary } from './QuestionnaireSummary';
 import { useSummaryOverview } from './useSummaryOverview';
 
 export const SummaryOverview = () => {
-    let match = useRouteMatch();
-    const history = useHistory();
-
-    const { fileListRD, questionnaireListRD, patientId } = useSummaryOverview();
-
-    const goToQuestionnaire = () => history.push({ pathname: `${match.url}/questionnaire` });
+    const { fileListRD, questionnaireListRD, patientId, goToQuestionnaire } = useSummaryOverview();
 
     return (
         <div>
@@ -24,7 +18,7 @@ export const SummaryOverview = () => {
             <RenderRemoteData
                 remoteData={questionnaireListRD}
                 renderLoading={() => <Spin />}
-                renderFailure={() => <div>Questionnaire list not found</div>}    
+                renderFailure={() => <div>Questionnaire list not found</div>}
             >
                 {(data) => <QuestionnaireSummary data={data} />}
             </RenderRemoteData>
@@ -37,19 +31,7 @@ export const SummaryOverview = () => {
                 renderLoading={() => <Spin />}
                 renderFailure={() => <div>File list not found</div>}
             >
-                {(data) => (
-                    <div>
-                        {data.dicomFileList.length > 0 ? (
-                            data.dicomFileList.map((fileKey: string, key: string) => (
-                                <div key={key} onClick={() => downloadFile(fileKey)}>
-                                    {removePatientIdFromFileKey(fileKey)}
-                                </div>
-                            ))
-                        ) : (
-                            <div>Empty</div>
-                        )}
-                    </div>
-                )}
+                {(data) => <DicomSummary data={data} />}
             </RenderRemoteData>
             <Button type="primary" href={`${fileUploaderUrl}/${patientId}`}>
                 Upload images

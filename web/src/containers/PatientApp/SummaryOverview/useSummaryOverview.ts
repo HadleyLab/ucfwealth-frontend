@@ -1,3 +1,5 @@
+import { useHistory, useRouteMatch } from 'react-router-dom';
+
 import { useService } from 'aidbox-react/src/hooks/service';
 import { isFailure } from 'aidbox-react/src/libs/remoteData';
 import { service } from 'aidbox-react/src/services/service';
@@ -36,5 +38,9 @@ export const useSummaryOverview = () => {
         return response;
     });
 
-    return { fileListRD, questionnaireListRD, patientId };
+    const match = useRouteMatch();
+    const history = useHistory();
+    const goToQuestionnaire = () => history.push({ pathname: `${match.url}/questionnaire` });
+
+    return { fileListRD, questionnaireListRD, patientId, goToQuestionnaire };
 };
