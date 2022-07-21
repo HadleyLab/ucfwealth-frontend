@@ -95,11 +95,11 @@ export function BaseLayout(props: BaseLayoutProps) {
 
     const [selectedKeys, setSelectedKeys] = useState([history.location.pathname]);
 
-    const location = history.location.pathname;
-
     useEffect(() => {
-        setSelectedKeys([location]);
-    }, [location]);
+        return history.listen((location) => {
+            setSelectedKeys([location.pathname]);
+        });
+    }, [history]);
 
     const menuWidth = routeList!.length > 2 ? '740px' : '300px';
 
