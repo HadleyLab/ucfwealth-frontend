@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
-import { Patient, User } from 'shared/src/contrib/aidbox';
+import { User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 import { fileUploaderUrl } from 'src/config.url';
@@ -18,9 +18,10 @@ interface PatientAppProps {
 }
 
 export function PatientApp({ user }: PatientAppProps) {
-    const { patientRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } = usePatientApp({
-        user,
-    });
+    const { patientResultRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } =
+        usePatientApp({
+            user,
+        });
 
     sharedPatientId.setSharedState({ id: user.data.patient?.id || '' });
 
@@ -30,12 +31,16 @@ export function PatientApp({ user }: PatientAppProps) {
             title: <span style={titleStyle}>Home</span>,
         },
         {
-            path: `${match.url}/questionnaire`,
+            path: `${match.url}/summary-overview`,
             title: <span style={titleStyle}>Profile data</span>,
         },
         {
             url: `${fileUploaderUrl}/${user.data.patient?.id}`,
             title: <span style={titleStyle}>Medical data</span>,
+        },
+        {
+            path: `${match.url}/questionnaire`,
+            title: <span style={titleStyle}>Questionnaire</span>,
         },
         {
             url: `https://community.covidimaging.app/auth/oauth2_basic`, // TODO config COMMUNITY_URL
@@ -44,8 +49,8 @@ export function PatientApp({ user }: PatientAppProps) {
     ];
 
     return (
-        <RenderRemoteData<Patient> remoteData={patientRD}>
-            {(patient) => (
+        <RenderRemoteData remoteData={patientResultRD}>
+            {(data) => (
                 <Router>
                     <BaseLayout
                         routes={routes}
@@ -59,13 +64,26 @@ export function PatientApp({ user }: PatientAppProps) {
                                     <QuestionnaireFormWrapper
                                         isSuccessQuestionnaire={isSuccessQuestionnaire}
                                         setIsSuccessQuestionnaire={setIsSuccessQuestionnaire}
-                                        patient={patient}
+                                        patient={data.patient}
                                     />
                                 )}
                             />
                             <Route
-                                path={`${match.url}/`}
+                                path={`${match.url}/summary-overview`}
                                 render={() => <SummaryOverview />}
+                                exact
+                            />
+                            <Route
+                                path={`${match.url}/`}
+                                render={() => (
+                                    <Redirect
+                                        to={
+                                            data.questionnaireResponseList.length === 0
+                                                ? `${match.url}/questionnaire`
+                                                : `${match.url}/summary-overview`
+                                        }
+                                    />
+                                )}
                                 exact
                             />
                             <Route path={'/'} render={() => <p>Page not found</p>} />

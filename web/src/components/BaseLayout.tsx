@@ -50,7 +50,10 @@ export function BaseLayout(props: BaseLayoutProps) {
         return _.map(routes, (route) => {
             if (route.submenu) {
                 return (
-                    <Menu.SubMenu title={renderMenuTitle(route)} key={route.path || route.title}>
+                    <Menu.SubMenu
+                        title={renderMenuTitle(route)}
+                        key={route.path || route.title}
+                    >
                         {renderMenu(route.submenu)}
                     </Menu.SubMenu>
                 );
@@ -58,7 +61,7 @@ export function BaseLayout(props: BaseLayoutProps) {
 
             if (route.path) {
                 return (
-                    <Menu.Item key={route.path}>
+                    <Menu.Item key={route.path} >
                         <Link
                             to={route.path}
                             onClick={() => {
@@ -116,7 +119,8 @@ export function BaseLayout(props: BaseLayoutProps) {
                                     setSelectedKeys([history.location.pathname]);
                                 }}
                                 selectedKeys={selectedKeys}
-                                style={{ minWidth: menuWidth, height: '66px' }}
+                                style={{ minWidth: menuWidth, height: '65px' }}
+                                disabledOverflow={true}
                             >
                                 {renderMenu(routeList)}
                             </Menu>
@@ -163,14 +167,18 @@ export function BaseLayout(props: BaseLayoutProps) {
                 </Header>
                 <Layout>
                     <Content style={contentStyle}>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            height: '100%',
-                            minWidth: '840px',
-                        }}>{children}</div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: '100%',
+                                minWidth: '840px',
+                            }}
+                        >
+                            {children}
+                        </div>
                     </Content>
                 </Layout>
             </Layout>
