@@ -50,10 +50,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         return _.map(routes, (route) => {
             if (route.submenu) {
                 return (
-                    <Menu.SubMenu
-                        title={renderMenuTitle(route)}
-                        key={route.path || route.title}
-                    >
+                    <Menu.SubMenu title={renderMenuTitle(route)} key={route.path || route.title}>
                         {renderMenu(route.submenu)}
                     </Menu.SubMenu>
                 );
@@ -61,7 +58,7 @@ export function BaseLayout(props: BaseLayoutProps) {
 
             if (route.path) {
                 return (
-                    <Menu.Item key={route.path} >
+                    <Menu.Item key={route.path}>
                         <Link
                             to={route.path}
                             onClick={() => {
@@ -104,7 +101,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         setSelectedKeys([location]);
     }, [location]);
 
-    const menuWidth = routeList!.length > 2 ? '600px' : '300px';
+    const menuWidth = routeList!.length > 2 ? '740px' : '300px';
 
     return (
         <>
