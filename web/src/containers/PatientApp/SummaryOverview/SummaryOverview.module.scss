@@ -1,8 +1,9 @@
 .title {
     display: flex;
     align-self: flex-start;
-    font-weight: 600;
-    font-size: 20px;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 40px;
 }
 
 .wrapper {
@@ -16,10 +17,16 @@
     text-align: left;
     background-color: #f3fbfe;
     border: 1px solid #cae4ed;
-    padding: 28px 28px 20px 28px;
+    padding: 28px;
     margin-bottom: 20px;
 }
 
 .button {
-    margin-top: 16px;
+    margin-top: 10px;
+}
+
+.subTitle {
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 12px;
 }

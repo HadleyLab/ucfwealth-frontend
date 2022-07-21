@@ -1,0 +1,17 @@
+.title {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    width: fit-content;
+
+    &:hover {
+        background-color: #eab7001a;
+    }
+}
+
+.empty {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
