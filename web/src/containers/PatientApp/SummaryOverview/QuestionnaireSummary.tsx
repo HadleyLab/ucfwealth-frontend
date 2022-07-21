@@ -1,39 +1,39 @@
-import { Bundle, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import { Questionnaire, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-interface Props {
-    data: Bundle<QuestionnaireResponse>;
+interface Data {
+    questionnaireList: Questionnaire[];
+    questionnaireResponseList: QuestionnaireResponse[];
 }
 
-export const QuestionnaireSummary = ({ data }: Props) => {
+interface Props {
+    data: Data;
+    getQuestionnaireSummary: (
+        data: Data,
+        questionnaireNameExpectedList: string[],
+    ) => {
+        [key: string]: {
+            id: string;
+            title: string;
+            result: boolean;
+        };
+    };
+}
+
+export const QuestionnaireSummary = ({ data, getQuestionnaireSummary }: Props) => {
     const questionnaireNameExpectedList = ['personal-information', 'screening-questions'];
 
-    if (data.entry?.length === 0) {
-        return (
-            <div>
-                {questionnaireNameExpectedList.map((questionnaireName, key) => (
-                    <div key={key}>{questionnaireName}: Incomplete</div>
-                ))}
-            </div>
-        );
-    }
+    const questionnaireSummary = getQuestionnaireSummary(data, questionnaireNameExpectedList);
 
-    const questionnaireNameResultList: string[] = [];
+    const renderQuestionnaireSummary = () => {
+        return Object.keys(questionnaireSummary).map((key) => {
+            const questionnaire = questionnaireSummary[key];
+            return (
+                <div key={questionnaire.id}>
+                    {questionnaire.title}: {questionnaire.result ? 'Complete' : 'Incomplete'}
+                </div>
+            );
+        });
+    };
 
-    data.entry?.map((entry) => {
-        const questionnaireName = entry.resource?.questionnaire;
-        if (questionnaireName && questionnaireNameExpectedList.includes(questionnaireName)) {
-            questionnaireNameResultList.push(questionnaireName);
-        }
-    });
-
-    return (
-        <div>
-            {questionnaireNameExpectedList.map((questionnaireName, key) => {
-                if (questionnaireNameResultList.includes(questionnaireName)) {
-                    return <div key={key}>{questionnaireName}: Complete</div>;
-                }
-                return <div key={key}>{questionnaireName}: Incomplete</div>;
-            })}
-        </div>
-    );
+    return <div>{renderQuestionnaireSummary()}</div>;
 };
