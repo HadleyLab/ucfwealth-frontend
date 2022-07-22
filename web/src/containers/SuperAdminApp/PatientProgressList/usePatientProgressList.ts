@@ -1,3 +1,5 @@
+import { message } from 'antd';
+
 import { useService } from 'aidbox-react/src/hooks/service';
 import {
     failure,
@@ -109,8 +111,10 @@ const checkPatientHederaAccountExists = (response: RemoteData<any, any>) => {
 
 const celebrate = async (patient: Patient) => {
     if (!patient.id) {
-        console.error('Patient ID is undefined');
-        return;
+        const description = 'Patient ID is undefined';
+        console.error(description);
+        message.error(description);
+        return description;
     }
 
     console.log('Patient ID: ', patient.id);
@@ -118,20 +122,28 @@ const celebrate = async (patient: Patient) => {
     const response = await getPatientHederaAccount(patient.id);
 
     if (isFailure(response)) {
-        console.error(response.error);
-        return;
+        const description = JSON.stringify(response.error);
+        console.error(description);
+        message.error(description);
+        return description;
     }
 
     const isAccountExists = checkPatientHederaAccountExists(response);
 
     if (!isAccountExists) {
-        console.error('Hedera account does not exist');
-        return;
+        const description = 'Hedera account does not exist';
+        console.error(description);
+        message.error(description);
+        return description;
     }
 
     const result = await createNft(patient.id);
 
     console.log('Result:', result);
+
+    message.success('Created NFT with id: ' + result.tokenId);
+
+    return String('Created NFT with id: ' + result.tokenId);
 };
 
 export const usePatientProgressList = () => {
