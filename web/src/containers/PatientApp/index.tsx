@@ -73,22 +73,15 @@ export function PatientApp({ user }: PatientAppProps) {
                                 render={() => <SummaryOverview />}
                                 exact
                             />
-                            <Route
-                                path={`${match.url}/`}
-                                render={() => (
-                                    <Redirect
-                                        to={
-                                            data.questionnaireResponseList.length === 0
-                                                ? `${match.url}/questionnaire`
-                                                : `${match.url}/summary-overview`
-                                        }
-                                    />
-                                )}
-                                exact
-                            />
                             <Route path={'/'} render={() => <p>Page not found</p>} />
                         </Switch>
-                        <Redirect to={`${match.url}`} />
+                        <Redirect
+                            to={
+                                data.questionnaireResponseList.length === 0
+                                    ? `${match.url}/questionnaire`
+                                    : `${match.url}/summary-overview`
+                            }
+                        />
                     </BaseLayout>
                 </Router>
             )}

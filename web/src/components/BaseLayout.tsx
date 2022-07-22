@@ -8,7 +8,7 @@ import { Layout, Menu, Dropdown, Button } from 'antd';
 import _ from 'lodash';
 import React from 'react';
 import { useContext, useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { SessionContext } from 'src/containers/SessionContext';
 import { Logo } from 'src/images/Logo';
@@ -95,11 +95,11 @@ export function BaseLayout(props: BaseLayoutProps) {
 
     const [selectedKeys, setSelectedKeys] = useState([history.location.pathname]);
 
+    const location = useLocation().pathname;
+
     useEffect(() => {
-        return history.listen((location) => {
-            setSelectedKeys([location.pathname]);
-        });
-    }, [history]);
+        setSelectedKeys([location]);
+    }, [location]);
 
     const menuWidth = routeList!.length > 2 ? '740px' : '300px';
 
