@@ -13,7 +13,7 @@ import s from './PatientProgressListTable.module.scss';
 interface Props {
     patientList: ExtendedPatient[];
     patientCount?: number;
-    celebrate: (patient: Patient) => Promise<void>;
+    celebrate: (patient: Patient) => Promise<string>;
 }
 
 export const PatientProgressListTable = ({ patientList, patientCount, celebrate }: Props) => {
