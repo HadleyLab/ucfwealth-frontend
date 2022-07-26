@@ -123,20 +123,21 @@ export function useQuestionnaireForm({ patient, questionnaireId }: Props) {
         return choiceQuestions.length;
     };
 
-    const [questionnaire, setQiestionnaire] = useState<QuestionnaireItem[] | undefined>([]);
     const [choices, setChoices] = useState<any[]>([]);
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        const questionCount = getAllQuestionCount(questionnaire!);
-        if (questionCount > 0) {
-            setProgress(Math.round((choices.length / questionCount) * 100));
+        if (isSuccess(questFormRespRD)) {
+            const questionCount = getAllQuestionCount(questFormRespRD.data.questionnaire.item!);
+            if (questionCount > 0) {
+                setProgress(Math.round((choices.length / questionCount) * 100));
+            }
         }
-    }, [choices, questionnaire]);
+    }, [choices, questFormRespRD]);
 
     useEffect(() => {
         setChoices([]);
     }, [questionnaireId]);
 
-    return { questFormRespRD, saveQR, setQiestionnaire, progress, choices, setChoices };
+    return { questFormRespRD, saveQR, progress, choices, setChoices };
 }

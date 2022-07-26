@@ -25,7 +25,7 @@ export const QuestionnaireForm = ({
     currentStep,
     setCurrentStep,
 }: Props) => {
-    const { questFormRespRD, progress, choices, saveQR, setQiestionnaire, setChoices } =
+    const { questFormRespRD, progress, choices, saveQR, setChoices } =
         useQuestionnaireForm({
             patient,
             questionnaireId,
@@ -37,7 +37,6 @@ export const QuestionnaireForm = ({
                 remoteData={questFormRespRD as RemoteData<QuestionnaireResponseFormData, any>}
             >
                 {(data) => {
-                    setQiestionnaire(data.questionnaire.item);
                     return (
                         <QuestionnaireResponseForm
                             key={data.questionnaire.id}
