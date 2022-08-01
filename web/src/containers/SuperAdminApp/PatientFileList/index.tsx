@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
-import { fileUploaderUrl } from 'src/config.url';
+import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
 import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
 
@@ -42,7 +42,7 @@ export const PatientFileList = () => {
                         <Button
                             className={s.uploadImages}
                             type="primary"
-                            href={`${fileUploaderUrl}/${patientId}`}
+                            href={`${FILE_UPLOADER_FRONTEND_URL}/${patientId}`}
                         >
                             Upload images
                         </Button>

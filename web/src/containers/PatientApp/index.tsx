@@ -5,7 +5,7 @@ import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 import { User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
-import { fileUploaderUrl } from 'src/config.url';
+import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { sharedPatientId } from 'src/sharedState';
 import { RouteItem } from 'src/utils/route';
 
@@ -35,7 +35,7 @@ export function PatientApp({ user }: PatientAppProps) {
             title: <span style={titleStyle}>Profile data</span>,
         },
         {
-            url: `${fileUploaderUrl}/${user.data.patient?.id}`,
+            url: `${FILE_UPLOADER_FRONTEND_URL}/${user.data.patient?.id}`,
             title: <span style={titleStyle}>Medical data</span>,
         },
         {

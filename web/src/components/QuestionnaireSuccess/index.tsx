@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 
-import { fileUploaderUrl } from 'src/config.url';
+import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { SuccessIcon } from 'src/images/SuccessIcon';
 import { sharedPatientId } from 'src/sharedState';
 
@@ -32,7 +32,7 @@ export const QuestionnaireSuccess = () => {
                 <Button
                     className={s.uploadImages}
                     type="primary"
-                        href={`${fileUploaderUrl}/${patientId.id}`}
+                        href={`${FILE_UPLOADER_FRONTEND_URL}/${patientId.id}`}
                 >
                     <span className={s.uploadImagesSpan}>Upload images</span>
                 </Button>

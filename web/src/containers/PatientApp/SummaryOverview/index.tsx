@@ -4,7 +4,7 @@ import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
 
 import { DicomSummary } from 'src/components/DicomSummary';
 import { QuestionnaireSummary } from 'src/components/QuestionnaireSummary';
-import { fileUploaderUrl } from 'src/config.url';
+import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 
 import s from './SummaryOverview.module.scss';
 import { useSummaryOverview } from './useSummaryOverview';
@@ -54,7 +54,7 @@ export const SummaryOverview = () => {
                 </div>
                 <Button
                     type="primary"
-                    href={`${fileUploaderUrl}/${patientId}`}
+                    href={`${FILE_UPLOADER_FRONTEND_URL}/${patientId}`}
                     className={s.button}
                 >
                     Upload images
