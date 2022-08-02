@@ -18,7 +18,9 @@ RUN yarn --network-concurrency=1
 
 ADD . /app
 
-ARG TIER
+ARG TIER=local
 RUN cp shared/src/config.${TIER}.ts shared/src/config.ts
 
-RUN yarn build
+# RUN yarn build
+
+CMD ["yarn", "start"]
