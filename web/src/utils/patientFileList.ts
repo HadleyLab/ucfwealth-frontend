@@ -4,7 +4,7 @@ import { service } from 'aidbox-react/src/services/service';
 export const downloadFile = async (key: string) => {
     const result = await service({
         method: 'GET',
-        url: '$download-dicom_file',
+        url: '$download-dicom-file',
         params: { key },
     });
 
