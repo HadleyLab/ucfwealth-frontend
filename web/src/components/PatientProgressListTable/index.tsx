@@ -8,12 +8,13 @@ import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressLis
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
 import { formatHumanDateTime } from 'src/utils/date';
 
+import { Celebrate } from './Celebrate';
 import s from './PatientProgressListTable.module.scss';
 
 interface Props {
     patientList: ExtendedPatient[];
     patientCount?: number;
-    celebrate: (patient: Patient) => Promise<string>;
+    celebrate: (patient: Patient, setLoading: (loading: boolean) => void) => Promise<string>;
 }
 
 export const PatientProgressListTable = ({ patientList, patientCount, celebrate }: Props) => {
@@ -28,10 +29,12 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
     const goToPatientFileList = (patient: ExtendedPatient) =>
         history.push({ pathname: `/patients/${patient.id}/files` });
 
-    const dataSource = patientList.map((patient: ExtendedPatient) => {
+    const dataSource = patientList.map((patient: ExtendedPatient, key) => {
         return {
             key: patient.id,
-            questionnaires: <QuestionnaireAvailableBadge questionnaireList={patient.questionnaireList} />,
+            questionnaires: (
+                <QuestionnaireAvailableBadge questionnaireList={patient.questionnaireList} />
+            ),
             participant: patient.email,
             lastActivity: formatHumanDateTime(patient.lastActivity),
             dicomFiles: (
@@ -46,11 +49,7 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
                     </div>
                 </div>
             ),
-            hedera: (
-                <div onClick={() => celebrate(patient)} style={{ cursor: 'pointer' }}>
-                    Celebrate
-                </div>
-            ),
+            hedera: <Celebrate celebrate={celebrate} patient={patient} />,
         };
     });
 

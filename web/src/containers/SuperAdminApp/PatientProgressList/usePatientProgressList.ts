@@ -31,7 +31,7 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
         }
         const patientList = await Promise.all(
             remoteData.data.entry.map(async (patientItem) => {
-                const patient = patientItem.resource;              
+                const patient = patientItem.resource;
 
                 const userResponse = await service({
                     method: 'GET',
@@ -96,24 +96,21 @@ const createNft = async (patientId: string) => {
         url: '$create-nft',
         params: { patientId },
     });
-
-    if (isFailure(response)) {
-        console.error(response.error);
-        return;
-    }
-
-    return response.data;
+    return response;
 };
 
 const checkPatientHederaAccountExists = (response: RemoteData<any, any>) => {
     return isSuccess(response) ? Boolean(response.data.data.entry.length > 0) : false;
 };
 
-const celebrate = async (patient: Patient) => {
+const celebrate = async (patient: Patient, setLoading: (loading: boolean) => void) => {
+    setLoading(true);
+
     if (!patient.id) {
         const description = 'Patient ID is undefined';
         console.error(description);
         message.error(description);
+        setLoading(false);
         return description;
     }
 
@@ -125,6 +122,7 @@ const celebrate = async (patient: Patient) => {
         const description = JSON.stringify(response.error);
         console.error(description);
         message.error(description);
+        setLoading(false);
         return description;
     }
 
@@ -134,16 +132,23 @@ const celebrate = async (patient: Patient) => {
         const description = 'Hedera account does not exist';
         console.error(description);
         message.error(description);
+        setLoading(false);
         return description;
     }
 
-    const result = await createNft(patient.id);
+    const createNftResponse = await createNft(patient.id);
 
-    console.log('Result:', result);
+    if (isFailure(createNftResponse)) {
+        setLoading(false);
+        const createNftMessageFailure = 'Create NFT failure: ' + createNftResponse.error;
+        message.error(createNftMessageFailure);
+        return createNftMessageFailure;
+    }
 
-    message.success('Created NFT with id: ' + result.tokenId);
-
-    return String('Created NFT with id: ' + result.tokenId);
+    setLoading(false);
+    const createNftMessage = 'Created NFT with id: ' + createNftResponse.data.tokenId;
+    message.success(createNftMessage);
+    return createNftMessage;
 };
 
 export const usePatientProgressList = () => {
