@@ -24,7 +24,7 @@ export const PatientQuestionnaireResult = () => {
                 </div>
             </div>
             <div className={s.codeMirrorWrapper}>
-                {patient.questionnaire ? (
+                {patient.questionnaireList && patient.questionnaireList.length > 0 ? (
                     <CodeMirror
                         value={questionnaire}
                         options={{

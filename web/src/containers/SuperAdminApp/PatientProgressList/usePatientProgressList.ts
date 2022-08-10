@@ -11,11 +11,11 @@ import {
 import { getFHIRResources } from 'aidbox-react/src/services/fhir';
 import { sequenceMap, service } from 'aidbox-react/src/services/service';
 
-import { Bundle, Patient, Questionnaire } from 'shared/src/contrib/aidbox';
+import { Bundle, Patient, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
 export interface ExtendedPatient extends Patient {
     email?: string;
-    questionnaire?: Questionnaire;
+    questionnaireList?: QuestionnaireResponse[];
     lastActivity?: string;
 }
 
@@ -31,7 +31,7 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
         }
         const patientList = await Promise.all(
             remoteData.data.entry.map(async (patientItem) => {
-                const patient = patientItem.resource;
+                const patient = patientItem.resource;              
 
                 const userResponse = await service({
                     method: 'GET',
@@ -59,7 +59,7 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
                     return { ...patient, email };
                 }
 
-                const questionnaire = questionnaireResponse.data.entry[0];
+                const questionnaireList = questionnaireResponse.data.entry;
 
                 const questionnaireLastUpdated =
                     questionnaireResponse.data.entry?.[0]?.resource?.meta?.lastUpdated;
@@ -69,7 +69,7 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
                 if (questionnaireLastUpdated !== undefined) {
                     lastActivity = questionnaireLastUpdated;
                 }
-                return { ...patient, email, questionnaire, lastActivity };
+                return { ...patient, email, questionnaireList, lastActivity };
             }),
         );
         return patientList;

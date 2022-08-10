@@ -1,17 +1,38 @@
 import { SVGProps } from 'react';
 
-import { Questionnaire } from 'shared/src/contrib/aidbox';
+import { BundleEntry, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+
+import { questionnaireNameList } from 'src/config.questionnaire';
 
 interface Props {
-    questionnaire?: Questionnaire;
+    questionnaireList?: BundleEntry<QuestionnaireResponse>[];
 }
 
-export const QuestionnaireAvailableBadge = ({ questionnaire }: Props) => {
-    if (questionnaire) {
-        return <SuccessIcon />;
+export const QuestionnaireAvailableBadge = ({ questionnaireList }: Props) => {
+    const questionnaireSummary: { questionnaire: string; result: boolean }[] = [];
+    questionnaireNameList.map((questionnaire) => {
+        questionnaireSummary.push({
+            questionnaire,
+            result: false,
+        });
+    });
+    if (questionnaireList) {
+        questionnaireList.map((questionnaire) => {
+            questionnaireSummary.map((summary) => {
+                if (summary.questionnaire === questionnaire.resource?.questionnaire) {
+                    summary.result = true;
+                }
+            });
+        });
     }
-
-    return <EmptyIcon />;
+    return questionnaireSummary
+        .map((summary) => {
+            if (summary.result) {
+                return <SuccessIcon key={summary.questionnaire} />;
+            }
+            return <EmptyIcon key={summary.questionnaire} />;
+        })
+        .reduce((prev, curr) => [prev, ' ', curr] as any);
 };
 
 const SuccessIcon = (props: SVGProps<SVGSVGElement>) => (

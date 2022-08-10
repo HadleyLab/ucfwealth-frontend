@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { Patient } from 'shared/src/contrib/aidbox';
 
 import { QuestionnaireSuccess } from 'src/components/QuestionnaireSuccess';
+import { questionnaireTitle } from 'src/config.questionnaire';
+import { QuestionnaireForm } from 'src/containers/PatientApp/QuestionnaireForm';
 
-import { QuestionnaireForm } from '../QuestionnaireForm';
 import s from './QuestionnaireSteps.module.scss';
 
 const { Step } = Steps;
@@ -50,14 +51,13 @@ export const QuestionnaireSteps = ({ patient }: Props) => {
 
     return (
         <>
-            <h2 className={s.title}>COVID-19 Questionnaire</h2>
+            <h2 className={s.title}>{questionnaireTitle}</h2>
             <Steps current={currentStep} className={s.steps}>
                 {steps.map((item) => (
                     <Step key={item.title} title={item.title} />
                 ))}
             </Steps>
             <div className={s.stepsContent}>{steps[currentStep].content}</div>
-
         </>
     );
 };

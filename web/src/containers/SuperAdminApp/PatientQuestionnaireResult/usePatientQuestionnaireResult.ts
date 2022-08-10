@@ -8,11 +8,11 @@ export const usePatientQuestionnaireResult = () => {
 
     const patient = location.state.patient as ExtendedPatient;
 
-    if (!patient.questionnaire) {
+    if (!patient.questionnaireList) {
         return { patient };
     }
 
-    const questionnaire = objectToDisplay(patient.questionnaire);
+    const questionnaire = objectToDisplay(patient.questionnaireList);
 
     return { patient, questionnaire };
 };

@@ -31,7 +31,7 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
     const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
             key: patient.id,
-            questionnaires: <QuestionnaireAvailableBadge questionnaire={patient.questionnaire} />,
+            questionnaires: <QuestionnaireAvailableBadge questionnaireList={patient.questionnaireList} />,
             participant: patient.email,
             lastActivity: formatHumanDateTime(patient.lastActivity),
             dicomFiles: (
