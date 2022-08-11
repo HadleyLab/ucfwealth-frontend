@@ -2,13 +2,15 @@ import './styles.css';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { useHistory } from 'react-router-dom';
 
+import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
+import { objectToDisplay } from 'src/utils/questionnaire';
 
 import s from './PatientQuestionnaireResult.module.scss';
 import { usePatientQuestionnaireResult } from './usePatientQuestionnaireResult';
 
 export const PatientQuestionnaireResult = () => {
-    const { patient, questionnaire } = usePatientQuestionnaireResult();
+    const { questionnaireResponseListRD, patientId } = usePatientQuestionnaireResult();
 
     const history = useHistory();
 
@@ -19,23 +21,31 @@ export const PatientQuestionnaireResult = () => {
                     <LeftArrowIcon />
                 </div>
                 <div className={s.patientDetails}>
-                    <div className={s.patient}>{patient.email}</div>
+                    <div className={s.patient}>{patientId}</div>
                     <div className={s.details}>Participant Details</div>
                 </div>
             </div>
             <div className={s.codeMirrorWrapper}>
-                {patient.questionnaireList && patient.questionnaireList.length > 0 ? (
-                    <CodeMirror
-                        value={questionnaire}
-                        options={{
-                            lineNumbers: false,
-                            mode: 'yaml',
-                            readOnly: true,
-                        }}
-                    />
-                ) : (
-                    <div>Empty</div>
-                )}
+                <RenderRemoteData remoteData={questionnaireResponseListRD}>
+                    {(questionnaireResponseList) => {
+                        return (
+                            <>
+                                {questionnaireResponseList.length > 0 ? (
+                                    <CodeMirror
+                                        value={objectToDisplay(questionnaireResponseList)}
+                                        options={{
+                                            lineNumbers: false,
+                                            mode: 'yaml',
+                                            readOnly: true,
+                                        }}
+                                    />
+                                ) : (
+                                    <div>Empty</div>
+                                )}
+                            </>
+                        );
+                    }}
+                </RenderRemoteData>
             </div>
         </div>
     );
