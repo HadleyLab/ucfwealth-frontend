@@ -29,7 +29,7 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
     const goToPatientFileList = (patient: ExtendedPatient) =>
         history.push({ pathname: `/patients/${patient.id}/files` });
 
-    const dataSource = patientList.map((patient: ExtendedPatient, key) => {
+    const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
             key: patient.id,
             questionnaires: (
