@@ -1,5 +1,6 @@
 import { Table } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { Patient } from 'shared/src/contrib/aidbox';
 
@@ -18,16 +19,29 @@ interface Props {
 }
 
 export const PatientProgressListTable = ({ patientList, patientCount, celebrate }: Props) => {
+    const [tablePageNumber, setTablePageNumber] = useState<number | undefined>(1);
+
     const history = useHistory();
+
+    const location = useLocation<any>();
+
+    useEffect(() => {
+        if (location.state.pageNumber) {
+            setTablePageNumber(location.state.pageNumber);
+        }
+    }, [location]);
 
     const goToDetails = (patient: ExtendedPatient) =>
         history.push({
             pathname: `/patients/${patient.id}`,
-            state: { patient },
+            state: { pageNumber: tablePageNumber },
         });
 
     const goToPatientFileList = (patient: ExtendedPatient) =>
-        history.push({ pathname: `/patients/${patient.id}/files` });
+        history.push({
+            pathname: `/patients/${patient.id}/files`,
+            state: { pageNumber: tablePageNumber },
+        });
 
     const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
@@ -106,7 +120,16 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
                     <div className={s.totalAbout}>participants total</div>
                 </div>
             </div>
-            <Table dataSource={dataSource} columns={columns} bordered />
+            <Table
+                dataSource={dataSource}
+                columns={columns}
+                rowKey={(patient) => patient.key!}
+                bordered
+                pagination={{
+                    current: tablePageNumber,
+                    onChange: (i) => setTablePageNumber(i),
+                }}
+            />
         </div>
     );
 };
