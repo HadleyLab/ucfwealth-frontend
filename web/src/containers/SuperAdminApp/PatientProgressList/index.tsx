@@ -1,8 +1,5 @@
-import { Spin } from 'antd';
-
-import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
-
 import { PatientProgressListTable } from 'src/components/PatientProgressListTable';
+import { RenderRemoteData } from 'src/components/RenderRemoteData';
 
 import { usePatientProgressList } from './usePatientProgressList';
 
@@ -12,7 +9,6 @@ export const PatientProgressList = () => {
     return (
         <RenderRemoteData
             remoteData={patientListWithCountRD}
-            renderLoading={() => <Spin />}
             renderFailure={(error) => (
                 <div>Error during loading patient list: {JSON.stringify(error)}</div>
             )}

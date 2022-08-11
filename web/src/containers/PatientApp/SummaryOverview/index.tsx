@@ -1,9 +1,8 @@
-import { Button, Spin } from 'antd';
-
-import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
+import { Button } from 'antd';
 
 import { DicomSummary } from 'src/components/DicomSummary';
 import { QuestionnaireSummary } from 'src/components/QuestionnaireSummary';
+import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 
 import s from './SummaryOverview.module.scss';
@@ -26,7 +25,6 @@ export const SummaryOverview = () => {
                 <div>
                     <RenderRemoteData
                         remoteData={questionnaireListMapRD}
-                        renderLoading={() => <Spin />}
                         renderFailure={() => <div>Questionnaire list not found</div>}
                     >
                         {(data) => (
@@ -46,7 +44,6 @@ export const SummaryOverview = () => {
                 <div>
                     <RenderRemoteData
                         remoteData={fileListRD}
-                        renderLoading={() => <Spin />}
                         renderFailure={() => <div>File list not found</div>}
                     >
                         {(data) => <DicomSummary data={data} />}

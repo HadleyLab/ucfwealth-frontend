@@ -1,8 +1,7 @@
-import { Button, Spin } from 'antd';
+import { Button } from 'antd';
 import { useHistory } from 'react-router-dom';
 
-import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
-
+import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
 import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
@@ -23,7 +22,7 @@ export const PatientFileList = () => {
                 </div>
                 <div className={s.header}>Dicom Files</div>
             </div>
-            <RenderRemoteData remoteData={fileListRD} renderLoading={() => <Spin />}>
+            <RenderRemoteData remoteData={fileListRD}>
                 {(data) => (
                     <div className={s.fileList}>
                         {data.dicomFileList.length > 0 ? (

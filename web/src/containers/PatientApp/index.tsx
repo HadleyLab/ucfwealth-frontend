@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
-import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
-
 import { User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
+import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { sharedPatientId } from 'src/sharedState';
 import { RouteItem } from 'src/utils/route';

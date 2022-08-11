@@ -1,5 +1,3 @@
-import { Spin } from 'antd';
-
 import { PatientListTable } from 'src/components/PatientListTable';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
 
@@ -11,7 +9,6 @@ export const PatientList = () => {
     return (
         <RenderRemoteData
             remoteData={patientListRD}
-            renderLoading={() => <Spin />}
             renderFailure={(error) => (
                 <div>Error during loading patient list: {JSON.stringify(error)}</div>
             )}

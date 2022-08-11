@@ -1,8 +1,5 @@
-import { Spin } from 'antd';
-
-import { RenderRemoteData } from 'aidbox-react/src/components/RenderRemoteData';
-
 import { PatientDataInfo } from 'src/components/PatientDataInfo';
+import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { TimelineSection } from 'src/components/TimelineSection/TimelineSection';
 
 import s from './PatientData.module.scss';
@@ -15,10 +12,10 @@ export const PatientData = () => {
 
     return (
         <div className={s.container}>
-            <RenderRemoteData remoteData={patientResourceRD} renderLoading={() => <Spin />}>
+            <RenderRemoteData remoteData={patientResourceRD}>
                 {(patient) => <PatientDataInfo patient={patient} />}
             </RenderRemoteData>
-            <RenderRemoteData remoteData={patientInfoRD} renderLoading={() => <Spin />}>
+            <RenderRemoteData remoteData={patientInfoRD}>
                 {(data) => (
                     <TimelineSection
                         data={data}

@@ -10,25 +10,28 @@ import {
 } from 'aidbox-react/src/libs/remoteData';
 import { formatError } from 'aidbox-react/src/utils/error';
 
-interface RenderRemoteDataProps<S, E = any> {
-    remoteData: RemoteData<S, E>;
-    children: (data: S) => React.ReactElement;
+interface RenderConfig<E = any> {
     renderFailure?: (error: E) => React.ReactElement;
     renderLoading?: () => React.ReactElement;
     renderNotAsked?: () => React.ReactElement;
 }
 
+interface RenderRemoteDataBasicProps<S, E = any> {
+    remoteData: RemoteData<S, E>;
+    children: (data: S) => React.ReactElement;
+}
+
 function renderFailureDefault<E>(error: E) {
-    return <p>{formatError(error)}</p>;
+    return <>{formatError(error)}</>;
 }
 
 function renderLoadingDefault() {
     return <Spin />;
 }
 
-// TODO: Add fabric that binds optional functions to RenderRemoteData component
+type RenderRemoteDataProps<S, E = any> = RenderRemoteDataBasicProps<S> & RenderConfig<E>;
 
-export function RenderRemoteData<S>(props: RenderRemoteDataProps<S>) {
+export function RenderRemoteData<S, E = any>(props: RenderRemoteDataProps<S, E>) {
     const { remoteData, children, renderFailure, renderLoading, renderNotAsked } = props;
     if (isNotAsked(remoteData)) {
         return renderNotAsked ? renderNotAsked() : null;
@@ -42,4 +45,10 @@ export function RenderRemoteData<S>(props: RenderRemoteDataProps<S>) {
         const n: never = remoteData;
         throw new Error(n);
     }
+}
+
+export function withRender<E = any>(config: RenderConfig<E>) {
+    return function <S>(props: RenderRemoteDataProps<S, E>) {
+        return <RenderRemoteData {...config} {...props} />;
+    };
 }
