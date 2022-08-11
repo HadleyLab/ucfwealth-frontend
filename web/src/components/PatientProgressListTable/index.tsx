@@ -26,7 +26,7 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
     const location = useLocation<any>();
 
     useEffect(() => {
-        if (location.state.pageNumber) {
+        if (location.state?.pageNumber) {
             setTablePageNumber(location.state.pageNumber);
         }
     }, [location]);

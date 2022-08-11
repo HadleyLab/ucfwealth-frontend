@@ -22,7 +22,7 @@ export const PatientQuestionnaireResult = () => {
         <div>
             <div className={s.headerWrapper}>
                 <div
-                    onClick={() => history.replace('/', { pageNumber: pageNumber ?? 1 })}
+                    onClick={() => history.push('/app', { pageNumber: pageNumber ?? 1 })}
                     className={s.leftArrow}
                 >
                     <LeftArrowIcon />
