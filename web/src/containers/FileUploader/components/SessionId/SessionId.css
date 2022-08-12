@@ -1,0 +1,14 @@
+.buttonStyle {
+    background: #eab800;
+    border-radius: 2px;
+}
+
+.buttonStyle:hover {
+    background: #fbc603;
+    border-radius: 2px;
+}
+
+.buttonStyle:active {
+    background: #edab00;
+    border-radius: 2px;
+}

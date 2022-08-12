@@ -24,6 +24,7 @@ import { history } from 'src/services/history';
 import { getUserRole, UserRole } from 'src/services/role';
 import { removeToken, retrieveToken, saveToken } from 'src/services/token';
 
+import { FileUploader } from '../FileUploader/App';
 import { SessionContext } from '../SessionContext';
 import { Auth } from './Auth';
 
@@ -82,6 +83,7 @@ export function App() {
                 </Route>
                 <Route path="/signup" exact render={() => <SignUp setToken={setToken} />} />
                 <Route path="/login" exact render={() => <Login />} />
+                <Route path="/file-uploader" render={() => <FileUploader />} />
                 <Redirect
                     to={{
                         pathname: '/login',
@@ -111,6 +113,7 @@ export function App() {
                             </RoleSwitch>
                         </SessionContext.Provider>
                     </Route>
+                    <Route path="/file-uploader" render={() => <FileUploader />} />
                     <Redirect to={'/app/questionnaire'} />
                 </Switch>
             );
