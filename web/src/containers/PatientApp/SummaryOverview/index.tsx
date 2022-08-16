@@ -27,9 +27,9 @@ export const SummaryOverview = () => {
                         remoteData={questionnaireListMapRD}
                         renderFailure={() => <div>Questionnaire list not found</div>}
                     >
-                        {(data) => (
+                        {(questionnaireListMap) => (
                             <QuestionnaireSummary
-                                data={data}
+                                questionnaireListMap={questionnaireListMap}
                                 getQuestionnaireSummary={getQuestionnaireSummary}
                             />
                         )}

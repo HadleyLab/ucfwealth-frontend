@@ -10,18 +10,18 @@ import { Questionnaire, QuestionnaireResponse } from 'shared/src/contrib/aidbox'
 import { sharedPatientId } from 'src/sharedState';
 
 const getQuestionnaireSummary = (
-    data: {
+    questionnaireListMap: {
         questionnaireList: Questionnaire[];
         questionnaireResponseList: QuestionnaireResponse[];
     },
     questionnaireNameExpectedList: string[],
 ) => {
-    const questionnaireList = data.questionnaireList.filter(
+    const questionnaireList = questionnaireListMap.questionnaireList.filter(
         (questionnaire) =>
             questionnaire.id && questionnaireNameExpectedList.includes(questionnaire.id),
     );
 
-    const questionnaireResponseList = data.questionnaireResponseList.filter(
+    const questionnaireResponseList = questionnaireListMap.questionnaireResponseList.filter(
         (questionnaireResponse) =>
             questionnaireResponse.questionnaire &&
             questionnaireNameExpectedList.includes(questionnaireResponse.questionnaire),

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Patient } from 'shared/src/contrib/aidbox';
 
 import { QuestionnaireSuccess } from 'src/components/QuestionnaireSuccess';
-import { questionnaireTitle } from 'src/config.questionnaire';
+import { questionnaireNameList, questionnaireTitle } from 'src/config.questionnaire';
 import { QuestionnaireForm } from 'src/containers/PatientApp/QuestionnaireForm';
 
 import s from './QuestionnaireSteps.module.scss';
@@ -26,7 +26,7 @@ export const QuestionnaireSteps = ({ patient }: Props) => {
             content: (
                 <QuestionnaireForm
                     patient={patient}
-                    questionnaireId={'personal-information'}
+                    questionnaireId={questionnaireNameList[0]}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
                 />
@@ -37,7 +37,7 @@ export const QuestionnaireSteps = ({ patient }: Props) => {
             content: (
                 <QuestionnaireForm
                     patient={patient}
-                    questionnaireId={'screening-questions'}
+                    questionnaireId={questionnaireNameList[1]}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
                 />

@@ -1,18 +1,19 @@
 import { Questionnaire, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
 import { CompleteStatus } from 'src/components/CompleteStatus';
+import { questionnaireNameList } from 'src/config.questionnaire';
 
 import s from './QuestionnaireSummary.module.scss';
 
-interface Data {
+interface QuestionnaireListMap {
     questionnaireList: Questionnaire[];
     questionnaireResponseList: QuestionnaireResponse[];
 }
 
 interface Props {
-    data: Data;
+    questionnaireListMap: QuestionnaireListMap;
     getQuestionnaireSummary: (
-        data: Data,
+        questionnaireListMap: QuestionnaireListMap,
         questionnaireNameExpectedList: string[],
     ) => {
         [key: string]: {
@@ -23,10 +24,10 @@ interface Props {
     };
 }
 
-export const QuestionnaireSummary = ({ data, getQuestionnaireSummary }: Props) => {
-    const questionnaireNameExpectedList = ['personal-information', 'screening-questions'];
+export const QuestionnaireSummary = ({ questionnaireListMap, getQuestionnaireSummary }: Props) => {
+    const questionnaireNameExpectedList = questionnaireNameList;
 
-    const questionnaireSummary = getQuestionnaireSummary(data, questionnaireNameExpectedList);
+    const questionnaireSummary = getQuestionnaireSummary(questionnaireListMap, questionnaireNameExpectedList);
 
     const renderQuestionnaireSummary = () => {
         return Object.keys(questionnaireSummary).map((key) => {
