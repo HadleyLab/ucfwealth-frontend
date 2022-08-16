@@ -1,13 +1,16 @@
 interface Props {
-    status: boolean;
+    questionnaire: { id: string; title: string; result: boolean };
 }
 
 import s from './CompleteStatus.module.scss';
 
-export const CompleteStatus = ({ status }: Props) => {
+export const CompleteStatus = ({ questionnaire }: Props) => {
     return (
-        <div className={status ? s.complete : s.incomplete}>
-            <div className={s.font}>{status ? 'completed' : 'not completed'}</div>
+        <div key={questionnaire.id} className={s.questionnaireSummary}>
+            <div className={s.title}>{questionnaire.title}:</div>{' '}
+            <div className={questionnaire.result ? s.complete : s.incomplete}>
+                <div className={s.font}>{questionnaire.result ? 'completed' : 'not completed'}</div>
+            </div>
         </div>
     );
 };

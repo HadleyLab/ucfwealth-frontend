@@ -1,9 +1,9 @@
 import { Button } from 'antd';
 
 import { DicomSummary } from 'src/components/DicomSummary';
-import { QuestionnaireSummary } from 'src/components/QuestionnaireSummary';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
+import { QuestionnaireSummary } from 'src/containers/PatientApp/QuestionnaireSummary';
 
 import s from './SummaryOverview.module.scss';
 import { useSummaryOverview } from './useSummaryOverview';
