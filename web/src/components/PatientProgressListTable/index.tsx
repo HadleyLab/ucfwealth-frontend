@@ -4,8 +4,8 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { Patient } from 'shared/src/contrib/aidbox';
 
-import { QuestionnaireAvailableBadge } from 'src/components/QuestionnaireAvailableBadge';
 import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
+import { QuestionnaireAvailableBadge } from 'src/containers/SuperAdminApp/QuestionnaireAvailableBadge';
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
 import { formatHumanDateTime } from 'src/utils/date';
 
