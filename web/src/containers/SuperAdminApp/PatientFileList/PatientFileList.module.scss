@@ -24,6 +24,10 @@
     width: fit-content;
     cursor: pointer;
     margin: 5px 0;
+
+    &:hover {
+        background-color: #eab7001a;
+    }
 }
 
 .fileList {
@@ -33,4 +37,8 @@
 
 .uploadImages {
     margin-top: 8px;
+}
+
+.showImage {
+    margin-bottom: 6px;
 }

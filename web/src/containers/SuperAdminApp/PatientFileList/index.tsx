@@ -2,6 +2,7 @@ import { Button } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
+import { ShowImage } from 'src/components/ShowImage';
 import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
 import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
@@ -34,12 +35,17 @@ export const PatientFileList = () => {
                     <div className={s.fileList}>
                         {data.dicomFileList.length > 0 ? (
                             data.dicomFileList.map((fileKey: string, key: string) => (
-                                <div
-                                    className={s.fileKey}
-                                    key={key}
-                                    onClick={() => downloadFile(fileKey)}
-                                >
-                                    {removePatientIdFromFileKey(fileKey)}
+                                <div>
+                                    <div
+                                        className={s.fileKey}
+                                        key={key}
+                                        onClick={() => downloadFile(fileKey)}
+                                    >
+                                        {removePatientIdFromFileKey(fileKey)}
+                                    </div>
+                                    <div className={s.showImage}>
+                                        <ShowImage fileKey={fileKey} />
+                                    </div>
                                 </div>
                             ))
                         ) : (
