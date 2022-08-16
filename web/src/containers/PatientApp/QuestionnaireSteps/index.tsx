@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Patient } from 'shared/src/contrib/aidbox';
 
 import { QuestionnaireSuccess } from 'src/components/QuestionnaireSuccess';
-import { questionnaireNameList, questionnaireTitle } from 'src/config.questionnaire';
 import { QuestionnaireForm } from 'src/containers/PatientApp/QuestionnaireForm';
 
 import s from './QuestionnaireSteps.module.scss';
@@ -12,12 +11,16 @@ import s from './QuestionnaireSteps.module.scss';
 const { Step } = Steps;
 
 interface Props {
-    isSuccessQuestionnaire: boolean;
     patient: Patient;
-    setIsSuccessQuestionnaire: (state: boolean) => void;
+    activeQuestionnaireMap: any;
+    questionnaireName: string;
 }
 
-export const QuestionnaireSteps = ({ patient }: Props) => {
+export const QuestionnaireSteps = ({
+    patient,
+    activeQuestionnaireMap,
+    questionnaireName,
+}: Props) => {
     const [currentStep, setCurrentStep] = useState(0);
 
     const steps = [
@@ -26,7 +29,7 @@ export const QuestionnaireSteps = ({ patient }: Props) => {
             content: (
                 <QuestionnaireForm
                     patient={patient}
-                    questionnaireId={questionnaireNameList[0]}
+                    questionnaireId={activeQuestionnaireMap.personalInfo}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
                 />
@@ -37,7 +40,7 @@ export const QuestionnaireSteps = ({ patient }: Props) => {
             content: (
                 <QuestionnaireForm
                     patient={patient}
-                    questionnaireId={questionnaireNameList[1]}
+                    questionnaireId={questionnaireName}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
                 />
@@ -49,9 +52,12 @@ export const QuestionnaireSteps = ({ patient }: Props) => {
         },
     ];
 
+    let title = questionnaireName.split('-').join(' ');
+    title = title.charAt(0).toUpperCase() + title.slice(1);
+
     return (
         <>
-            <h2 className={s.title}>{questionnaireTitle}</h2>
+            <h2 className={s.title}>{title}</h2>
             <Steps current={currentStep} className={s.steps}>
                 {steps.map((item) => (
                     <Step key={item.title} title={item.title} />
