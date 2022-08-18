@@ -1,12 +1,14 @@
+import { isSuccess, RemoteDataResult } from 'aidbox-react/src/libs/remoteData';
+import { mapSuccess, service } from 'aidbox-react/src/services/service';
 import { Button, DatePicker } from 'antd';
 import { FormApi, Unsubscribe } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import _ from 'lodash';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
 
-import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import { Coding, Questionnaire, QuestionnaireItem, QuestionnaireItemAnswerOption, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
 import { InputField } from 'src/components/fields';
 import { SaveIcon } from 'src/images/SaveIcon';
@@ -305,9 +307,34 @@ export const QuestionnaireResponseForm = (props: Props) => {
         parentPath: string[],
         formParams: FormRenderProps,
     ) => {
-        const { linkId, text, answerOption, item, repeats, required } = questionItem;
+        const { linkId, text, item, repeats, required, answerValueSet } = questionItem;
         const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
         const fieldName = fieldPath.join('.');
+        const [answerOption, setAnserOption] = useState(questionItem.answerOption);
+        useEffect(() => {
+            (async function() {
+            if(answerValueSet){
+                console.log(answerValueSet);
+
+                const response = mapSuccess(
+                    await service<{ data: Array<{ concept: Coding }> }>({
+                        url: '/$query/expand',
+                        params: { valueset: answerValueSet, text: '' },
+                    }),
+                    (data) => data.data.map((d) => {
+                        const result:QuestionnaireItemAnswerOption ={
+                            value: {Coding: d.concept},
+                        }
+                        return result;
+                    }),
+                );
+                if(isSuccess(response)){
+                    setAnserOption(response.data);
+                } else {
+                    setAnserOption([]);
+                }
+            }})();
+        }, [answerValueSet])
 
         return (
             <ChooseField<FormAnswerItems>
