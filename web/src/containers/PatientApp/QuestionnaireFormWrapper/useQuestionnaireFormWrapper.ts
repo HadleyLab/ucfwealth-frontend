@@ -7,8 +7,6 @@ import { mapSuccess, sequenceMap, service } from 'aidbox-react/src/services/serv
 
 import { Patient } from 'shared/src/contrib/aidbox';
 
-import { useActiveQuestionnaireList } from 'src/containers/SuperAdminApp/QuestionnaireAvailableBadge/useActiveQuestionnaireList';
-
 interface Props {
     patient: Patient;
 }
@@ -16,7 +14,18 @@ interface Props {
 export const useQuestionnaireFormWrapper = ({ patient }: Props) => {
     const [questionnaireSelected, setQuestionnaireSelected] = useState('');
 
-    const { activeQuestionnaireMapRD } = useActiveQuestionnaireList();
+    const [activeQuestionnaireMapRD] = useService(async () => {
+        const response = await service({
+            method: 'GET',
+            url: `QuestionnaireSettings`,
+        });
+        if (isFailure(response)) {
+            console.error(response.error);
+        }
+        return mapSuccess(response, (bundle) => {
+            return extractBundleResources(bundle).QuestionnaireSettings[0] as any;
+        });
+    });
 
     const [patientSettingsRD] = useService(async () => {
         const response = await service({
