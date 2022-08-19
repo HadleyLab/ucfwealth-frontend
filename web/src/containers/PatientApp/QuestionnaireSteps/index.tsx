@@ -52,8 +52,15 @@ export const QuestionnaireSteps = ({
         },
     ];
 
-    let title = questionnaireName.split('-').join(' ');
-    title = title.charAt(0).toUpperCase() + title.slice(1);
+    let title;
+
+    if (questionnaireName === 'patient-report-baseline') {
+        title = 'Breast Cancer research';
+    }
+
+    if (questionnaireName === 'screening-questions') {
+        title = 'COVID-19 research';
+    }
 
     return (
         <>
