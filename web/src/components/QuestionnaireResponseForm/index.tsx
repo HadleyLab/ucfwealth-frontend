@@ -9,7 +9,13 @@ import { Field, FormRenderProps } from 'react-final-form';
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { mapSuccess, service } from 'aidbox-react/src/services/service';
 
-import { Coding, Questionnaire, QuestionnaireItem, QuestionnaireItemAnswerOption, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import {
+    Coding,
+    Questionnaire,
+    QuestionnaireItem,
+    QuestionnaireItemAnswerOption,
+    QuestionnaireResponse,
+} from 'shared/src/contrib/aidbox';
 
 import { InputField } from 'src/components/fields';
 import { SaveIcon } from 'src/images/SaveIcon';
@@ -303,90 +309,6 @@ export const QuestionnaireResponseForm = (props: Props) => {
         );
     };
 
-    const renderAnswerChoice = (
-        questionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-    ) => {
-        const { linkId, text, item, repeats, required, answerValueSet } = questionItem;
-        const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
-        const fieldName = fieldPath.join('.');
-        const [answerOption, setAnserOption] = useState(questionItem.answerOption);
-        useEffect(() => {
-            (async function() {
-            if(answerValueSet){
-                console.log(answerValueSet);
-
-                const response = mapSuccess(
-                    await service<{ data: Array<{ concept: Coding }> }>({
-                        url: '/$query/expand',
-                        params: { valueset: answerValueSet, text: '' },
-                    }),
-                    (data) => data.data.map((d) => {
-                        const result:QuestionnaireItemAnswerOption ={
-                            value: {Coding: d.concept},
-                        }
-                        return result;
-                    }),
-                );
-                if(isSuccess(response)){
-                    setAnserOption(response.data);
-                } else {
-                    setAnserOption([]);
-                }
-            }})();
-        }, [answerValueSet])
-
-        return (
-            <ChooseField<FormAnswerItems>
-                name={fieldName}
-                label={<div className={s.chooseFieldLabel}>{text}</div>}
-                multiple={repeats}
-                inline={!item && !repeats}
-                options={_.map(answerOption, (opt) => ({
-                    value: { value: opt.value },
-                    label: getDisplay(opt.value),
-                }))}
-                fieldProps={{
-                    validate: required
-                        ? (inputValue: any) => {
-                              if (repeats) {
-                                  if (!inputValue?.length) {
-                                      return 'Choose at least one option';
-                                  }
-                              } else {
-                                  if (!inputValue) {
-                                      return 'Required';
-                                  }
-                              }
-
-                              return undefined;
-                          }
-                        : undefined,
-                }}
-                isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
-                renderOptionContent={(option, index, value) => {
-                    const selectedIndex = _.findIndex(
-                        _.isArray(value) ? value : [value],
-                        (answer) => isValueEqual(answer.value, option.value.value),
-                    );
-                    selectedIndex === 0
-                        ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
-                        : null;
-                    if (item && selectedIndex !== -1) {
-                        const subItemParentPath = [
-                            ...fieldPath,
-                            ...(repeats ? [_.toString(selectedIndex)] : []),
-                            'items',
-                        ];
-                        return renderQuestions(item, subItemParentPath, formParams);
-                    }
-                    return null;
-                }}
-            />
-        );
-    };
-
     const renderGroup = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
@@ -517,7 +439,15 @@ export const QuestionnaireResponseForm = (props: Props) => {
         }
 
         if (type === 'choice') {
-            return renderAnswerChoice(questionItem, parentPath, formParams);
+            return (
+                <RenderAnswerChoice
+                    questionItem={questionItem}
+                    parentPath={parentPath}
+                    formParams={formParams}
+                    addChoiceValueToProgressBar={addChoiceValueToProgressBar}
+                    renderQuestions={renderQuestions}
+                />
+            );
         }
 
         if (type === 'display') {
@@ -613,5 +543,104 @@ export const QuestionnaireResponseForm = (props: Props) => {
                 return renderForm(items, params);
             }}
         </CustomForm>
+    );
+};
+
+interface Propss {
+    questionItem: QuestionnaireItem;
+    parentPath: string[];
+    formParams: FormRenderProps;
+    addChoiceValueToProgressBar: (choice: any) => void;
+    renderQuestions: (
+        items: QuestionnaireItem[],
+        parentPath: string[],
+        formParams: FormRenderProps,
+    ) => JSX.Element[];
+}
+
+const RenderAnswerChoice = ({
+    questionItem,
+    parentPath,
+    formParams,
+    addChoiceValueToProgressBar,
+    renderQuestions,
+}: Propss) => {
+    const { linkId, text, item, repeats, required, answerValueSet } = questionItem;
+    const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
+    const fieldName = fieldPath.join('.');
+    const [answerOption, setAnserOption] = useState(questionItem.answerOption);
+    useEffect(() => {
+        (async function () {
+            if (answerValueSet) {
+                console.log(answerValueSet);
+
+                const response = mapSuccess(
+                    await service<{ data: Array<{ concept: Coding }> }>({
+                        url: '/$query/expand',
+                        params: { valueset: answerValueSet, text: '' },
+                    }),
+                    (data) =>
+                        data.data.map((d) => {
+                            const result: QuestionnaireItemAnswerOption = {
+                                value: { Coding: d.concept },
+                            };
+                            return result;
+                        }),
+                );
+                if (isSuccess(response)) {
+                    setAnserOption(response.data);
+                } else {
+                    setAnserOption([]);
+                }
+            }
+        })();
+    }, [answerValueSet]);
+
+    return (
+        <ChooseField<FormAnswerItems>
+            name={fieldName}
+            label={<div className={s.chooseFieldLabel}>{text}</div>}
+            multiple={repeats}
+            inline={!item && !repeats}
+            options={_.map(answerOption, (opt) => ({
+                value: { value: opt.value },
+                label: getDisplay(opt.value),
+            }))}
+            fieldProps={{
+                validate: required
+                    ? (inputValue: any) => {
+                          if (repeats) {
+                              if (!inputValue?.length) {
+                                  return 'Choose at least one option';
+                              }
+                          } else {
+                              if (!inputValue) {
+                                  return 'Required';
+                              }
+                          }
+
+                          return undefined;
+                      }
+                    : undefined,
+            }}
+            isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
+            renderOptionContent={(option, index, value) => {
+                const selectedIndex = _.findIndex(_.isArray(value) ? value : [value], (answer) =>
+                    isValueEqual(answer.value, option.value.value),
+                );
+                selectedIndex === 0
+                    ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
+                    : null;
+                if (item && selectedIndex !== -1) {
+                    const subItemParentPath = [
+                        ...fieldPath,
+                        ...(repeats ? [_.toString(selectedIndex)] : []),
+                        'items',
+                    ];
+                    return renderQuestions(item, subItemParentPath, formParams);
+                }
+                return null;
+            }}
+        />
     );
 };
