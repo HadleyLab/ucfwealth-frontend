@@ -21,7 +21,7 @@ export const SummaryOverview = () => {
         <div className={s.wrapper}>
             <h2 className={s.title}>Summary Overview</h2>
             <div className={s.sectionWrapper}>
-                <div className={s.subTitle}>Questionaire Progress</div>
+                <div className={s.subTitle}>Questionnaire Progress</div>
                 <div>
                     <RenderRemoteData
                         remoteData={questionnaireListMapRD}
@@ -31,13 +31,12 @@ export const SummaryOverview = () => {
                             <QuestionnaireSummary
                                 questionnaireListMap={questionnaireListMap}
                                 getQuestionnaireSummary={getQuestionnaireSummary}
+                                patientId={patientId}
+                                goToQuestionnaire={goToQuestionnaire}
                             />
                         )}
                     </RenderRemoteData>
                 </div>
-                {/* <Button onClick={goToQuestionnaire} type="primary" className={s.button}>
-                    Join research
-                </Button> */}
             </div>
             <div className={s.sectionWrapper}>
                 <div className={s.subTitle}>Dicom Files</div>
