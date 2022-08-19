@@ -4,7 +4,7 @@ import { extractBundleResources } from 'aidbox-react/src/services/fhir';
 import { mapSuccess, service } from 'aidbox-react/src/services/service';
 
 export const useActiveQuestionnaireList = () => {
-    const [activeQuestionnaireListRD] = useService(async () => {
+    const [activeQuestionnaireMapRD] = useService(async () => {
         const response = await service({
             method: 'GET',
             url: `QuestionnaireSettings`,
@@ -16,5 +16,6 @@ export const useActiveQuestionnaireList = () => {
             return extractBundleResources(bundle).QuestionnaireSettings[0] as any;
         });
     });
-    return { activeQuestionnaireListRD };
+
+    return { activeQuestionnaireMapRD };
 };

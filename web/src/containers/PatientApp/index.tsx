@@ -17,10 +17,9 @@ interface PatientAppProps {
 }
 
 export function PatientApp({ user }: PatientAppProps) {
-    const { patientResultRD, match, isSuccessQuestionnaire, setIsSuccessQuestionnaire } =
-        usePatientApp({
-            user,
-        });
+    const { patientResultRD, match } = usePatientApp({
+        user,
+    });
 
     sharedPatientId.setSharedState({ id: user.data.patient?.id || '' });
 
@@ -51,21 +50,12 @@ export function PatientApp({ user }: PatientAppProps) {
         <RenderRemoteData remoteData={patientResultRD}>
             {(data) => (
                 <Router>
-                    <BaseLayout
-                        routes={routes}
-                        setIsSuccessQuestionnaire={setIsSuccessQuestionnaire}
-                    >
+                    <BaseLayout routes={routes}>
                         <Switch>
                             <Route
                                 path={`${match.url}/questionnaire`}
                                 exact
-                                render={() => (
-                                    <QuestionnaireFormWrapper
-                                        isSuccessQuestionnaire={isSuccessQuestionnaire}
-                                        setIsSuccessQuestionnaire={setIsSuccessQuestionnaire}
-                                        patient={data.patient}
-                                    />
-                                )}
+                                render={() => <QuestionnaireFormWrapper patient={data.patient} />}
                             />
                             <Route
                                 path={`${match.url}/summary-overview`}

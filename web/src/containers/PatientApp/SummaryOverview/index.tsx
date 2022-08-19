@@ -35,9 +35,9 @@ export const SummaryOverview = () => {
                         )}
                     </RenderRemoteData>
                 </div>
-                <Button onClick={goToQuestionnaire} type="primary" className={s.button}>
-                    COVID-19 Questionnaire
-                </Button>
+                {/* <Button onClick={goToQuestionnaire} type="primary" className={s.button}>
+                    Join research
+                </Button> */}
             </div>
             <div className={s.sectionWrapper}>
                 <div className={s.subTitle}>Dicom Files</div>

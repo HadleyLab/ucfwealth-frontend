@@ -24,10 +24,10 @@ interface Props {
 }
 
 export const QuestionnaireSummary = ({ questionnaireListMap, getQuestionnaireSummary }: Props) => {
-    const { activeQuestionnaireListRD } = useActiveQuestionnaireList();
+    const { activeQuestionnaireMapRD } = useActiveQuestionnaireList();
 
     return (
-        <RenderRemoteData remoteData={activeQuestionnaireListRD}>
+        <RenderRemoteData remoteData={activeQuestionnaireMapRD}>
             {(data) => {
                 const questionnaireNameExpectedList = [
                     data.personalInfo,

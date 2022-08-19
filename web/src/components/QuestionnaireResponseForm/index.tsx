@@ -1,5 +1,3 @@
-import { isSuccess, RemoteDataResult } from 'aidbox-react/src/libs/remoteData';
-import { mapSuccess, service } from 'aidbox-react/src/services/service';
 import { Button, DatePicker } from 'antd';
 import { FormApi, Unsubscribe } from 'final-form';
 import arrayMutators from 'final-form-arrays';
@@ -7,6 +5,9 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
+
+import { isSuccess } from 'aidbox-react/src/libs/remoteData';
+import { mapSuccess, service } from 'aidbox-react/src/services/service';
 
 import { Coding, Questionnaire, QuestionnaireItem, QuestionnaireItemAnswerOption, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 

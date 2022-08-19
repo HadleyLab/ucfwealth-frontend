@@ -11,10 +11,10 @@ interface Props {
 }
 
 export const QuestionnaireAvailableBadge = ({ questionnaireList }: Props) => {
-    const { activeQuestionnaireListRD } = useActiveQuestionnaireList();
+    const { activeQuestionnaireMapRD } = useActiveQuestionnaireList();
 
     return (
-        <RenderRemoteData remoteData={activeQuestionnaireListRD}>
+        <RenderRemoteData remoteData={activeQuestionnaireMapRD}>
             {(data) => {
                 const questionnaireNameList = [
                     data.personalInfo,
