@@ -1,4 +1,4 @@
-import { Checkbox as ACheckbox, Radio as ARadio, Form } from 'antd';
+import { Checkbox as ACheckbox, Radio as ARadio, Form, Select } from 'antd';
 import _ from 'lodash';
 import React from 'react';
 import { Field } from 'react-final-form';
@@ -43,6 +43,7 @@ export function ChooseField<T = any>({
     className,
 }: FieldProps & ChooseFieldProps<T>) {
     const isEqual = comparator ? comparator : _.isEqual;
+    const { Option } = Select;
 
     return (
         <Field name={name} {...fieldProps}>
@@ -100,30 +101,62 @@ export function ChooseField<T = any>({
                             {...getFormItemProps(meta)}
                             className={s.formitem}
                         >
-                            {_.map(options, (option, index) => {
-                                const isSelected = isEqual(input.value, option.value);
-                                return (
-                                    <div key={`${option.value}-${index}`}>
-                                        <RadioElement
-                                            checked={isSelected}
-                                            onChange={(event) => {
-                                                const value = event.target.checked
-                                                    ? option.value
-                                                    : undefined;
-                                                input.onChange(value);
-                                                if (onChange) {
-                                                    onChange(value);
-                                                }
-                                            }}
-                                            className={s.radio}
-                                        >
-                                            {option.label}
-                                        </RadioElement>
-                                        {renderOptionContent &&
-                                            renderOptionContent(option, index, input.value)}
-                                    </div>
-                                );
-                            })}
+                            {options.length > 10 ? (
+                                <Select
+                                    showSearch
+                                    placeholder="Select"
+                                    optionFilterProp="children"
+                                    defaultValue={input.value.value?.Coding.display}
+                                    onChange={(event) => {
+                                        const eventParsed = JSON.parse(event);
+                                        const value = eventParsed.value
+                                            ? eventParsed.value
+                                            : undefined;
+                                        input.onChange(value);
+                                        if (onChange) {
+                                            onChange(value);
+                                        }
+                                    }}
+                                    filterOption={(input, option) =>
+                                        (option!.children as unknown as string)
+                                            .toLowerCase()
+                                            .includes(input.toLowerCase())
+                                    }
+                                >
+                                    {options.map((option) => {
+                                        return (
+                                            <Option value={JSON.stringify(option)}>
+                                                {option.label}
+                                            </Option>
+                                        );
+                                    })}
+                                </Select>
+                            ) : (
+                                _.map(options, (option, index) => {
+                                    const isSelected = isEqual(input.value, option.value);
+                                    return (
+                                        <div key={`${option.value}-${index}`}>
+                                            <RadioElement
+                                                checked={isSelected}
+                                                onChange={(event) => {
+                                                    const value = event.target.checked
+                                                        ? option.value
+                                                        : undefined;
+                                                    input.onChange(value);
+                                                    if (onChange) {
+                                                        onChange(value);
+                                                    }
+                                                }}
+                                                className={s.radio}
+                                            >
+                                                {option.label}
+                                            </RadioElement>
+                                            {renderOptionContent &&
+                                                renderOptionContent(option, index, input.value)}
+                                        </div>
+                                    );
+                                })
+                            )}
                         </Form.Item>
                     );
                 }
