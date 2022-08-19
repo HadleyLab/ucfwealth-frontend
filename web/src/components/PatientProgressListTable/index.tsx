@@ -47,7 +47,10 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
         return {
             key: patient.id,
             questionnaires: (
-                <QuestionnaireAvailableBadge questionnaireList={patient.questionnaireList} />
+                <QuestionnaireAvailableBadge
+                    questionnaireList={patient.questionnaireList}
+                    patientId={patient.id ? patient.id : ''}
+                />
             ),
             participant: patient.email,
             lastActivity: formatHumanDateTime(patient.lastActivity),

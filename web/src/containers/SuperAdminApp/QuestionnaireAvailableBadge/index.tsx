@@ -8,25 +8,38 @@ import { useActiveQuestionnaireList } from './useActiveQuestionnaireList';
 
 interface Props {
     questionnaireList?: BundleEntry<QuestionnaireResponse>[];
+    patientId: string;
 }
 
-export const QuestionnaireAvailableBadge = ({ questionnaireList }: Props) => {
-    const { activeQuestionnaireMapRD } = useActiveQuestionnaireList();
+export const QuestionnaireAvailableBadge = ({ questionnaireList, patientId }: Props) => {
+    const { settingsMapRD } = useActiveQuestionnaireList({ patientId });
 
     return (
-        <RenderRemoteData remoteData={activeQuestionnaireMapRD}>
-            {(data) => {
+        <RenderRemoteData remoteData={settingsMapRD}>
+            {(settingsMap) => {
                 const questionnaireNameList = [
-                    data.personalInfo,
-                    ...data.questionnaireList.split(' '),
+                    settingsMap.activeQuestionnaireMap.personalInfo,
+                    ...settingsMap.activeQuestionnaireMap.questionnaireList.split(' '),
                 ];
                 const questionnaireSummary: { questionnaire: string; result: boolean }[] = [];
                 questionnaireNameList.map((questionnaire) => {
+                    if (
+                        (questionnaire &&
+                            questionnaire === settingsMap.activeQuestionnaireMap.personalInfo) ||
+                        (settingsMap.patientSettings?.selectedQuestionnaire &&
+                            questionnaire === settingsMap.patientSettings.selectedQuestionnaire)
+                    )
+                        questionnaireSummary.push({
+                            questionnaire,
+                            result: false,
+                        });
+                });
+                if (questionnaireSummary.length < 2) {
                     questionnaireSummary.push({
-                        questionnaire,
+                        questionnaire: "",
                         result: false,
                     });
-                });
+                }
                 if (questionnaireList) {
                     questionnaireList.map((questionnaire) => {
                         questionnaireSummary.map((summary) => {
