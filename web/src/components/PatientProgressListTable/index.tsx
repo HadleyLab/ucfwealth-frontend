@@ -43,16 +43,32 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
             state: { pageNumber: tablePageNumber },
         });
 
+    const showQuestionnaireTitle = (questionnaireList?: any[]) => {
+        if (questionnaireList) {
+            const questionnaireNameList = questionnaireList.map(
+                (questionnaire) => questionnaire.resource?.questionnaire,
+            );
+            if (questionnaireNameList.indexOf('screening-questions') >= 0) {
+                return 'COVID-19';
+            }
+            if (questionnaireNameList.indexOf('patient-report-baseline') >= 0) {
+                return 'Breast Cancer';
+            }
+        }
+        return 'Did not join';
+    };
+
     const dataSource = patientList.map((patient: ExtendedPatient) => {
         return {
             key: patient.id,
+            research: <div>{showQuestionnaireTitle(patient.questionnaireList)}</div>,
             questionnaires: (
                 <QuestionnaireAvailableBadge
                     questionnaireList={patient.questionnaireList}
                     patientId={patient.id ? patient.id : ''}
                 />
             ),
-            participant: patient.email,
+            participant: <div style={{ lineBreak: 'anywhere' }}>{patient.email}</div>,
             lastActivity: formatHumanDateTime(patient.lastActivity),
             dicomFiles: (
                 <div onClick={() => goToPatientFileList(patient)}>
@@ -75,12 +91,13 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
             title: <b>Participant</b>,
             dataIndex: 'participant',
             key: 'participant',
+            width: '30%',
             align: 'center' as 'center',
         },
         {
-            title: <b>Questionnaires</b>,
-            dataIndex: 'questionnaires',
-            key: 'questionnaires',
+            title: <b>Research</b>,
+            dataIndex: 'research',
+            key: 'research',
             width: '15%',
             align: 'center' as 'center',
             filters: [
@@ -107,6 +124,13 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
             },
         },
         {
+            title: <b>Questionnaires</b>,
+            dataIndex: 'questionnaires',
+            key: 'questionnaires',
+            width: '15%',
+            align: 'center' as 'center',
+        },
+        {
             title: <b>Last Activity</b>,
             dataIndex: 'lastActivity',
             key: 'lastActivity',
@@ -124,7 +148,7 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
             title: <b>Details</b>,
             dataIndex: 'details',
             key: 'details',
-            width: '15%',
+            width: '10%',
             align: 'center' as 'center',
         },
         {
