@@ -83,6 +83,28 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
             key: 'questionnaires',
             width: '15%',
             align: 'center' as 'center',
+            filters: [
+                {
+                    text: 'COVID-19 research',
+                    value: 'screening-questions',
+                },
+                {
+                    text: 'Breast Cancer research',
+                    value: 'patient-report-baseline',
+                },
+            ],
+            onFilter: (
+                value: any,
+                record: {
+                    key: any;
+                    questionnaires: { props: { questionnaireList: any[] } };
+                },
+            ) => {
+                const questionnaireNameList = record.questionnaires.props.questionnaireList.map(
+                    (questionnaire) => questionnaire.resource?.questionnaire,
+                );
+                return questionnaireNameList.indexOf(value) >= 0;
+            },
         },
         {
             title: <b>Last Activity</b>,
