@@ -43,9 +43,21 @@ export const useQuestionnaireFormWrapper = ({ patient }: Props) => {
         });
     }, []);
 
+    const [questionnaireListRD] = useService(async () => {
+        const response = await service({
+            method: 'GET',
+            url: `QuestionnaireResponse?_ilike=${patient && patient.id}`,
+        });
+
+        return mapSuccess(response, (bundle) => {
+            return extractBundleResources(bundle).QuestionnaireResponse as any;
+        });
+    }, []);
+
     const settingsMapRD = sequenceMap({
         activeQuestionnaireMap: activeQuestionnaireMapRD,
         patientSettings: patientSettingsRD,
+        questionnaireList: questionnaireListRD,
     });
 
     const questionnaireSelect = async (name: string) => {

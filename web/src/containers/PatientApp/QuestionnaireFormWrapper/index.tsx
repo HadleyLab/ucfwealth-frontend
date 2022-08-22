@@ -38,6 +38,7 @@ export const QuestionnaireFormWrapper = ({ patient }: QuestionnaireFormWrapperPr
                                     patient={patient}
                                     activeQuestionnaireMap={settingsMap.activeQuestionnaireMap}
                                     questionnaireName={questionnaireSelected}
+                                    questionnaireList={settingsMap.questionnaireList}
                                 />
                             ) : (
                                 <div style={{ width: '1000px' }}>

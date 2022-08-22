@@ -1,7 +1,7 @@
 import { Steps } from 'antd';
 import { useState } from 'react';
 
-import { Patient } from 'shared/src/contrib/aidbox';
+import { Patient, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
 import { QuestionnaireSuccess } from 'src/components/QuestionnaireSuccess';
 import { QuestionnaireForm } from 'src/containers/PatientApp/QuestionnaireForm';
@@ -14,18 +14,37 @@ interface Props {
     patient: Patient;
     activeQuestionnaireMap: any;
     questionnaireName: string;
+    questionnaireList: QuestionnaireResponse[];
 }
+
+const getDefaultStep = (questionnaireList: QuestionnaireResponse[]) => {
+    if (questionnaireList.length >= 2) {
+        return 2;
+    }
+    if (questionnaireList.length >= 1) {
+        return 1;
+    }
+    return 0;
+};
 
 export const QuestionnaireSteps = ({
     patient,
     activeQuestionnaireMap,
     questionnaireName,
+    questionnaireList,
 }: Props) => {
-    const [currentStep, setCurrentStep] = useState(0);
+    const [currentStep, setCurrentStep] = useState(getDefaultStep(questionnaireList));
 
     const steps = [
         {
-            title: 'Participant Information',
+            title: (
+                <div
+                    style={currentStep !== 0 ? { cursor: 'pointer' } : {}}
+                    onClick={() => setCurrentStep(0)}
+                >
+                    Participant Information
+                </div>
+            ),
             content: (
                 <QuestionnaireForm
                     patient={patient}
@@ -36,7 +55,22 @@ export const QuestionnaireSteps = ({
             ),
         },
         {
-            title: 'Questionnaire',
+            title: (
+                <div
+                    style={
+                        questionnaireList.length >= 1 && currentStep !== 1
+                            ? { cursor: 'pointer' }
+                            : {}
+                    }
+                    onClick={() => {
+                        if (questionnaireList.length >= 1) {
+                            setCurrentStep(1);
+                        }
+                    }}
+                >
+                    Questionnaire
+                </div>
+            ),
             content: (
                 <QuestionnaireForm
                     patient={patient}
@@ -47,7 +81,22 @@ export const QuestionnaireSteps = ({
             ),
         },
         {
-            title: 'Complete',
+            title: (
+                <div
+                    style={
+                        questionnaireList.length >= 2 && currentStep !== 2
+                            ? { cursor: 'pointer' }
+                            : {}
+                    }
+                    onClick={() => {
+                        if (questionnaireList.length >= 2) {
+                            setCurrentStep(2);
+                        }
+                    }}
+                >
+                    Upload files
+                </div>
+            ),
             content: <QuestionnaireSuccess />,
         },
     ];
@@ -67,7 +116,7 @@ export const QuestionnaireSteps = ({
             <h2 className={s.title}>{title}</h2>
             <Steps current={currentStep} className={s.steps}>
                 {steps.map((item) => (
-                    <Step key={item.title} title={item.title} />
+                    <Step key={item.title as any} title={item.title} />
                 ))}
             </Steps>
             <div className={s.stepsContent}>{steps[currentStep].content}</div>
