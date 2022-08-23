@@ -7,6 +7,8 @@ import axios from 'axios';
 import { Circle } from 'rc-progress';
 import { useEffect, useState } from 'react';
 
+import { sharedPatientId } from 'src/sharedState';
+
 interface UploadProgressProps {
     getData: () => Promise<any>;
     uploadFileName: string;
@@ -104,9 +106,10 @@ export const UploadProgress = ({
     };
 
     const workAfterUpload = async () => {
-        const patientId = localStorage.getItem('sessionId') || 'patient id';
+        const patientId = sharedPatientId.getSharedState().id;
         const patientExists = await checkPatientExists(patientId);
         console.log('The patient exists:', patientExists);
+        console.log('Patient ID:', patientId);
         if (patientExists) {
             const isHederaAccountExist = await checkHederaAccountExists(patientId);
             if (!isHederaAccountExist) {
@@ -129,9 +132,7 @@ export const UploadProgress = ({
     return (
         <div
             className={
-                completed === 0
-                    ? 'invisible flex flex-row-reverse mb-2 h-25'
-                    : 'flex flex-row-reverse mb-2 h-25'
+                completed === 0 ? 'uploading-progress-not-started' : 'uploading-progress-started'
             }
         >
             <Circle
@@ -140,7 +141,7 @@ export const UploadProgress = ({
                 strokeColor={barchProgress === 100 ? '#52C41A' : '#1491BD'}
                 percent={barchProgress}
             />
-            <span className="px-2 py-2 text-sm text-gray-700">
+            <span className="barch-progress">
                 {barchProgress === 100 ? 'All done!' : 'Uploading...'}
             </span>
         </div>

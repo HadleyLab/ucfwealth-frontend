@@ -1,5 +1,7 @@
+import { sharedPatientId } from "src/sharedState";
+
 export const SessionId = () => {
-    const sessionId = localStorage.getItem('sessionId');
+    const sessionId = sharedPatientId.getSharedState().id;
 
     const copySessionId = () => {
         if (sessionId) {

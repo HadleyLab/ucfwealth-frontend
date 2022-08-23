@@ -2,7 +2,10 @@ import UploadButton from '@rpldy/upload-button';
 import UploadDropZone from '@rpldy/upload-drop-zone';
 import { CreateOptions } from '@rpldy/uploader';
 import { useRequestPreSend } from '@rpldy/uploady';
+import { Button } from 'antd';
 import axios from 'axios';
+
+import { sharedPatientId } from 'src/sharedState';
 
 interface Props {
     setUploadFileName: (uploadFileName: string) => void;
@@ -23,12 +26,12 @@ export const SignedUploadDragAndDrop = ({ setUploadFileName }: Props) => {
 
         const gateway = window.gateway ?? 'http://localhost:8083';
 
-        const sessionId = localStorage.getItem('sessionId');
+        const patientId = sharedPatientId.getSharedState().id;
 
         const response = await axios(
             `${gateway}/api/sign?` +
                 new URLSearchParams({
-                    name: `${sessionId}/${name}`,
+                    name: `${patientId}/${name}`,
                     type,
                 }),
         );
@@ -52,13 +55,17 @@ export const SignedUploadDragAndDrop = ({ setUploadFileName }: Props) => {
 
     return (
         <UploadDropZone
-            className="drag-and-drop border-dashed border-2 borderDashedColor w-64 h-32 rounded justify-center items-center flex flex-col"
+            className="drag-and-drop"
             onDragOverClassName="drag-over"
             htmlDirContentParams={{ recursive: true, withFullPath: true }}
         >
-            <span className="block mb-4">Drag and drop your files anywhere or</span>
-            <UploadButton className="py-2 px-4 font-semibold rounded-full text-white buttonStyle">
-                Click To Upload!
+            <span className="drag-and-drop-your-files-text">
+                Drag and drop your files anywhere or
+            </span>
+            <UploadButton className="upload-button-container">
+                <Button type="primary" className="upload-button">
+                    Click To Upload!
+                </Button>
             </UploadButton>
         </UploadDropZone>
     );

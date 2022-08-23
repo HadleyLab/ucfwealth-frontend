@@ -23,12 +23,10 @@ interface WrapperProps {
 
 const Wrapper = ({ children }: WrapperProps) => {
     return (
-        <>
-            <div>
-                <div className="flex place-items-center place-content-center my-2">File list</div>
-                {children}
-            </div>
-        </>
+        <div>
+            <div className="file-list">File list</div>
+            {children}
+        </div>
     );
 };
 

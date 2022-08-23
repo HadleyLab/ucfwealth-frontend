@@ -1,13 +1,10 @@
-import { Button } from 'antd';
 
-import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
+import { FileUploader } from 'src/containers/FileUploader/App';
 import { SuccessIcon } from 'src/images/SuccessIcon';
-import { sharedPatientId } from 'src/sharedState';
 
 import s from './QuestionnaireSuccess.module.scss';
 
 export const QuestionnaireSuccess = () => {
-    const patientId = sharedPatientId.getSharedState();
     return (
         <div className={s.wrapper}>
             <SuccessIcon />
@@ -29,13 +26,7 @@ export const QuestionnaireSuccess = () => {
                     If the images fit into the study, you'll will receive an email with the access
                     to your NFT.
                 </div>
-                <Button
-                    className={s.uploadImages}
-                    type="primary"
-                        href={`${FILE_UPLOADER_FRONTEND_URL}/${patientId.id}`}
-                >
-                    <span className={s.uploadImagesSpan}>Upload images</span>
-                </Button>
+                <FileUploader />
             </div>
         </div>
     );

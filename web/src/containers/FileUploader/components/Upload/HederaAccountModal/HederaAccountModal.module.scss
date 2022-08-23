@@ -1,0 +1,23 @@
+.useitToAccessYourNFTs {
+    padding: 0 0.5rem/* 8px */;
+}
+
+.useitToAccessYourNFTsText {
+    font-weight: 600;
+    --tw-text-opacity: 1;
+    color: rgb(156 163 175 / var(--tw-text-opacity));
+}
+
+.credentialsContainer {
+    padding: 0.5rem/* 8px */;
+    flex: 1 1 auto;
+}
+
+.accountIdPasswordContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.label {
+    margin: 5px 0;
+}
