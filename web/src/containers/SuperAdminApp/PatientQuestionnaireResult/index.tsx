@@ -1,16 +1,15 @@
 import './styles.css';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
+import { QuestionnaireFormWrapper } from 'src/containers/PatientApp/QuestionnaireFormWrapper';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
-import { objectToDisplay } from 'src/utils/questionnaire';
 
 import s from './PatientQuestionnaireResult.module.scss';
 import { usePatientQuestionnaireResult } from './usePatientQuestionnaireResult';
 
 export const PatientQuestionnaireResult = () => {
-    const { questionnaireResponseListRD, patientId } = usePatientQuestionnaireResult();
+    const { patientRD } = usePatientQuestionnaireResult();
 
     const history = useHistory();
 
@@ -20,40 +19,25 @@ export const PatientQuestionnaireResult = () => {
 
     return (
         <div>
-            <div className={s.headerWrapper}>
-                <div
-                    onClick={() => history.push('/app', { pageNumber: pageNumber ?? 1 })}
-                    className={s.leftArrow}
-                >
-                    <LeftArrowIcon />
-                </div>
-                <div className={s.patientDetails}>
-                    <div className={s.patient}>{patientId}</div>
-                    <div className={s.details}>Participant Details</div>
-                </div>
-            </div>
-            <div className={s.codeMirrorWrapper}>
-                <RenderRemoteData remoteData={questionnaireResponseListRD}>
-                    {(questionnaireResponseList) => {
-                        return (
-                            <>
-                                {questionnaireResponseList.length > 0 ? (
-                                    <CodeMirror
-                                        value={objectToDisplay(questionnaireResponseList)}
-                                        options={{
-                                            lineNumbers: false,
-                                            mode: 'yaml',
-                                            readOnly: true,
-                                        }}
-                                    />
-                                ) : (
-                                    <div>Empty</div>
-                                )}
-                            </>
-                        );
-                    }}
-                </RenderRemoteData>
-            </div>
+            <RenderRemoteData remoteData={patientRD}>
+                {(patient) => {
+                    return (
+                        <div style={{ display: 'flex' }}>
+                            <div
+                                onClick={() =>
+                                    history.push('/app', { pageNumber: pageNumber ?? 1 })
+                                }
+                                className={s.leftArrow}
+                            >
+                                <LeftArrowIcon />
+                            </div>
+                            <div style={{ width: '1100px' }}>
+                                <QuestionnaireFormWrapper patient={patient} isSaveDisabled={true} />
+                            </div>
+                        </div>
+                    );
+                }}
+            </RenderRemoteData>
         </div>
     );
 };

@@ -3,7 +3,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { ShowImage } from 'src/components/ShowImage';
-import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
 import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
 
@@ -54,7 +53,11 @@ export const PatientFileList = () => {
                         <Button
                             className={s.uploadImages}
                             type="primary"
-                            href={`${FILE_UPLOADER_FRONTEND_URL}/${patientId}`}
+                            onClick={() =>
+                                history.push(`/patients/${patientId}`, {
+                                    pageNumber: pageNumber ?? 1,
+                                })
+                            }
                         >
                             Upload images
                         </Button>

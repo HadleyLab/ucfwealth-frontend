@@ -15,8 +15,9 @@ interface QuestionnaireResponseFormData {
 interface Props {
     patient: Patient;
     questionnaireId: string;
-    currentStep: number;
-    setCurrentStep: (value: React.SetStateAction<number>) => void;
+    currentStep?: number;
+    setCurrentStep?: (value: React.SetStateAction<number>) => void;
+    isSaveDisabled?: boolean;
 }
 
 export const QuestionnaireForm = ({
@@ -24,12 +25,12 @@ export const QuestionnaireForm = ({
     questionnaireId,
     currentStep,
     setCurrentStep,
+    isSaveDisabled
 }: Props) => {
-    const { questFormRespRD, progress, choices, saveQR, setChoices } =
-        useQuestionnaireForm({
-            patient,
-            questionnaireId,
-        });
+    const { questFormRespRD, progress, choices, saveQR, setChoices } = useQuestionnaireForm({
+        patient,
+        questionnaireId,
+    });
 
     return (
         <div style={{ width: '840px' }}>
@@ -49,6 +50,7 @@ export const QuestionnaireForm = ({
                             onSave={saveQR as (resource: QuestionnaireResponse) => Promise<any>}
                             setChoices={setChoices}
                             setCurrentStep={setCurrentStep}
+                            readOnly={isSaveDisabled || false}
                         />
                     );
                 }}

@@ -10,9 +10,13 @@ import { useQuestionnaireFormWrapper } from './useQuestionnaireFormWrapper';
 
 interface QuestionnaireFormWrapperProps {
     patient: Patient;
+    isSaveDisabled?: boolean;
 }
 
-export const QuestionnaireFormWrapper = ({ patient }: QuestionnaireFormWrapperProps) => {
+export const QuestionnaireFormWrapper = ({
+    patient,
+    isSaveDisabled,
+}: QuestionnaireFormWrapperProps) => {
     const { settingsMapRD, questionnaireSelect, questionnaireSelected, setQuestionnaireSelected } =
         useQuestionnaireFormWrapper({ patient });
 
@@ -39,8 +43,9 @@ export const QuestionnaireFormWrapper = ({ patient }: QuestionnaireFormWrapperPr
                                     activeQuestionnaireMap={settingsMap.activeQuestionnaireMap}
                                     questionnaireName={questionnaireSelected}
                                     questionnaireList={settingsMap.questionnaireList}
+                                    isSaveDisabled={isSaveDisabled}
                                 />
-                            ) : (
+                            ) : !isSaveDisabled ? (
                                 <div style={{ width: '1000px' }}>
                                     <h2 className={s.title}>Select a study to participate</h2>
                                     <div className={s.sectionWrapper}>
@@ -95,6 +100,10 @@ export const QuestionnaireFormWrapper = ({ patient }: QuestionnaireFormWrapperPr
                                             Join
                                         </Button>
                                     </div>
+                                </div>
+                            ) : (
+                                <div style={{ fontSize: 16, fontWeight: 600, marginTop: 1 }}>
+                                    Patient does not participate in any study
                                 </div>
                             )}
                         </>

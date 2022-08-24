@@ -47,13 +47,13 @@ interface Props {
     };
     readOnly?: boolean;
     choices: any[];
-    currentStep: number;
+    currentStep?: number;
     questionnaireId: string;
     progress: number;
     onSave: (resource: QuestionnaireResponse) => Promise<any> | void;
     onChange?: (resource: QuestionnaireResponse) => void;
     setChoices: (value: any[]) => void;
-    setCurrentStep: (value: React.SetStateAction<number>) => void;
+    setCurrentStep?: (value: React.SetStateAction<number>) => void;
 }
 
 type FormValues = FormItems;
@@ -480,7 +480,8 @@ export const QuestionnaireResponseForm = (props: Props) => {
         const onClick = async () => {
             await handleSubmit();
             setAnswerDateTimeChanged(true);
-            if (valid && validDate) props.setCurrentStep(props.currentStep + 1);
+            if (valid && validDate && props.setCurrentStep && props.currentStep)
+                props.setCurrentStep(props.currentStep + 1);
         };
 
         return (

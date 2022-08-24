@@ -15,6 +15,7 @@ interface Props {
     activeQuestionnaireMap: any;
     questionnaireName: string;
     questionnaireList: QuestionnaireResponse[];
+    isSaveDisabled?: boolean;
 }
 
 const getDefaultStep = (questionnaireList: QuestionnaireResponse[]) => {
@@ -32,6 +33,7 @@ export const QuestionnaireSteps = ({
     activeQuestionnaireMap,
     questionnaireName,
     questionnaireList,
+    isSaveDisabled
 }: Props) => {
     const [currentStep, setCurrentStep] = useState(getDefaultStep(questionnaireList));
 
@@ -51,6 +53,7 @@ export const QuestionnaireSteps = ({
                     questionnaireId={activeQuestionnaireMap.personalInfo}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
+                    isSaveDisabled={isSaveDisabled}
                 />
             ),
         },
@@ -77,6 +80,7 @@ export const QuestionnaireSteps = ({
                     questionnaireId={questionnaireName}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
+                    isSaveDisabled={isSaveDisabled}
                 />
             ),
         },

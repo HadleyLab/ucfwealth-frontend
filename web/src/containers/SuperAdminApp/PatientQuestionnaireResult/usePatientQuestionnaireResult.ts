@@ -1,30 +1,26 @@
 import { useLocation } from 'react-router-dom';
 
 import { useService } from 'aidbox-react/src/hooks/service';
-import { isFailure } from 'aidbox-react/src/libs/remoteData';
-import { extractBundleResources, WithId } from 'aidbox-react/src/services/fhir';
-import { mapSuccess, service } from 'aidbox-react/src/services/service';
+import { getFHIRResource } from 'aidbox-react/src/services/fhir';
 
-import { QuestionnaireResponse } from 'shared/src/contrib/aidbox';
+import { Patient } from 'shared/src/contrib/aidbox';
+
+import { sharedPatientId } from 'src/sharedState';
 
 export const usePatientQuestionnaireResult = () => {
     const location = useLocation<any>();
 
     const patientId = location.pathname.split('/')[2];
 
-    const [questionnaireResponseListRD] = useService(async () => {
-        const response = await service({
-            method: 'GET',
-            url: `QuestionnaireResponse?_ilike=${patientId}`,
+    const [patientRD] = useService<Patient>(async () => {
+        const response = await getFHIRResource<Patient>({
+            resourceType: 'Patient',
+            id: patientId,
         });
-        if (isFailure(response)) {
-            console.error(response.error);
-        }
-        return mapSuccess(response, (bundle) => {
-            return extractBundleResources(bundle)
-                .QuestionnaireResponse as WithId<QuestionnaireResponse>[];
-        });
+        return response;
     });
 
-    return { questionnaireResponseListRD, patientId };
+    sharedPatientId.setSharedState({ id: patientId || '' });
+
+    return { patientRD };
 };
