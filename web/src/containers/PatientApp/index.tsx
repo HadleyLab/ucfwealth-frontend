@@ -4,7 +4,6 @@ import { User } from 'shared/src/contrib/aidbox';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
-import { FILE_UPLOADER_FRONTEND_URL } from 'src/config.url';
 import { sharedPatientId } from 'src/sharedState';
 import { RouteItem } from 'src/utils/route';
 
@@ -31,10 +30,6 @@ export function PatientApp({ user }: PatientAppProps) {
         {
             path: `${match.url}/summary-overview`,
             title: <span style={titleStyle}>Profile data</span>,
-        },
-        {
-            url: `${FILE_UPLOADER_FRONTEND_URL}/${user.data.patient?.id}`,
-            title: <span style={titleStyle}>Medical data</span>,
         },
         {
             path: `${match.url}/questionnaire`,

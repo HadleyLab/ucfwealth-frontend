@@ -101,7 +101,7 @@ export function BaseLayout(props: BaseLayoutProps) {
         setSelectedKeys([location]);
     }, [location]);
 
-    const menuWidth = routeList!.length > 2 ? '740px' : '300px';
+    const menuWidth = routeList!.length > 2 ? '600px' : '300px';
 
     return (
         <>
