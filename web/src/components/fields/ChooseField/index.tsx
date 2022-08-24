@@ -63,28 +63,26 @@ export function ChooseField<T = any>({
                                     -1;
 
                                 return (
-                                    <React.Fragment key={`${option.value}-${index}`}>
-                                        <ACheckbox.Group>
-                                            <ACheckbox
-                                                checked={isSelected}
-                                                onChange={(event: any) => {
-                                                    let value;
-                                                    if (event.target.checked) {
-                                                        value = [...input.value, option.value];
-                                                    } else {
-                                                        value = _.reject(input.value, (x) =>
-                                                            isEqual(x, option.value),
-                                                        );
-                                                    }
-                                                    input.onChange(value);
-                                                    if (onChange) {
-                                                        onChange(value);
-                                                    }
-                                                }}
-                                            >
-                                                {option.label}
-                                            </ACheckbox>
-                                        </ACheckbox.Group>
+                                    <React.Fragment key={`${index}`}>
+                                        <ACheckbox
+                                            checked={isSelected}
+                                            onChange={(event: any) => {
+                                                let value;
+                                                if (event.target.checked) {
+                                                    value = [...input.value, option.value];
+                                                } else {
+                                                    value = _.reject(input.value, (x) =>
+                                                        isEqual(x, option.value),
+                                                    );
+                                                }
+                                                input.onChange(value);
+                                                if (onChange) {
+                                                    onChange(value);
+                                                }
+                                            }}
+                                        >
+                                            {option.label}
+                                        </ACheckbox>
                                         {renderOptionContent &&
                                             renderOptionContent(option, index, input.value)}
                                     </React.Fragment>
