@@ -480,7 +480,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
         const onClick = async () => {
             await handleSubmit();
             setAnswerDateTimeChanged(true);
-            if (valid && validDate && props.setCurrentStep && props.currentStep)
+            if (valid && validDate && props.setCurrentStep && typeof props.currentStep === 'number')
                 props.setCurrentStep(props.currentStep + 1);
         };
 
