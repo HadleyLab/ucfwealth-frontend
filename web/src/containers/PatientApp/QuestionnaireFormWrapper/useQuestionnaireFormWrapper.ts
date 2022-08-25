@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { useService } from 'aidbox-react/src/hooks/service';
-import { isFailure } from 'aidbox-react/src/libs/remoteData';
-import { extractBundleResources } from 'aidbox-react/src/services/fhir';
+import { isFailure, isSuccess } from 'aidbox-react/src/libs/remoteData';
+import { extractBundleResources, saveFHIRResource } from 'aidbox-react/src/services/fhir';
 import { mapSuccess, sequenceMap, service } from 'aidbox-react/src/services/service';
 
 import { Patient } from 'shared/src/contrib/aidbox';
@@ -61,16 +61,14 @@ export const useQuestionnaireFormWrapper = ({ patient }: Props) => {
     });
 
     const questionnaireSelect = async (name: string) => {
-        const data = {
+        const resource = {
+            id: patient.id,
             patientId: patient.id,
             selectedQuestionnaire: name,
+            resourceType: 'PatientSettings',
         };
-        await service({
-            url: '/PatientSettings/$save-patient-settings',
-            method: 'POST',
-            data: data,
-        });
-        setQuestionnaireSelected(name);
+        const response = await saveFHIRResource(resource);
+        if (isSuccess(response)) setQuestionnaireSelected(name);
     };
 
     return { settingsMapRD, questionnaireSelect, questionnaireSelected, setQuestionnaireSelected };

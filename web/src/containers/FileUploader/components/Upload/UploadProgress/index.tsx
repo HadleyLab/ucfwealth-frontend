@@ -3,9 +3,18 @@ import {
     useBatchStartListener,
     useBatchProgressListener,
 } from '@rpldy/uploady';
-import axios from 'axios';
 import { Circle } from 'rc-progress';
 import { useEffect, useState } from 'react';
+
+import { isFailure, isSuccess } from 'aidbox-react/src/libs/remoteData';
+import {
+    extractBundleResources,
+    getFHIRResource,
+    saveFHIRResource,
+} from 'aidbox-react/src/services/fhir';
+import { mapSuccess, service } from 'aidbox-react/src/services/service';
+
+import { Patient } from 'shared/src/contrib/aidbox';
 
 import { sharedPatientId } from 'src/sharedState';
 
@@ -49,27 +58,24 @@ export const UploadProgress = ({
         }
     };
 
-    const gateway = 'http://localhost:8080';
-
-    const checkPatientExists = async (id: string) => {
-        try {
-            const response = await axios.get(`${gateway}/$check-patient-exists?patientId=${id}`);
-            return response.data.isPatientExist;
-        } catch (error) {
-            console.log(error);
-        }
+    const checkPatientExists = async (patientId: string) => {
+        const response = await getFHIRResource<Patient>({
+            resourceType: 'Patient',
+            id: patientId,
+        });
+        if (isSuccess(response)) return true;
+        if (isFailure(response)) return false;
     };
 
     const checkHederaAccountExists = async (patientId: string) => {
-        try {
-            const response = await axios.get(
-                `${gateway}/$check-hedera-account-exists?patientId=${patientId}`,
-            );
-            console.log(response);
-            return response.data.isHederaAccountExist;
-        } catch (error) {
-            console.log(error);
-        }
+        const response = await service({
+            method: 'GET',
+            url: `HederaAccount?_ilike=${patientId}`,
+        });
+        return Boolean(
+            mapSuccess(response, (bundle) => extractBundleResources(bundle).HederaAccount)['data']
+                .length,
+        );
     };
 
     const showHederaAccountModal = (accountId: string, accountKey: string) => {
@@ -82,21 +88,13 @@ export const UploadProgress = ({
         accountId: string,
         accountKey: string,
     ) => {
-        const saveData = {
+        const resource = {
             patientId,
             accountId,
             accountKey,
+            resourceType: 'HederaAccount',
         };
-        try {
-            const response = await axios.post(
-                `${gateway}/HederaAccount/$save-hedera-account-id`,
-                saveData,
-            );
-            console.log('Account is created:', response.data.isHederaAccountSaved);
-            return response.data.isHederaAccountSaved;
-        } catch (error) {
-            console.log(error);
-        }
+        return await saveFHIRResource(resource);
     };
 
     const createAndSaveHederaAccount = async (patientId: string) => {
