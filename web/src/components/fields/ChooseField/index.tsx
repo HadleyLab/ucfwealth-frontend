@@ -63,7 +63,7 @@ export function ChooseField<T = any>({
                                     -1;
 
                                 return (
-                                    <React.Fragment key={`${index}`}>
+                                    <div key={`${index}`}>
                                         <ACheckbox
                                             checked={isSelected}
                                             onChange={(event: any) => {
@@ -85,7 +85,7 @@ export function ChooseField<T = any>({
                                         </ACheckbox>
                                         {renderOptionContent &&
                                             renderOptionContent(option, index, input.value)}
-                                    </React.Fragment>
+                                    </div>
                                 );
                             })}
                         </Form.Item>
