@@ -18,10 +18,3 @@ export const downloadFile = async (key: string) => {
 
     return result;
 };
-
-export const removePatientIdFromFileKey = (fileKey: string) => {
-    return fileKey
-        .split('/')
-        .filter((el, key) => key !== 0)
-        .join('/');
-};

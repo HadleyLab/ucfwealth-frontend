@@ -1,9 +1,9 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-import { sharedPatientId } from 'src/sharedState';
+import { isFailure } from 'aidbox-react/src/libs/remoteData';
+import { service } from 'aidbox-react/src/services/service';
 
-import { FILE_UPLOADER_BACKEND_URL } from '../config.url';
+import { sharedPatientId } from 'src/sharedState';
 
 declare global {
     interface Window {
@@ -18,24 +18,25 @@ export const useApp = () => {
 
     const [contentList, setContentList] = useState<[] | string[]>([]);
 
-    const gateway = window.gateway ?? FILE_UPLOADER_BACKEND_URL;
-
     const getData = async () => {
         if (!sessionId) {
             return;
         }
+        const response = await service({
+            method: 'GET',
+            url: '/api/get-data',
+            params: { sessionId },
+        });
 
-        const response = await axios(
-            `${gateway}/api/get-data?` +
-                new URLSearchParams({
-                    sessionId,
-                }),
-        );
+        if (isFailure(response)) {
+            console.error(response)
+            return [];
+        }
 
-        setContentList(response.data);
+        setContentList(response.data.contents.contents);
         setShowLoader(false);
 
-        return response.data;
+        return response.data.contents.contents;
     };
 
     useEffect(() => {

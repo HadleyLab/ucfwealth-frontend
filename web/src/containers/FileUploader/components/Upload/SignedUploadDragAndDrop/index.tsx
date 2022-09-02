@@ -3,7 +3,9 @@ import UploadDropZone from '@rpldy/upload-drop-zone';
 import { CreateOptions } from '@rpldy/uploader';
 import { useRequestPreSend } from '@rpldy/uploady';
 import { Button } from 'antd';
-import axios from 'axios';
+
+import { isFailure } from 'aidbox-react/src/libs/remoteData';
+import { service } from 'aidbox-react/src/services/service';
 
 import { sharedPatientId } from 'src/sharedState';
 
@@ -24,24 +26,28 @@ export const SignedUploadDragAndDrop = ({ setUploadFileName }: Props) => {
 
         setUploadFileName(name);
 
-        const gateway = window.gateway ?? 'http://localhost:8083';
-
         const patientId = sharedPatientId.getSharedState().id;
 
-        const response = await axios(
-            `${gateway}/api/sign?` +
-                new URLSearchParams({
-                    name: `${patientId}/${name}`,
-                    type,
-                }),
-        );
+        const response = await service({
+            method: 'GET',
+            url: '/api/sign',
+            params: {
+                name: `${patientId}/${name}`,
+                type,
+            },
+        });
+
+        if (isFailure(response)) {
+            console.log(response)
+            return {};
+        }
 
         const { data } = response;
 
         const options: CreateOptions = {
             sendWithFormData: false,
             destination: {
-                url: data,
+                url: data.url,
                 method: 'PUT',
             },
         };

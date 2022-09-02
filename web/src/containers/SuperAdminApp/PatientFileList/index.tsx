@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { ShowImage } from 'src/components/ShowImage';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
-import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
+import { downloadFile } from 'src/utils/patientFileList';
 
 import s from './PatientFileList.module.scss';
 import { usePatientFileList } from './usePatientFileList';
@@ -33,17 +33,17 @@ export const PatientFileList = () => {
                 {(data) => (
                     <div className={s.fileList}>
                         {data.dicomFileList.length > 0 ? (
-                            data.dicomFileList.map((fileKey: string, key: string) => (
+                            data.dicomFileList.map((fileName: string, key: string) => (
                                 <div>
                                     <div
                                         className={s.fileKey}
                                         key={key}
-                                        onClick={() => downloadFile(fileKey)}
+                                        onClick={() => downloadFile(`${patientId}/${fileName}`)}
                                     >
-                                        {removePatientIdFromFileKey(fileKey)}
+                                        {fileName}
                                     </div>
                                     <div className={s.showImage}>
-                                        <ShowImage fileKey={fileKey} />
+                                        <ShowImage fileKey={`${patientId}/${fileName}`} />
                                     </div>
                                 </div>
                             ))

@@ -1,5 +1,6 @@
 import { ShowImage } from 'src/components/ShowImage';
-import { downloadFile, removePatientIdFromFileKey } from 'src/utils/patientFileList';
+import { sharedPatientId } from 'src/sharedState';
+import { downloadFile } from 'src/utils/patientFileList';
 
 interface Props {
     data: any;
@@ -8,16 +9,17 @@ interface Props {
 import s from './DicomSummary.module.scss';
 
 export const DicomSummary = ({ data }: Props) => {
+    const patientId = sharedPatientId.getSharedState().id;
     return (
         <div>
             {data.dicomFileList.length > 0 ? (
-                data.dicomFileList.map((fileKey: string, key: string) => (
+                data.dicomFileList.map((fileName: string, key: string) => (
                     <div>
-                        <div className={s.title} key={key} onClick={() => downloadFile(fileKey)}>
-                            {removePatientIdFromFileKey(fileKey)}
+                        <div className={s.title} key={key} onClick={() => downloadFile(`${patientId}/${fileName}`)}>
+                            {fileName}
                         </div>
                         <div className={s.showImage}>
-                            <ShowImage fileKey={fileKey} />
+                            <ShowImage fileKey={`${patientId}/${fileName}`} />
                         </div>
                     </div>
                 ))

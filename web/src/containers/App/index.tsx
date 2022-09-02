@@ -15,7 +15,6 @@ import { RoleSwitch } from 'src/components/RoleSwitch';
 import { Login } from 'src/containers/Login';
 import { PractitionerApp } from 'src/containers/ParactitonerApp';
 import { PatientApp } from 'src/containers/PatientApp';
-import { SignUp } from 'src/containers/SignUp';
 import { SuperAdminApp } from 'src/containers/SuperAdminApp';
 import { UnprivilegedApp } from 'src/containers/UnprivilegedApp';
 import { getUserInfo } from 'src/services/auth';
@@ -81,7 +80,6 @@ export function App() {
                 <Route path="/auth" exact>
                     <Auth setToken={setToken} />
                 </Route>
-                <Route path="/signup" exact render={() => <SignUp setToken={setToken} />} />
                 <Route path="/login" exact render={() => <Login />} />
                 <Route path="/file-uploader" render={() => <FileUploader />} />
                 <Redirect

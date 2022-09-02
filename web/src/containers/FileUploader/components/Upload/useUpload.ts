@@ -1,18 +1,23 @@
-import axios from 'axios';
 import { useState } from 'react';
 
-import { FILE_UPLOADER_BACKEND_URL } from '../../config.url';
+import { isFailure } from 'aidbox-react/src/libs/remoteData';
+import { service } from 'aidbox-react/src/services/service';
 
 export type AccountCredentials = [accountId: string, accountKey: string];
 
 const filterByExtension = (file: any) => file.name.substr(-4) === '.dcm';
 
 const createHederaAccount = async () => {
-    const gateway = window.gateway ?? FILE_UPLOADER_BACKEND_URL;
-    const response = await axios(`${gateway}/api/create-hedera-account`);
+    const response = await service({
+        method: 'GET',
+        url: '/api/create-hedera-account',
+    });
+    if (isFailure(response)) {
+        return { accountId: '', accountKey: '' };
+    }
     return {
-        accountId: response.data.accountId,
-        accountKey: response.data.accountKey,
+        accountId: response.data.hederaAccount.accountId,
+        accountKey: response.data.hederaAccount.accountKey,
     };
 };
 
