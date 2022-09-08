@@ -41,20 +41,23 @@ export const QuestionnaireSummary = ({
     return (
         <RenderRemoteData remoteData={settingsMapRD}>
             {(settingsMap) => {
-                const questionnaireNameExpectedList = [
-                    settingsMap.activeQuestionnaireMap.personalInfo,
-                    ...settingsMap.activeQuestionnaireMap.questionnaireList.split(' '),
-                ];
+                const questionnaireIdList = settingsMap.questionnaireList.map((questionnaire) => {
+                    if (!questionnaire.id) {
+                        console.error('questionnaire ID does not exist');
+                        return '';
+                    }
+                    return questionnaire.id;
+                });
                 const questionnaireSummary = getQuestionnaireSummary(
                     questionnaireListMap,
-                    questionnaireNameExpectedList,
+                    questionnaireIdList,
                 );
-                if (settingsMap.patientSettings?.selectedQuestionnaire) {
+                if (settingsMap.patientSettings?.questionnaire?.id) {
                     const questionnaireResult = Object.fromEntries(
                         Object.entries(questionnaireSummary).filter(([id]) => {
                             return (
-                                id === settingsMap.activeQuestionnaireMap.personalInfo ||
-                                id === settingsMap.patientSettings?.selectedQuestionnaire
+                                id === 'personal-information' ||
+                                id === settingsMap.patientSettings.questionnaire.id
                             );
                         }),
                     );

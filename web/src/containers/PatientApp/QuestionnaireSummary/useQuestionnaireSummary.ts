@@ -1,30 +1,18 @@
 import { useService } from 'aidbox-react/src/hooks/service';
 import { isFailure } from 'aidbox-react/src/libs/remoteData';
-import { extractBundleResources } from 'aidbox-react/src/services/fhir';
-import { mapSuccess, sequenceMap, service } from 'aidbox-react/src/services/service';
+import { extractBundleResources, getFHIRResources } from 'aidbox-react/src/services/fhir';
+import { mapSuccess, sequenceMap } from 'aidbox-react/src/services/service';
+
+import { Questionnaire } from 'shared/src/contrib/aidbox';
 
 interface Props {
     patientId: string;
 }
 
 export const useQuestionnaireSummary = ({ patientId }: Props) => {
-    const [activeQuestionnaireMapRD] = useService(async () => {
-        const response = await service({
-            method: 'GET',
-            url: `QuestionnaireSettings`,
-        });
-        if (isFailure(response)) {
-            console.error(response.error);
-        }
-        return mapSuccess(response, (bundle) => {
-            return extractBundleResources(bundle).QuestionnaireSettings[0] as any;
-        });
-    });
-
     const [patientSettingsRD] = useService(async () => {
-        const response = await service({
-            method: 'GET',
-            url: `PatientSettings?_ilike=${patientId}`,
+        const response = await getFHIRResources('PatientSettings', {
+            patient: patientId,
         });
 
         if (isFailure(response)) {
@@ -37,9 +25,16 @@ export const useQuestionnaireSummary = ({ patientId }: Props) => {
         });
     }, []);
 
+    const [questionnaireListRD] = useService(async () => {
+        const response = await getFHIRResources('Questionnaire', {});
+        return mapSuccess(response, (bundle) => {
+            return extractBundleResources(bundle).Questionnaire as Questionnaire[];
+        });
+    });
+
     const settingsMapRD = sequenceMap({
-        activeQuestionnaireMap: activeQuestionnaireMapRD,
         patientSettings: patientSettingsRD,
+        questionnaireList: questionnaireListRD,
     });
 
     return { settingsMapRD };

@@ -12,17 +12,16 @@ const { Step } = Steps;
 
 interface Props {
     patient: Patient;
-    activeQuestionnaireMap: any;
     questionnaireName: string;
-    questionnaireList: QuestionnaireResponse[];
+    questionnaireResponseList: QuestionnaireResponse[];
     isSaveDisabled?: boolean;
 }
 
-const getDefaultStep = (questionnaireList: QuestionnaireResponse[]) => {
-    if (questionnaireList.length >= 2) {
+const getDefaultStep = (questionnaireResponseList: QuestionnaireResponse[]) => {
+    if (questionnaireResponseList.length >= 2) {
         return 2;
     }
-    if (questionnaireList.length >= 1) {
+    if (questionnaireResponseList.length >= 1) {
         return 1;
     }
     return 0;
@@ -30,12 +29,11 @@ const getDefaultStep = (questionnaireList: QuestionnaireResponse[]) => {
 
 export const QuestionnaireSteps = ({
     patient,
-    activeQuestionnaireMap,
     questionnaireName,
-    questionnaireList,
+    questionnaireResponseList,
     isSaveDisabled
 }: Props) => {
-    const [currentStep, setCurrentStep] = useState(getDefaultStep(questionnaireList));
+    const [currentStep, setCurrentStep] = useState(getDefaultStep(questionnaireResponseList));
 
     const steps = [
         {
@@ -50,7 +48,7 @@ export const QuestionnaireSteps = ({
             content: (
                 <QuestionnaireForm
                     patient={patient}
-                    questionnaireId={activeQuestionnaireMap.personalInfo}
+                    questionnaireId={'personal-information'}
                     currentStep={currentStep}
                     setCurrentStep={setCurrentStep}
                     isSaveDisabled={isSaveDisabled}
@@ -61,12 +59,12 @@ export const QuestionnaireSteps = ({
             title: (
                 <div
                     style={
-                        questionnaireList.length >= 1 && currentStep !== 1
+                        questionnaireResponseList.length >= 1 && currentStep !== 1
                             ? { cursor: 'pointer' }
                             : {}
                     }
                     onClick={() => {
-                        if (questionnaireList.length >= 1) {
+                        if (questionnaireResponseList.length >= 1) {
                             setCurrentStep(1);
                         }
                     }}
@@ -88,12 +86,12 @@ export const QuestionnaireSteps = ({
             title: (
                 <div
                     style={
-                        questionnaireList.length >= 2 && currentStep !== 2
+                        questionnaireResponseList.length >= 2 && currentStep !== 2
                             ? { cursor: 'pointer' }
                             : {}
                     }
                     onClick={() => {
-                        if (questionnaireList.length >= 2) {
+                        if (questionnaireResponseList.length >= 2) {
                             setCurrentStep(2);
                         }
                     }}

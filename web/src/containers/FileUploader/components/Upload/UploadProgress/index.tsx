@@ -27,6 +27,7 @@ interface UploadProgressProps {
         accountId: string;
         accountKey: string;
     }>;
+    setFileListCoordinator: (array: string[]) => void;
 }
 
 export const UploadProgress = ({
@@ -36,6 +37,7 @@ export const UploadProgress = ({
     setAccountCredentials,
     setShowModal,
     createHederaAccount,
+    setFileListCoordinator
 }: UploadProgressProps) => {
     const progressData = useItemProgressListener() || { completed: 0 };
 
@@ -54,7 +56,10 @@ export const UploadProgress = ({
     const updateFileList = async () => {
         for (let i = 0; i < 30; i++) {
             const data = await getData();
-            if (data.includes(uploadFileName)) break;
+            if (data.includes(uploadFileName)) {
+                setFileListCoordinator(data);
+                break;
+            }
         }
     };
 
@@ -89,7 +94,7 @@ export const UploadProgress = ({
         accountKey: string,
     ) => {
         const resource = {
-            patientId,
+            patient: { id: patientId, resourceType: 'Patient' },
             accountId,
             accountKey,
             resourceType: 'HederaAccount',

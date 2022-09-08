@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useService } from 'aidbox-react/src/hooks/service';
@@ -8,15 +9,17 @@ export const usePatientFileList = () => {
 
     const patientId = location.pathname.split('/')[2];
 
-    const [fileListRD] = useService(() =>
-        service({
+    const [fileListCoordinator, setFileListCoordinator] = useState(['']);
+
+    const [fileListRD] = useService(() => {
+        return service({
             method: 'GET',
             url: '$list-patient-dicom-files',
             params: {
                 patientId,
             },
-        }),
-    );
+        });
+    }, [fileListCoordinator]);
 
-    return { fileListRD, patientId };
+    return { fileListRD, patientId, setFileListCoordinator };
 };

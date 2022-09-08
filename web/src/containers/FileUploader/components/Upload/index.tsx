@@ -8,9 +8,10 @@ import './Upload.css';
 
 interface UploadProps {
     getData: () => Promise<any>;
+    setFileListCoordinator: (array: string[]) => void;
 }
 
-export const Upload = ({ getData }: UploadProps) => {
+export const Upload = ({ getData, setFileListCoordinator }: UploadProps) => {
     const {
         uploadFileName,
         setUploadFileName,
@@ -42,6 +43,7 @@ export const Upload = ({ getData }: UploadProps) => {
                     setAccountCredentials={setAccountCredentials}
                     setShowModal={setShowModal}
                     createHederaAccount={createHederaAccount}
+                    setFileListCoordinator={setFileListCoordinator}
                 />
                 <SignedUploadDragAndDrop setUploadFileName={setUploadFileName} />
             </Uploady>

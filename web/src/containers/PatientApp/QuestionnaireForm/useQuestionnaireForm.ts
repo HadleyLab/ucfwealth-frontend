@@ -53,7 +53,7 @@ export function useQuestionnaireForm({ patient, questionnaireId }: Props) {
     const saveQR = async (data: QuestionnaireResponse): Promise<void> => {
         const preparedQR: QuestionnaireResponse = {
             ...data,
-            status: 'final',
+            status: 'completed',
             subject: { resourceType: 'Patient', id: patient.id! },
         };
         const response = await saveFHIRResource<QuestionnaireResponse>(preparedQR);

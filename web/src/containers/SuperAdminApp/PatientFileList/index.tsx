@@ -1,22 +1,25 @@
-import { Button } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { ShowImage } from 'src/components/ShowImage';
+import { FileUploader } from 'src/containers/FileUploader/App';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
+import { sharedPatientId } from 'src/sharedState';
 import { downloadFile } from 'src/utils/patientFileList';
 
 import s from './PatientFileList.module.scss';
 import { usePatientFileList } from './usePatientFileList';
 
 export const PatientFileList = () => {
-    const { fileListRD, patientId } = usePatientFileList();
+    const { fileListRD, patientId, setFileListCoordinator } = usePatientFileList();
 
     const history = useHistory();
 
     const location = useLocation<any>();
 
     const pageNumber = location.state.pageNumber;
+
+    sharedPatientId.setSharedState({ id: patientId });
 
     return (
         <>
@@ -28,6 +31,12 @@ export const PatientFileList = () => {
                     <LeftArrowIcon />
                 </div>
                 <div className={s.header}>Dicom Files</div>
+            </div>
+            <div className={s.fileUploader}>
+                <FileUploader
+                    showFileList={false}
+                    setFileListCoordinator={setFileListCoordinator}
+                />
             </div>
             <RenderRemoteData remoteData={fileListRD}>
                 {(data) => (
@@ -50,17 +59,6 @@ export const PatientFileList = () => {
                         ) : (
                             <div>Empty</div>
                         )}
-                        <Button
-                            className={s.uploadImages}
-                            type="primary"
-                            onClick={() =>
-                                history.push(`/patients/${patientId}`, {
-                                    pageNumber: pageNumber ?? 1,
-                                })
-                            }
-                        >
-                            Upload images
-                        </Button>
                     </div>
                 )}
             </RenderRemoteData>

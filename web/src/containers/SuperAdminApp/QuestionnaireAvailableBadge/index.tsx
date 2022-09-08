@@ -17,26 +17,28 @@ export const QuestionnaireAvailableBadge = ({ questionnaireList, patientId }: Pr
     return (
         <RenderRemoteData remoteData={settingsMapRD}>
             {(settingsMap) => {
-                const questionnaireNameList = [
-                    settingsMap.activeQuestionnaireMap.personalInfo,
-                    ...settingsMap.activeQuestionnaireMap.questionnaireList.split(' '),
-                ];
+                const questionnaireIdList = settingsMap.questionnaireList.map((questionnaire) => {
+                    if (!questionnaire.id) {
+                        console.error('questionnaire ID does not exist');
+                        return '';
+                    }
+                    return questionnaire.id;
+                });
                 const questionnaireSummary: { questionnaire: string; result: boolean }[] = [];
-                questionnaireNameList.map((questionnaire) => {
+                questionnaireIdList.map((questionnaireId) => {
                     if (
-                        (questionnaire &&
-                            questionnaire === settingsMap.activeQuestionnaireMap.personalInfo) ||
-                        (settingsMap.patientSettings?.selectedQuestionnaire &&
-                            questionnaire === settingsMap.patientSettings.selectedQuestionnaire)
+                        (questionnaireId && questionnaireId === 'personal-information') ||
+                        (settingsMap.patientSettings?.questionnaire.id &&
+                            questionnaireId === settingsMap.patientSettings.questionnaire.id)
                     )
                         questionnaireSummary.push({
-                            questionnaire,
+                            questionnaire: questionnaireId,
                             result: false,
                         });
                 });
                 if (questionnaireSummary.length < 2) {
                     questionnaireSummary.push({
-                        questionnaire: "",
+                        questionnaire: '',
                         result: false,
                     });
                 }

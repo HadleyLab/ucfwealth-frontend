@@ -145,8 +145,7 @@ const celebrate = async (patient: Patient, setLoading: (loading: boolean) => voi
         return createNftMessageFailure;
     }
 
-    setLoading(false);
-    const createNftMessage = 'Created NFT with id: ' + createNftResponse.data.tokenId;
+    const createNftMessage = createNftResponse?.data?.text;
     message.success(createNftMessage);
     return createNftMessage;
 };

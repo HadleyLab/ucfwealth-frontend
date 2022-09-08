@@ -24,15 +24,11 @@ export const QuestionnaireFormWrapper = ({
         <div className={s.wrapper}>
             <RenderRemoteData remoteData={settingsMapRD}>
                 {(settingsMap) => {
-                    const questionnaireNameExpectedList = [
-                        ...settingsMap.activeQuestionnaireMap.questionnaireList.split(' '),
-                    ];
-
                     if (
-                        settingsMap.patientSettings?.selectedQuestionnaire &&
-                        questionnaireSelected !== settingsMap.patientSettings?.selectedQuestionnaire
+                        settingsMap.patientSettings?.questionnaire &&
+                        questionnaireSelected !== settingsMap.patientSettings.questionnaire.id
                     ) {
-                        setQuestionnaireSelected(settingsMap.patientSettings.selectedQuestionnaire);
+                        setQuestionnaireSelected(settingsMap.patientSettings.questionnaire.id);
                     }
 
                     return (
@@ -40,9 +36,10 @@ export const QuestionnaireFormWrapper = ({
                             {questionnaireSelected !== '' ? (
                                 <QuestionnaireSteps
                                     patient={patient}
-                                    activeQuestionnaireMap={settingsMap.activeQuestionnaireMap}
                                     questionnaireName={questionnaireSelected}
-                                    questionnaireList={settingsMap.questionnaireList}
+                                    questionnaireResponseList={
+                                        settingsMap.questionnaireResponseList
+                                    }
                                     isSaveDisabled={isSaveDisabled}
                                 />
                             ) : !isSaveDisabled ? (
@@ -65,9 +62,7 @@ export const QuestionnaireFormWrapper = ({
                                         </div>
                                         <Button
                                             onClick={() =>
-                                                questionnaireSelect(
-                                                    questionnaireNameExpectedList[0],
-                                                )
+                                                questionnaireSelect('screening-questions')
                                             }
                                             type="primary"
                                         >
@@ -91,9 +86,7 @@ export const QuestionnaireFormWrapper = ({
                                         </div>
                                         <Button
                                             onClick={() =>
-                                                questionnaireSelect(
-                                                    questionnaireNameExpectedList[1],
-                                                )
+                                                questionnaireSelect('patient-report-baseline')
                                             }
                                             type="primary"
                                         >
