@@ -16,11 +16,9 @@ export function UnprivilegedApp() {
         }
         if (isSuccess(response)) {
             const data = response.data.data;
-            if ('patient' in data) {
-                return true;
-            }
+            return 'patient' in data;
         }
-        return false;
+        return;
     };
     useInterval(async () => {
         if (checkPatient) {
