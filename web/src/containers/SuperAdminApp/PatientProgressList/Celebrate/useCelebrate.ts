@@ -2,14 +2,22 @@ import { message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 
 import { failure, isFailure, isSuccess, success } from 'aidbox-react/src/libs/remoteData';
-import { getFHIRResource } from 'aidbox-react/src/services/fhir';
+import { extractBundleResources, getFHIRResources } from 'aidbox-react/src/services/fhir';
 import { service } from 'aidbox-react/src/services/service';
 
-import { Patient } from 'shared/src/contrib/aidbox';
+import { id, Meta } from 'shared/src/contrib/aidbox';
 
 import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
 
 import { useInterval } from './useInterval';
+
+interface ResultCreationNft {
+    status?: 'in-progress' | 'completed';
+    patient?: { id: string; resourceType: 'Patient' };
+    id?: id;
+    meta?: Meta;
+    resourceType: 'ResultCreationNft';
+}
 
 const getPatientHederaAccount = async (patientId: string) => {
     const response = await service({
@@ -34,56 +42,13 @@ const createNft = async (patientId: string) => {
     return response;
 };
 
-const describeError = (
-    setLoading: (loading: 'in-progress' | 'completed') => void,
-    description: string,
-) => {
-    console.error(description);
-    message.error(description);
-    setLoading('completed');
-    return description;
-};
-
-const celebrate = async (
-    patient: Patient,
-    setLoading: (loading: 'in-progress' | 'completed') => void,
-) => {
-    setLoading('in-progress');
-
-    if (!patient.id) {
-        const description = 'Patient id does not exist';
-        return describeError(setLoading, description);
-    }
-
-    console.log('Patient ID: ', patient.id);
-
-    const response = await getPatientHederaAccount(patient.id);
-
-    if (isFailure(response)) {
-        const description = JSON.stringify(response.error);
-        return describeError(setLoading, description);
-    }
-
-    const isAccountExists = isSuccess(response)
-        ? Boolean(response.data.data.entry.length > 0)
-        : false;
-
-    if (!isAccountExists) {
-        const description = 'Hedera account does not exist';
-        return describeError(setLoading, description);
-    }
-
-    const createNftResponse = await createNft(patient.id);
-
-    if (isFailure(createNftResponse)) {
-        const description = 'Create NFT failure: ' + createNftResponse.error;
-        return describeError(setLoading, description);
-    }
-
-    const createNftMessage = createNftResponse?.data?.text;
-    console.log(createNftMessage);
-    message.success(createNftMessage);
-    return createNftMessage;
+const setResultCreationNftResourceInProgress = async (patientId: string) => {
+    const response = await service({
+        method: 'GET',
+        url: '$set-in-progress-create-nft',
+        params: { patientId },
+    });
+    return response;
 };
 
 interface Props {
@@ -91,59 +56,94 @@ interface Props {
 }
 
 export const useCelebrate = ({ patient }: Props) => {
-    const [loading, setLoading] = useState<'in-progress' | 'completed'>('in-progress');
+    const [status, setStatus] = useState<'in-progress' | 'completed'>('in-progress');
 
     const [disabled, setDisabled] = useState(true);
 
+    const celebrate = useCallback(async () => {
+        if (!patient.id) {
+            const description = 'Patient id does not exist';
+            return failure(description);
+        }
+
+        const setInProgressResponse = await setResultCreationNftResourceInProgress(patient.id);
+        if (isFailure(setInProgressResponse)) {
+            const description = JSON.stringify(setInProgressResponse.error);
+            return failure(description);
+        }
+        setStatus('in-progress');
+
+        const getHederaAccountResponse = await getPatientHederaAccount(patient.id);
+        if (isFailure(getHederaAccountResponse)) {
+            const description = JSON.stringify(getHederaAccountResponse.error);
+            return failure(description);
+        }
+        const isAccountExists = isSuccess(getHederaAccountResponse)
+            ? Boolean(getHederaAccountResponse.data.data.entry.length > 0)
+            : false;
+        if (!isAccountExists) {
+            const description = 'Hedera account does not exist';
+            return failure(description);
+        }
+
+        const createNftResponse = await createNft(patient.id);
+        if (isFailure(createNftResponse)) {
+            const description = 'Create NFT failure: ' + createNftResponse.error;
+            return failure(description);
+        }
+        const createNftMessage = createNftResponse?.data?.text;
+        return success(createNftMessage);
+    }, []);
+
     useInterval(async () => {
-        if (loading === 'in-progress') {
+        if (status === 'in-progress') {
             if (!patient.id) {
                 console.log('Patient id does not exist');
                 return;
             }
-            const response = await getFHIRResource<any>({
-                resourceType: 'ResultCreationNft',
-                id: patient.id,
+            const response = await getFHIRResources<ResultCreationNft>('ResultCreationNft', {
+                patient: patient.id,
             });
             if (isFailure(response)) {
-                setLoading('completed');
+                message.error(response.error);
+                setStatus('completed');
+                return failure(response.error);
             }
-            if (isSuccess(response)) {
-                if (response.data.status === 'completed') {
-                    setLoading('completed');
-                    message.success(`Creation of NFT for patient ${patient.id} completed`);
-                } else {
-                    setLoading('in-progress');
-                }
+            const resultCreationNft = extractBundleResources(response.data).ResultCreationNft[0];
+            if (resultCreationNft && resultCreationNft.status === 'completed') {
+                setStatus('completed');
+                message.success(`Creation of NFT for patient ${patient.id} completed`);
+            } else {
+                setStatus('in-progress');
             }
         }
     }, 3000);
 
-    const configureButton = useCallback(async () => {
-        if (!patient.id) {
-            console.log('Patient id does not exist');
-            return;
-        }
-        const response = await getFHIRResource<any>({
-            resourceType: 'ResultCreationNft',
-            id: patient.id,
-        });
-        if (isFailure(response)) {
-            setLoading('completed');
-        }
-        if (isSuccess(response)) {
-            if (response.data.status === 'in-progress') {
-                setLoading('in-progress');
-            } else {
-                setLoading('completed');
+    useEffect(() => {
+        (async function () {
+            if (!patient.id) {
+                console.log('Patient id does not exist');
+                return;
             }
-        }
-        setDisabled(false);
+            const response = await getFHIRResources<ResultCreationNft>('ResultCreationNft', {
+                patient: patient.id,
+            });
+            if (isFailure(response)) {
+                console.error(response.error);
+                setStatus('completed');
+            }
+            if (isSuccess(response)) {
+                const resultCreationNft = extractBundleResources(response.data)
+                    .ResultCreationNft[0];
+                if (resultCreationNft && resultCreationNft.status === 'in-progress') {
+                    setStatus('in-progress');
+                } else {
+                    setStatus('completed');
+                }
+            }
+            setDisabled(false);
+        })();
     }, []);
 
-    useEffect(() => {
-        configureButton();
-    }, [configureButton]);
-
-    return { loading, setLoading, disabled, setDisabled, celebrate };
+    return { status, setStatus, disabled, setDisabled, celebrate };
 };
