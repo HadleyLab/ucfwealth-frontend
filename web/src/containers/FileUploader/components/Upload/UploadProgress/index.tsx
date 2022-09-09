@@ -37,7 +37,7 @@ export const UploadProgress = ({
     setAccountCredentials,
     setShowModal,
     createHederaAccount,
-    setFileListCoordinator
+    setFileListCoordinator,
 }: UploadProgressProps) => {
     const progressData = useItemProgressListener() || { completed: 0 };
 
@@ -83,8 +83,20 @@ export const UploadProgress = ({
         );
     };
 
+    const downloadTxtFile = (accountId: string, accountKey: string) => {
+        const element = document.createElement('a');
+        const file = new Blob([`accountId: ${accountId}\naccountKey: ${accountKey}`], {
+            type: 'text/plain',
+        });
+        element.href = URL.createObjectURL(file);
+        element.download = `hedera_${accountId}.txt`;
+        document.body.appendChild(element);
+        element.click();
+    };
+
     const showHederaAccountModal = (accountId: string, accountKey: string) => {
         setAccountCredentials([accountId, accountKey]);
+        downloadTxtFile(accountId, accountKey);
         setShowModal(true);
     };
 
