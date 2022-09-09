@@ -4,7 +4,7 @@ import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { usePatientProgressList } from './usePatientProgressList';
 
 export const PatientProgressList = () => {
-    const { patientListWithCountRD, celebrate } = usePatientProgressList();
+    const { patientListWithCountRD } = usePatientProgressList();
 
     return (
         <RenderRemoteData
@@ -17,7 +17,6 @@ export const PatientProgressList = () => {
                 <PatientProgressListTable
                     patientList={data.patientList}
                     patientCount={data.patientCount}
-                    celebrate={celebrate}
                 />
             )}
         </RenderRemoteData>

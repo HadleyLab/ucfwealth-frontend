@@ -1,5 +1,3 @@
-import { message } from 'antd';
-
 import { useService } from 'aidbox-react/src/hooks/service';
 import {
     failure,
@@ -76,80 +74,6 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
     }
 };
 
-const getPatientHederaAccount = async (patientId: string) => {
-    const response = await service({
-        method: 'GET',
-        url: `HederaAccount?_ilike=${patientId}`,
-    });
-
-    if (isFailure(response)) {
-        console.error(response.error);
-        return failure(response);
-    }
-
-    return success(response);
-};
-
-const createNft = async (patientId: string) => {
-    const response = await service({
-        method: 'GET',
-        url: '$create-nft',
-        params: { patientId },
-    });
-    return response;
-};
-
-const checkPatientHederaAccountExists = (response: RemoteData<any, any>) => {
-    return isSuccess(response) ? Boolean(response.data.data.entry.length > 0) : false;
-};
-
-const celebrate = async (patient: Patient, setLoading: (loading: boolean) => void) => {
-    setLoading(true);
-
-    if (!patient.id) {
-        const description = 'Patient ID is undefined';
-        console.error(description);
-        message.error(description);
-        setLoading(false);
-        return description;
-    }
-
-    console.log('Patient ID: ', patient.id);
-
-    const response = await getPatientHederaAccount(patient.id);
-
-    if (isFailure(response)) {
-        const description = JSON.stringify(response.error);
-        console.error(description);
-        message.error(description);
-        setLoading(false);
-        return description;
-    }
-
-    const isAccountExists = checkPatientHederaAccountExists(response);
-
-    if (!isAccountExists) {
-        const description = 'Hedera account does not exist';
-        console.error(description);
-        message.error(description);
-        setLoading(false);
-        return description;
-    }
-
-    const createNftResponse = await createNft(patient.id);
-
-    if (isFailure(createNftResponse)) {
-        setLoading(false);
-        const createNftMessageFailure = 'Create NFT failure: ' + createNftResponse.error;
-        message.error(createNftMessageFailure);
-        return createNftMessageFailure;
-    }
-
-    const createNftMessage = createNftResponse?.data?.text;
-    message.success(createNftMessage);
-    return createNftMessage;
-};
-
 export const usePatientProgressList = () => {
     const [patientListRD] = useService(async () => {
         const response = await getFHIRResources<Patient>('Patient', {
@@ -180,5 +104,5 @@ export const usePatientProgressList = () => {
         patientCount: patientCountRD,
     });
 
-    return { patientListWithCountRD, celebrate };
+    return { patientListWithCountRD };
 };

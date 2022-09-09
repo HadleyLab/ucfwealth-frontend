@@ -2,23 +2,20 @@ import { Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import { Patient } from 'shared/src/contrib/aidbox';
-
+import { Celebrate } from 'src/containers/SuperAdminApp/PatientProgressList/Celebrate';
 import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
 import { QuestionnaireAvailableBadge } from 'src/containers/SuperAdminApp/QuestionnaireAvailableBadge';
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
 import { formatHumanDateTime } from 'src/utils/date';
 
-import { Celebrate } from './Celebrate';
 import s from './PatientProgressListTable.module.scss';
 
 interface Props {
     patientList: ExtendedPatient[];
     patientCount?: number;
-    celebrate: (patient: Patient, setLoading: (loading: boolean) => void) => Promise<string>;
 }
 
-export const PatientProgressListTable = ({ patientList, patientCount, celebrate }: Props) => {
+export const PatientProgressListTable = ({ patientList, patientCount }: Props) => {
     const [tablePageNumber, setTablePageNumber] = useState<number | undefined>(1);
 
     const history = useHistory();
@@ -82,7 +79,7 @@ export const PatientProgressListTable = ({ patientList, patientCount, celebrate 
                     </div>
                 </div>
             ),
-            hedera: <Celebrate celebrate={celebrate} patient={patient} />,
+            hedera: <Celebrate patient={patient} />,
         };
     });
 
