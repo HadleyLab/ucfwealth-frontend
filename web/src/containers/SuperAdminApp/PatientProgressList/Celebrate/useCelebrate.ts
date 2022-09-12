@@ -51,6 +51,35 @@ const setResultCreationNftResourceInProgress = async (patientId: string) => {
     return response;
 };
 
+const celebrateService = async (patientId: string) => {
+    const setInProgressResponse = await setResultCreationNftResourceInProgress(patientId);
+    if (isFailure(setInProgressResponse)) {
+        const description = JSON.stringify(setInProgressResponse.error);
+        return failure(description);
+    }
+
+    const getHederaAccountResponse = await getPatientHederaAccount(patientId);
+    if (isFailure(getHederaAccountResponse)) {
+        const description = JSON.stringify(getHederaAccountResponse.error);
+        return failure(description);
+    }
+    const isAccountExists = isSuccess(getHederaAccountResponse)
+        ? Boolean(getHederaAccountResponse.data.data.entry.length > 0)
+        : false;
+    if (!isAccountExists) {
+        const description = 'Hedera account does not exist';
+        return failure(description);
+    }
+
+    const createNftResponse = await createNft(patientId);
+    if (isFailure(createNftResponse)) {
+        const description = 'Create NFT failure: ' + createNftResponse.error;
+        return failure(description);
+    }
+    const createNftMessage = createNftResponse?.data?.text;
+    return success(createNftMessage);
+};
+
 interface Props {
     patient: ExtendedPatient;
 }
@@ -63,37 +92,21 @@ export const useCelebrate = ({ patient }: Props) => {
     const celebrate = useCallback(async () => {
         if (!patient.id) {
             const description = 'Patient id does not exist';
-            return failure(description);
-        }
-
-        const setInProgressResponse = await setResultCreationNftResourceInProgress(patient.id);
-        if (isFailure(setInProgressResponse)) {
-            const description = JSON.stringify(setInProgressResponse.error);
-            return failure(description);
+            console.error(description);
+            message.error(description);
+            return;
         }
         setStatus('in-progress');
-
-        const getHederaAccountResponse = await getPatientHederaAccount(patient.id);
-        if (isFailure(getHederaAccountResponse)) {
-            const description = JSON.stringify(getHederaAccountResponse.error);
-            return failure(description);
+        const response = await celebrateService(patient.id);
+        if (isFailure(response)) {
+            console.error(response.error);
+            message.error(response.error);
+        } else {
+            console.log(response.data);
+            message.warning(response.data);
         }
-        const isAccountExists = isSuccess(getHederaAccountResponse)
-            ? Boolean(getHederaAccountResponse.data.data.entry.length > 0)
-            : false;
-        if (!isAccountExists) {
-            const description = 'Hedera account does not exist';
-            return failure(description);
-        }
-
-        const createNftResponse = await createNft(patient.id);
-        if (isFailure(createNftResponse)) {
-            const description = 'Create NFT failure: ' + createNftResponse.error;
-            return failure(description);
-        }
-        const createNftMessage = createNftResponse?.data?.text;
-        return success(createNftMessage);
-    }, []);
+        setStatus('completed');
+    }, [patient.id]);
 
     useInterval(async () => {
         if (status === 'in-progress') {
