@@ -10,7 +10,7 @@
         "start:all": "lerna run --parallel start",
         "start:web": "lerna run start --parallel --scope web",
         "start:mobile": "lerna run start --parallel --scope mobile",
-        "build": "lerna run --parallel build --scope mobile",
+        "build:web": "lerna run --parallel build --scope web",
         "typecheck": "lerna run --parallel typecheck --scope web"
     },
     "devDependencies": {

@@ -12,8 +12,8 @@ jobs:
                 node-version: 16
             - name: Install deps
               run: yarn
-            - run: yarn build:web
             - run: cp shared/src/config.cloud.ts shared/src/config.ts
+            - run: yarn build:web
             - name: Set up Docker Buildx
               id: buildx
               uses: docker/setup-buildx-action@v1
