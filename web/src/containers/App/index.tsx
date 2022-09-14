@@ -9,6 +9,7 @@ import { setInstanceToken } from 'aidbox-react/src/services/instance';
 import { service } from 'aidbox-react/src/services/service';
 import { Token } from 'aidbox-react/src/services/token';
 
+import config from 'shared/src/config';
 import { User } from 'shared/src/contrib/aidbox';
 
 import { RoleSwitch } from 'src/components/RoleSwitch';
@@ -18,7 +19,6 @@ import { PatientApp } from 'src/containers/PatientApp';
 import { SuperAdminApp } from 'src/containers/SuperAdminApp';
 import { UnprivilegedApp } from 'src/containers/UnprivilegedApp';
 import { getUserInfo } from 'src/services/auth';
-import { baseURL } from 'src/services/constants';
 import { history } from 'src/services/history';
 import { getUserRole, UserRole } from 'src/services/role';
 import { removeToken, retrieveToken, saveToken } from 'src/services/token';
@@ -28,7 +28,7 @@ import { SessionContext } from '../SessionContext';
 import { Auth } from './Auth';
 
 (function init() {
-    setInstanceBaseURL(baseURL);
+    setInstanceBaseURL(config.baseURL);
     const globalToken = retrieveToken();
 
     if (globalToken) {
