@@ -43,7 +43,7 @@ const getPatientList = async (remoteData: RemoteData<Bundle<Patient>, any>) => {
 
                 const email = `${
                     patient?.name && patient?.name[0].given
-                        ? patient?.name[0]?.given[0].toLowerCase() + '@gmail.com'
+                        ? patient?.name[0]?.given[0].toLowerCase() + '@beda.software'
                         : userResponse.data.entry[0].resource.email
                 }`;
 
