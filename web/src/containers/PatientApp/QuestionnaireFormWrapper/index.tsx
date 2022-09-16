@@ -48,17 +48,24 @@ export const QuestionnaireFormWrapper = ({
                                     <div className={s.sectionWrapper}>
                                         <div className={s.subTitle}>COVID-19 research</div>
                                         <div className={s.joinText}>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Quisque id fringilla lorem. Duis vestibulum, nisl ut
-                                            feugiat sagittis, magna odio dapibus eros, in bibendum
-                                            odio dui nec urna. Nam quis ex et tortor gravida posuere
-                                            et et arcu. Proin elit enim, dignissim non nulla sit
-                                            amet, vestibulum volutpat justo. Nulla euismod
-                                            consectetur augue id venenatis. Pellentesque efficitur
-                                            aliquet nisi, non lacinia eros. Pellentesque porta elit
-                                            nisi, sed lacinia neque mollis sit amet. Vestibulum
-                                            lacinia convallis pretium. Sed fringilla id nibh ut
-                                            laoreet.
+                                            <p>
+                                                The purpose of this study is to develop medical
+                                                Artificial Intelligence (AI) to better understand
+                                                COVID-19 using patients' chest imaging. In
+                                                collaboration with clinical partners, we have built
+                                                a secure platform that allows us to enroll patients
+                                                who were previously hospitalized for COVID-19 to
+                                                share their X-rays and clinical experiences.
+                                            </p>
+                                            <p>
+                                                As a participant, you can gain realtime access to
+                                                your clinical X-rays that you can then share with
+                                                your healthcare providers. We take every precaution
+                                                to keep your data private, secure and anonymous.
+                                                Your data allows us to develop technology that
+                                                ultimately helps doctors better treat their
+                                                patients.
+                                            </p>
                                         </div>
                                         <Button
                                             onClick={() =>
@@ -72,17 +79,16 @@ export const QuestionnaireFormWrapper = ({
                                     <div className={s.sectionWrapper}>
                                         <div className={s.subTitle}>Breast Cancer research</div>
                                         <div className={s.joinText}>
-                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                            Quisque id fringilla lorem. Duis vestibulum, nisl ut
-                                            feugiat sagittis, magna odio dapibus eros, in bibendum
-                                            odio dui nec urna. Nam quis ex et tortor gravida posuere
-                                            et et arcu. Proin elit enim, dignissim non nulla sit
-                                            amet, vestibulum volutpat justo. Nulla euismod
-                                            consectetur augue id venenatis. Pellentesque efficitur
-                                            aliquet nisi, non lacinia eros. Pellentesque porta elit
-                                            nisi, sed lacinia neque mollis sit amet. Vestibulum
-                                            lacinia convallis pretium. Sed fringilla id nibh ut
-                                            laoreet.
+                                            <p>
+                                                The purpose of this study is to develop medical
+                                                Artificial Intelligence (AI) to better understand
+                                                Breast Cancer using patients' mammograms.
+                                            </p>
+                                            <p>
+                                                Your data allows us to develop technology that
+                                                ultimately helps doctors better treat their
+                                                patients.
+                                            </p>
                                         </div>
                                         <Button
                                             onClick={() =>
