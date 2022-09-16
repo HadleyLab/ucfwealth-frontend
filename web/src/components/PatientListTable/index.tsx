@@ -21,7 +21,7 @@ export const PatientListTable = ({ patientList }: Props) => {
             patient: (
                 <div onClick={() => goToPatientData(patient)} className={s.link}>
                     {patient.name
-                        ? String(patient.name[0].family).toLowerCase() + '@beda.software'
+                        ? "ucfwealth-" + String(patient.name[0].family).toLowerCase() + '@beda.software'
                         : "ucfwealth-" + patient.id + '@beda.software'}
                 </div>
             ),
