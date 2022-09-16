@@ -1,10 +1,19 @@
-import { Button, DatePicker } from 'antd';
-import { FormApi, Unsubscribe } from 'final-form';
-import arrayMutators from 'final-form-arrays';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, Select, Space } from 'antd';
+import { PickerProps } from 'antd/lib/date-picker/generatePicker';
+import TextArea from 'antd/lib/input/TextArea';
+import { Option } from 'antd/lib/mentions';
 import _ from 'lodash';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { Field, FormRenderProps } from 'react-final-form';
+import moment, { Moment } from 'moment';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+    calcInitialContext,
+    GroupItemProps,
+    QuestionItemProps,
+    QuestionItems,
+    QuestionnaireResponseFormData,
+    QuestionnaireResponseFormProvider,
+    useQuestionnaireResponseFormContext,
+} from 'sdc-qrf';
 
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { mapSuccess, service } from 'aidbox-react/src/services/service';
@@ -17,23 +26,18 @@ import {
     QuestionnaireResponse,
 } from 'shared/src/contrib/aidbox';
 
-import { InputField } from 'src/components/fields';
-import { SaveIcon } from 'src/images/SaveIcon';
+import { formatFHIRDate, formatFHIRDateTime } from 'src/utils/date';
 import {
-    FormAnswerItems,
     FormItems,
     getDisplay,
-    getEnabledQuestions,
-    interpolateAnswers,
     isValueEqual,
     mapFormToResponse,
     mapResponseToForm,
 } from 'src/utils/questionnaire';
 
-import { CustomForm } from '../CustomForm';
-import { ChooseField } from '../fields/ChooseField';
-import { QuestionnaireProgress } from '../QuestionnaireProgress';
 import s from './QuestionnaireResponseForm.module.scss';
+
+type FormValues = FormItems;
 
 interface Props {
     resource: QuestionnaireResponse;
@@ -42,7 +46,7 @@ interface Props {
         [linkId: string]: (
             questionItem: QuestionnaireItem,
             fieldPath: string[],
-            formParams: FormRenderProps,
+            formParams: any,
         ) => React.ReactNode;
     };
     readOnly?: boolean;
@@ -56,18 +60,31 @@ interface Props {
     setCurrentStep?: (value: React.SetStateAction<number>) => void;
 }
 
-type FormValues = FormItems;
-
 export const QuestionnaireResponseForm = (props: Props) => {
-    const addChoiceValueToProgressBar = (choice: any) => {
-        const choices = props.choices;
-        if (
-            !choices.find((c) => c.question === choice.question && choice !== '') &&
-            props.questionnaire.id !== 'personal-information'
-        ) {
-            props.setChoices([...choices, choice]);
-        }
+    const { resource, questionnaire, readOnly } = props;
+
+    const toFormValues = (): FormValues => {
+        return mapResponseToForm(resource, questionnaire);
     };
+
+    const formData = {
+        formValues: toFormValues(),
+        context: {
+            questionnaire: questionnaire,
+            questionnaireResponse: resource,
+            launchContextParameters: [],
+        },
+    };
+
+    const onSubmit = (data: QuestionnaireResponseFormData) => {
+        console.log(data.formValues);
+
+        // @ts-ignore
+        onSave(data.formValues);
+    };
+
+    const [form] = Form.useForm();
+    const formValues = form.getFieldsValue();
 
     const onSave = async (values: FormValues) => {
         const { onSave } = props;
@@ -83,498 +100,156 @@ export const QuestionnaireResponseForm = (props: Props) => {
         };
     };
 
-    const toFormValues = (): FormValues => {
-        const { resource, questionnaire } = props;
-        return mapResponseToForm(resource, questionnaire);
-    };
-
-    const renderRepeatsAnswer = (
-        renderAnswer: (
-            questionItem: QuestionnaireItem,
-            parentPath: string[],
-            formParams: FormRenderProps,
-            index: number,
-        ) => React.ReactNode,
-        questionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-    ) => {
-        const { linkId, text, required, repeats } = questionItem;
-        const baseFieldPath = [...parentPath, linkId];
-
-        if (!repeats) {
-            return renderAnswer(questionItem, parentPath, formParams, 0);
-        }
-
-        if (!required) {
-            console.error('TODO: Unsupported question which is not required and repeats');
-        }
-
-        return (
-            <Field name={baseFieldPath.join('.')}>
-                {({ input }) => {
-                    return (
-                        <div>
-                            <div>{text}</div>
-
-                            {_.map(
-                                input.value.length ? input.value : [{}],
-                                (elem, index: number) => {
-                                    if (index > 0 && !input.value[index]) {
-                                        return null;
-                                    }
-
-                                    return (
-                                        <div key={`repeatsAnswer-${index}`} className="d-flex">
-                                            <div className="flex-grow-1">
-                                                {renderAnswer(
-                                                    questionItem,
-                                                    parentPath,
-                                                    formParams,
-                                                    index,
-                                                )}
-                                            </div>
-                                            {index > 0 ? (
-                                                <div
-                                                    style={{
-                                                        width: 40,
-                                                        height: 40,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                    }}
-                                                    onClick={() =>
-                                                        input.onChange(
-                                                            _.filter(
-                                                                input.value,
-                                                                (val, valIndex: number) =>
-                                                                    valIndex !== index,
-                                                            ),
-                                                        )
-                                                    }
-                                                >
-                                                    Delete{' '}
-                                                </div>
-                                            ) : (
-                                                <div style={{ width: 40 }} />
-                                            )}
-                                        </div>
-                                    );
-                                },
-                            )}
-                            <Button
-                                onClick={() =>
-                                    input.onChange(
-                                        input.value.length ? [...input.value, {}] : [{}, {}],
-                                    )
-                                }
-                            >
-                                Add another answer
-                            </Button>
-                        </div>
-                    );
-                }}
-            </Field>
-        );
-    };
-
-    const renderAnswerText = (
-        questionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-        index = 0,
-    ) => {
-        const { linkId, text, item, required, hidden } = questionItem;
-        const fieldPath = [...parentPath, linkId, _.toString(index)];
-        const name = [...fieldPath, 'value', 'string'].join('.');
-
-        return (
-            <div className={s.inputField} style={hidden ? { opacity: '0.3' } : {}}>
-                <Field name={name}>
-                    {({ input, meta }) => {
-                        const inputProps = {
-                            ...input,
-                            ...(hidden ? { disabled: true } : {}),
-                        };
-                        return (
-                            <InputField
-                                name={name}
-                                input={inputProps}
-                                meta={meta}
-                                label={text}
-                                fieldProps={{
-                                    validate: required
-                                        ? (inputValue: any) =>
-                                              _.isUndefined(inputValue) ? 'Required' : undefined
-                                        : undefined,
-                                }}
-                            />
-                        );
-                    }}
-                </Field>
-                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </div>
-        );
-    };
-
-    const renderAnswerNumeric = (
-        questionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-        index = 0,
-    ) => {
-        const { linkId, text, type, item, required, hidden } = questionItem;
-        const fieldPath = [...parentPath, linkId, _.toString(index)];
-
-        const inputFieldPath = [...fieldPath, 'value', type];
-
-        return (
-            <div className={s.inputField}>
-                <InputField
-                    name={inputFieldPath.join('.')}
-                    fieldProps={{
-                        parse: (value: any) =>
-                            value
-                                ? type === 'integer'
-                                    ? _.parseInt(value)
-                                    : parseFloat(value)
-                                : undefined,
-                        validate: required
-                            ? (inputValue: any) =>
-                                  _.isUndefined(inputValue) ? 'Required' : undefined
-                            : undefined,
-                    }}
-                    type="number"
-                    label={text}
-                    disabled={hidden}
-                    // helpText={helpText}
-                    // addonAfter={unit && unit.display!}
-                />
-                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </div>
-        );
-    };
-
-    const [validDate, setValidDate] = React.useState(true);
-    const [answerDateTimeChanged, setAnswerDateTimeChanged] = React.useState(false);
-
-    const renderAnswerDateTime = (
-        questionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-        index = 0,
-    ) => {
-        const { linkId, text, item } = questionItem;
-        const fieldPath = [...parentPath, linkId, _.toString(index)];
-        const dateFormat = 'YYYY-MM-DD';
-        return (
-            <>
-                <Field name={[...fieldPath, 'value', 'date'].join('.')}>
-                    {({ input, meta }) => {
-                        if (!input.value) {
-                            setValidDate(false);
-                        }
-                        return (
-                            <div className={s.datepicker}>
-                                <div className={s.inputField} style={{ marginBottom: 8 }}>
-                                    {text}
-                                </div>
-                                <DatePicker
-                                    defaultValue={input.value && moment(input.value, dateFormat)}
-                                    onChange={(date, dateString) => {
-                                        setAnswerDateTimeChanged(true);
-                                        if (!dateString || dateString === '') {
-                                            setValidDate(false);
-                                        } else {
-                                            input.onChange(dateString);
-                                            setValidDate(true);
-                                        }
-                                    }}
-                                    format={dateFormat}
-                                    status={!validDate && answerDateTimeChanged ? 'error' : ''}
-                                />
-                                {!validDate && answerDateTimeChanged ? (
-                                    <div className={s.requiredRed}>Required</div>
-                                ) : !validDate && !answerDateTimeChanged ? (
-                                    <div className={s.requiredGrey}>Required</div>
-                                ) : (
-                                    <div style={{ height: '27px' }} />
-                                )}
-                            </div>
-                        );
-                    }}
-                </Field>
-                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </>
-        );
-    };
-
-    const renderGroup = (
-        questionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-        // fieldsRenderConfig: FieldsRenderConfig,
-    ) => {
-        const { linkId, item, text, repeats } = questionItem;
-
-        if (item) {
-            const baseFieldPath = [...parentPath, linkId];
-
-            if (repeats) {
-                return (
-                    <Field name={baseFieldPath.join('.')}>
-                        {({ input }) => {
-                            return (
-                                <div>
-                                    <div>
-                                        {_.map(
-                                            input.value.items && input.value.items.length
-                                                ? input.value.items
-                                                : [{}],
-                                            (_elem, index: number) => {
-                                                if (index > 0 && !input.value.items[index]) {
-                                                    return null;
-                                                }
-                                                return (
-                                                    <div
-                                                        className={s.imagingSiteGroup}
-                                                        key={`group-${index}`}
-                                                    >
-                                                        <div className={s.imagingSiteHeader}>
-                                                            <div
-                                                                className={s.groupParagraphHeader}
-                                                            >{`${questionItem.text} #${
-                                                                index + 1
-                                                            }`}</div>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    const filteredArray = _.filter(
-                                                                        input.value.items,
-                                                                        (_val, valIndex: number) =>
-                                                                            valIndex !== index,
-                                                                    );
-                                                                    input.onChange({
-                                                                        items: [...filteredArray],
-                                                                    });
-                                                                }}
-                                                            >
-                                                                <span>Remove</span>
-                                                            </Button>
-                                                        </div>
-                                                        <div>
-                                                            {renderQuestions(
-                                                                item,
-                                                                [
-                                                                    ...parentPath,
-                                                                    linkId,
-                                                                    'items',
-                                                                    index.toString(),
-                                                                ],
-                                                                formParams,
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            },
-                                        )}
-                                    </div>
-                                    <div className={s.addAnother}>
-                                        <Button
-                                            onClick={() => {
-                                                const existingItems = input.value.items || [];
-                                                const updatedInput = {
-                                                    items: [...existingItems, {}],
-                                                };
-                                                input.onChange(updatedInput);
-                                            }}
-                                        >
-                                            <p>{`+ Add another ${text}`}</p>
-                                        </Button>
-                                    </div>
-                                </div>
-                            );
-                        }}
-                    </Field>
-                );
-            }
-            const paragraphs = _.split(text, '\n');
-            return (
-                <div style={{ paddingBottom: 10, textAlign: 'left', whiteSpace: 'initial' }}>
-                    {_.map(paragraphs, (paragraph, index) => {
-                        return (
-                            <p key={`group-paragraph-${index}`} className={s.groupParagraph}>
-                                {paragraph}
-                            </p>
-                        );
-                    })}
-                    {renderQuestions(item, [...parentPath, linkId, 'items'], formParams)}
-                </div>
-            );
-        }
-        return null;
-    };
-
-    const renderAnswer = (
-        rawQuestionItem: QuestionnaireItem,
-        parentPath: string[],
-        formParams: FormRenderProps,
-    ) => {
-        const questionItem = {
-            ...rawQuestionItem,
-            text: interpolateAnswers(rawQuestionItem.text!, parentPath, formParams.values),
-        };
-        // const { linkId, type, item, text } = questionItem;
-        const { type } = questionItem;
-
-        if (type === 'string' || type === 'text') {
-            return renderRepeatsAnswer(renderAnswerText, questionItem, parentPath, formParams);
-        }
-
-        if (type === 'integer' || type === 'decimal') {
-            return renderRepeatsAnswer(renderAnswerNumeric, questionItem, parentPath, formParams);
-        }
-
-        if (type === 'date' || type === 'dateTime') {
-            return renderRepeatsAnswer(renderAnswerDateTime, questionItem, parentPath, formParams);
-        }
-
-        if (type === 'choice') {
-            return (
-                <RenderAnswerChoice
-                    questionItem={questionItem}
-                    parentPath={parentPath}
-                    formParams={formParams}
-                    addChoiceValueToProgressBar={addChoiceValueToProgressBar}
-                    renderQuestions={renderQuestions}
-                />
-            );
-        }
-
-        if (type === 'display') {
-            return <div>{questionItem.text}</div>;
-        }
-
-        if (type === 'group') {
-            return renderGroup(questionItem, parentPath, formParams);
-        }
-
-        console.error(`TODO: Unsupported item type ${type}`);
-
-        return null;
-    };
-
-    const renderQuestions = (
-        items: QuestionnaireItem[],
-        parentPath: string[],
-        formParams: FormRenderProps,
-    ) => {
-        return _.map(getEnabledQuestions(items, parentPath, formParams.values), (item, index) => (
-            <div key={index}>{renderAnswer(item, parentPath, formParams)}</div>
-        ));
-    };
-
-    const renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
-        const { readOnly } = props;
-        const { submitting, valid, handleSubmit } = formParams;
-
-        const onClick = async () => {
-            await handleSubmit();
-            setAnswerDateTimeChanged(true);
-            if (valid && validDate && props.setCurrentStep && typeof props.currentStep === 'number')
-                props.setCurrentStep(props.currentStep + 1);
-        };
-
-        return (
-            <>
-                {renderQuestions(items, [], formParams)}
-                {props.questionnaireId === 'screening-questions' && (
-                    <QuestionnaireProgress progress={props.progress} />
-                )}
-                {!readOnly && (
-                    <div className="questionnaire-form-actions">
-                        <Button
-                            type="primary"
-                            className={s.saveButton}
-                            disabled={submitting}
-                            onClick={onClick}
-                        >
-                            <SaveIcon style={{ marginRight: 9 }} />
-                            <span>Save and Continue</span>
-                        </Button>
-                    </div>
-                )}
-            </>
-        );
-    };
-
-    const onFormChange = (form: FormApi<FormValues>): Unsubscribe => {
-        const unsubscribe = form.subscribe(
-            ({ values }) => {
-                const { onChange } = props;
-                if (onChange) {
-                    if (!_.isEqual(values, toFormValues())) {
-                        const updatedResource = fromFormValues(values);
-                        onChange(updatedResource);
-                    }
-                }
-            },
-            { values: true },
-        );
-
-        return () => {
-            unsubscribe();
-        };
-    };
-
     return (
-        <CustomForm<FormValues>
-            onSubmit={onSave}
-            layout={'vertical'}
-            initialValues={toFormValues()}
-            initialValuesEqual={_.isEqual}
-            decorators={[onFormChange]}
-            mutators={{ ...arrayMutators }}
+        <Form
+            layout="vertical"
+            form={form}
+            initialValues={formData.formValues}
+            onFinish={(values) => onSubmit({ ...formData, formValues: values })}
         >
-            {(params) => {
-                if (!props.questionnaire.item) {
-                    console.error('questionnaire item is missing', props.questionnaire.item);
-                    return;
-                }
-                const items = getEnabledQuestions(props.questionnaire.item, [], params.values);
-                return renderForm(items, params);
-            }}
-        </CustomForm>
+            <QuestionnaireResponseFormProvider
+                formValues={formValues}
+                setFormValues={form.setFieldsValue}
+                groupItemComponent={Group}
+                questionItemComponents={{
+                    text: QuestionText,
+                    string: QuestionString,
+                    decimal: QuestionDecimal,
+                    integer: QuestionInteger,
+                    date: QuestionDateTime,
+                    dateTime: QuestionDateTime,
+                    time: QuestionDateTime,
+                    choice: QuestionChoice,
+                }}
+                readOnly={readOnly}
+            >
+                <>
+                    <QuestionItems
+                        questionItems={formData.context.questionnaire.item!}
+                        parentPath={[]}
+                        context={calcInitialContext(formData.context, formValues)}
+                    />
+                    {!readOnly && (
+                        <Button type="primary" htmlType="submit">
+                            Send
+                        </Button>
+                    )}
+                </>
+            </QuestionnaireResponseFormProvider>
+        </Form>
     );
 };
 
-interface Propss {
-    questionItem: QuestionnaireItem;
-    parentPath: string[];
-    formParams: FormRenderProps;
-    addChoiceValueToProgressBar: (choice: any) => void;
-    renderQuestions: (
-        items: QuestionnaireItem[],
-        parentPath: string[],
-        formParams: FormRenderProps,
-    ) => JSX.Element[];
+function Group({ parentPath, questionItem, context }: GroupItemProps) {
+    const { linkId, text, item, hidden } = questionItem;
+    const fieldName = [...parentPath, linkId, 'items'];
+
+    return (
+        <Form.Item label={<b>{text}</b>} name={fieldName} hidden={hidden}>
+            <QuestionItems questionItems={item!} parentPath={fieldName} context={context[0]} />
+        </Form.Item>
+    );
 }
 
-const RenderAnswerChoice = ({
-    questionItem,
-    parentPath,
-    formParams,
-    addChoiceValueToProgressBar,
-    renderQuestions,
-}: Propss) => {
-    const { linkId, text, item, repeats, required, answerValueSet } = questionItem;
-    const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
-    const fieldName = fieldPath.join('.');
+function QuestionText({ parentPath, questionItem }: QuestionItemProps) {
+    const qrfContext = useQuestionnaireResponseFormContext();
+    const { linkId, text, readOnly, hidden } = questionItem;
+    const fieldName = [...parentPath, linkId, 0, 'value', 'text'];
+    return (
+        <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <TextArea rows={4} readOnly={readOnly || qrfContext.readOnly} />
+        </Form.Item>
+    );
+}
+
+function QuestionString({ parentPath, questionItem }: QuestionItemProps) {
+    const qrfContext = useQuestionnaireResponseFormContext();
+    const { linkId, text, readOnly, hidden } = questionItem;
+    const fieldName = [...parentPath, linkId, 0, 'value', 'string'];
+
+    return (
+        <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <Input className={s.inputField} readOnly={readOnly || qrfContext.readOnly} />
+        </Form.Item>
+    );
+}
+
+function QuestionDecimal({ parentPath, questionItem }: QuestionItemProps) {
+    const qrfContext = useQuestionnaireResponseFormContext();
+    const { linkId, text, readOnly, hidden } = questionItem;
+    const fieldName = [...parentPath, linkId, 0, 'value', 'decimal'];
+
+    return (
+        <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <InputNumber style={{}} readOnly={readOnly || qrfContext.readOnly} />
+        </Form.Item>
+    );
+}
+
+function QuestionInteger({ parentPath, questionItem }: QuestionItemProps) {
+    const qrfContext = useQuestionnaireResponseFormContext();
+    const { linkId, text, readOnly, hidden } = questionItem;
+    const fieldName = [...parentPath, linkId, 0, 'value', 'integer'];
+
+    return (
+        <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <InputNumber
+                className={s.inputField}
+                style={{ width: '100%' }}
+                readOnly={readOnly || qrfContext.readOnly}
+            />
+        </Form.Item>
+    );
+}
+
+type DateTimePickerWrapperProps = PickerProps<moment.Moment> & { type: string };
+
+export function DateTimePickerWrapper({ value, onChange, type }: DateTimePickerWrapperProps) {
+    const newValue = useMemo(() => (value ? moment(value) : value), [value]);
+    const format = type === 'date' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+    const showTime = type === 'date' ? false : true;
+    const formatFunction = type === 'date' ? formatFHIRDate : formatFHIRDateTime;
+
+    const change = useCallback(
+        (value: Moment | null, dateString: string) => {
+            if (value) {
+                value.toJSON = () => {
+                    return formatFunction(value);
+                };
+            }
+            onChange && onChange(value, dateString);
+        },
+        [onChange],
+    );
+    return (
+        <DatePicker
+            className={s.datepicker}
+            showTime={showTime}
+            onChange={change}
+            format={format}
+            value={newValue}
+        />
+    );
+}
+
+function QuestionDateTime({ parentPath, questionItem }: QuestionItemProps) {
+    const qrfContext = useQuestionnaireResponseFormContext();
+    const { linkId, text, type, hidden } = questionItem;
+    const fieldName = [...parentPath, linkId, 0, 'value', type];
+    return (
+        <Form.Item label={text} name={fieldName} hidden={hidden || qrfContext.readOnly}>
+            <DateTimePickerWrapper type={type} />
+        </Form.Item>
+    );
+}
+
+function QuestionChoice({ parentPath, questionItem }: QuestionItemProps) {
+    const { linkId, text, answerValueSet, hidden, repeats } = questionItem;
     const [answerOption, setAnserOption] = useState(questionItem.answerOption);
+
     useEffect(() => {
         (async function () {
             if (answerValueSet) {
-                console.log(answerValueSet);
-
                 const response = mapSuccess(
                     await service<{ data: Array<{ concept: Coding }> }>({
                         url: '/$query/expand',
@@ -597,51 +272,143 @@ const RenderAnswerChoice = ({
         })();
     }, [answerValueSet]);
 
-    return (
-        <ChooseField<FormAnswerItems>
-            name={fieldName}
-            label={<div className={s.chooseFieldLabel}>{text}</div>}
-            multiple={repeats}
-            inline={!item && !repeats}
-            options={_.map(answerOption, (opt) => ({
-                value: { value: opt.value },
-                label: getDisplay(opt.value),
-            }))}
-            fieldProps={{
-                validate: required
-                    ? (inputValue: any) => {
-                          if (repeats) {
-                              if (!inputValue?.length) {
-                                  return 'Choose at least one option';
-                              }
-                          } else {
-                              if (!inputValue) {
-                                  return 'Required';
-                              }
-                          }
+    const options = _.map(answerOption, (opt) => ({
+        value: { value: opt.value },
+        label: getDisplay(opt.value),
+    }));
 
-                          return undefined;
-                      }
-                    : undefined,
-            }}
-            isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
-            renderOptionContent={(option, index, value) => {
-                const selectedIndex = _.findIndex(_.isArray(value) ? value : [value], (answer) =>
-                    isValueEqual(answer.value, option.value.value),
-                );
-                selectedIndex === 0
-                    ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
-                    : null;
-                if (item && selectedIndex !== -1) {
-                    const subItemParentPath = [
-                        ...fieldPath,
-                        ...(repeats ? [_.toString(selectedIndex)] : []),
-                        'items',
-                    ];
-                    return renderQuestions(item, subItemParentPath, formParams);
-                }
-                return null;
-            }}
-        />
+    if (options.length <= 5) {
+        const fieldName = repeats ? [...parentPath, linkId] : [...parentPath, linkId, 0, 'value'];
+        return (
+            <Form.Item label={text} name={fieldName} hidden={hidden}>
+                <QuestionRadioChoice options={answerOption} />
+            </Form.Item>
+        );
+    }
+
+    const fieldName = repeats ? [...parentPath, linkId] : [...parentPath, linkId, 0, 'value'];
+
+    if (repeats) {
+        return (
+            <Form.Item label={text} name={fieldName} hidden={hidden}>
+                <QuestionCheckboxChoice options={answerOption} />
+            </Form.Item>
+        );
+    }
+
+    return (
+        <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <QuestionSelectChoice options={answerOption} />
+        </Form.Item>
     );
-};
+}
+
+interface QuestionRadioChoiceProps {
+    options?: QuestionnaireItemAnswerOption[];
+    value?: any;
+    onChange?: any;
+}
+
+function QuestionRadioChoice(props: QuestionRadioChoiceProps) {
+    const { options, value, onChange } = props;
+    const [selected, setSelected] = useState<number>();
+
+    useEffect(() => {
+        if (options) {
+            options.map((option: any, index: number) => {
+                if (isValueEqual(value, option.value)) {
+                    setSelected(index);
+                }
+            });
+        }
+    }, [options]);
+
+    return (
+        <>
+            {options ? (
+                <Radio.Group
+                    onChange={(e) => {
+                        onChange(options[e.target.value].value);
+                        setSelected(e.target.value);
+                    }}
+                    value={selected}
+                >
+                    <Space direction="vertical">
+                        {options.map((option: any, index: number) => {
+                            return (
+                                <Radio key={index} value={index}>
+                                    {option.value.Coding?.display}
+                                </Radio>
+                            );
+                        })}
+                    </Space>
+                </Radio.Group>
+            ) : (
+                <div>options does not exist</div>
+            )}
+        </>
+    );
+}
+
+interface QuestionSelectChoiceProps {
+    options?: QuestionnaireItemAnswerOption[];
+    value?: any;
+    onChange?: any;
+}
+
+function QuestionSelectChoice(props: QuestionSelectChoiceProps) {
+    const { options, value, onChange } = props;
+
+    return (
+        <Select
+            defaultValue={value.Coding?.display || value.integer}
+            onChange={(e) => onChange(options?.[e].value)}
+            style={{}}
+        >
+            {options?.map((option: any, index: number) => {
+                const string = String(option.value.Coding?.display || option.value.integer);
+
+                return <Option value={String(index)}>{string}</Option>;
+            })}
+        </Select>
+    );
+}
+
+interface QuestionCheckboxChoiceProps {
+    options?: QuestionnaireItemAnswerOption[];
+    value?: any;
+    onChange?: any;
+}
+
+function QuestionCheckboxChoice(props: QuestionCheckboxChoiceProps) {
+    const { options, value, onChange } = props;
+
+    const defaultValues = value.map((el: any) => el.value.Coding?.display);
+
+    const handleChange = (e: any[]) => {
+        if (!options) {
+            return;
+        }
+        const result: any = [];
+        for (let i = 0; i < options?.length; i++) {
+            e.filter(
+                (q) => q === String(options[i].value.Coding?.display) && result.push(options[i]),
+            );
+        }
+        onChange(result);
+    };
+
+    return (
+        <Checkbox.Group
+            style={{ width: '100%' }}
+            defaultValue={defaultValues}
+            onChange={handleChange}
+        >
+            {options?.map((option: any, index: number) => {
+                const string = String(option.value.Coding?.display || option.value.integer);
+
+                return <Checkbox value={string}>{string}</Checkbox>;
+            })}
+        </Checkbox.Group>
+    );
+}
