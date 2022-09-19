@@ -61,7 +61,7 @@ interface Props {
 }
 
 export const QuestionnaireResponseForm = (props: Props) => {
-    const { resource, questionnaire, readOnly } = props;
+    const { resource, questionnaire, readOnly, currentStep, setCurrentStep } = props;
 
     const toFormValues = (): FormValues => {
         return mapResponseToForm(resource, questionnaire);
@@ -81,6 +81,10 @@ export const QuestionnaireResponseForm = (props: Props) => {
 
         // @ts-ignore
         onSave(data.formValues);
+        if (setCurrentStep && typeof currentStep === 'number') {
+            // TODO add validation
+            setCurrentStep(currentStep + 1);
+        }
     };
 
     const [form] = Form.useForm();
