@@ -138,7 +138,9 @@ export const QuestionnaireResponseForm = (props: Props) => {
                             />
                         </>
                     ) : (
-                        <div>{console.error('formData.context.questionnaire.item does not exist')}</div>
+                        <div>
+                            {console.error('formData.context.questionnaire.item does not exist')}
+                        </div>
                     )}
                     {!readOnly && (
                         <Button type="primary" htmlType="submit">
@@ -162,7 +164,11 @@ function Group({ parentPath, questionItem, context }: GroupItemProps) {
 
     if (context[0]) {
         return (
-            <Form.Item label={<b>{text}</b>} name={fieldName} hidden={hidden}>
+            <Form.Item
+                label={<div className={s.groupParagraph}>{text}</div>}
+                name={fieldName}
+                hidden={hidden}
+            >
                 <QuestionItems questionItems={item} parentPath={fieldName} context={context[0]} />
             </Form.Item>
         );
@@ -177,7 +183,12 @@ function QuestionText({ parentPath, questionItem }: QuestionItemProps) {
     const { linkId, text, readOnly, hidden } = questionItem;
     const fieldName = [...parentPath, linkId, 0, 'value', 'text'];
     return (
-        <Form.Item label={text} name={fieldName} hidden={hidden}>
+        <Form.Item
+            label={<div className={s.groupParagraph}>{text}</div>}
+            name={fieldName}
+            hidden={hidden}
+            style={{}}
+        >
             <TextArea rows={4} readOnly={readOnly || qrfContext.readOnly} />
         </Form.Item>
     );
@@ -189,7 +200,12 @@ function QuestionString({ parentPath, questionItem }: QuestionItemProps) {
     const fieldName = [...parentPath, linkId, 0, 'value', 'string'];
 
     return (
-        <Form.Item label={text} name={fieldName} hidden={hidden}>
+        <Form.Item
+            label={<div className={s.groupParagraph}>{text}</div>}
+            name={fieldName}
+            hidden={hidden}
+            style={{}}
+        >
             <Input className={s.inputField} readOnly={readOnly || qrfContext.readOnly} />
         </Form.Item>
     );
@@ -201,7 +217,11 @@ function QuestionDecimal({ parentPath, questionItem }: QuestionItemProps) {
     const fieldName = [...parentPath, linkId, 0, 'value', 'decimal'];
 
     return (
-        <Form.Item label={text} name={fieldName} hidden={hidden}>
+        <Form.Item
+            label={<div className={s.groupParagraph}>{text}</div>}
+            name={fieldName}
+            hidden={hidden}
+        >
             <InputNumber style={{}} readOnly={readOnly || qrfContext.readOnly} />
         </Form.Item>
     );
@@ -213,7 +233,11 @@ function QuestionInteger({ parentPath, questionItem }: QuestionItemProps) {
     const fieldName = [...parentPath, linkId, 0, 'value', 'integer'];
 
     return (
-        <Form.Item label={text} name={fieldName} hidden={hidden}>
+        <Form.Item
+            label={<div className={s.groupParagraph}>{text}</div>}
+            name={fieldName}
+            hidden={hidden}
+        >
             <InputNumber
                 className={s.inputField}
                 style={{ width: '100%' }}
@@ -258,7 +282,12 @@ function QuestionDateTime({ parentPath, questionItem }: QuestionItemProps) {
     const { linkId, text, type, hidden } = questionItem;
     const fieldName = [...parentPath, linkId, 0, 'value', type];
     return (
-        <Form.Item label={text} name={fieldName} hidden={hidden || qrfContext.readOnly}>
+        <Form.Item
+            label={<div className={s.groupParagraph}>{text}</div>}
+            name={fieldName}
+            hidden={hidden || qrfContext.readOnly}
+            style={{ display: 'flex', alignItems: 'self-start' }}
+        >
             <DateTimePickerWrapper type={type} />
         </Form.Item>
     );
@@ -301,7 +330,12 @@ function QuestionChoice({ parentPath, questionItem }: QuestionItemProps) {
     if (options.length <= 5) {
         const fieldName = repeats ? [...parentPath, linkId] : [...parentPath, linkId, 0, 'value'];
         return (
-            <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <Form.Item
+                label={<div style={{ fontWeight: 700 }}>{text}</div>}
+                name={fieldName}
+                hidden={hidden}
+                className={s.imagingSiteGroup}
+            >
                 <QuestionRadioChoice options={answerOption} />
             </Form.Item>
         );
@@ -311,14 +345,23 @@ function QuestionChoice({ parentPath, questionItem }: QuestionItemProps) {
 
     if (repeats) {
         return (
-            <Form.Item label={text} name={fieldName} hidden={hidden}>
+            <Form.Item
+                label={<div className={s.groupParagraph}>{text}</div>}
+                name={fieldName}
+                hidden={hidden}
+                style={{}}
+            >
                 <QuestionCheckboxChoice options={answerOption} />
             </Form.Item>
         );
     }
 
     return (
-        <Form.Item label={text} name={fieldName} hidden={hidden}>
+        <Form.Item
+            label={<div className={s.groupParagraph}>{text}</div>}
+            name={fieldName}
+            hidden={hidden}
+        >
             <QuestionSelectChoice options={answerOption} />
         </Form.Item>
     );
@@ -353,11 +396,12 @@ function QuestionRadioChoice(props: QuestionRadioChoiceProps) {
                         setSelected(e.target.value);
                     }}
                     value={selected}
+                    style={{ padding: 5 }}
                 >
                     <Space direction="vertical">
                         {options.map((option: any, index: number) => {
                             return (
-                                <Radio key={index} value={index}>
+                                <Radio key={index} value={index} style={{}}>
                                     {option.value.Coding?.display}
                                 </Radio>
                             );
@@ -380,11 +424,20 @@ interface QuestionSelectChoiceProps {
 function QuestionSelectChoice(props: QuestionSelectChoiceProps) {
     const { options, value, onChange } = props;
 
+    const getDefaultValue = (value: any) => {
+        if (value) {
+            if (value.Coding && value.Coding.display) {
+                return value.Coding.display;
+            }
+            if (value.integer) {
+                return [value.integer];
+            }
+        } else return [];
+    };
+
     return (
         <Select
-            defaultValue={
-                value ? (value.Coding.display ? value.Coding.display : value.integer) : []
-            }
+            defaultValue={getDefaultValue(value)}
             onChange={(e) => onChange(options?.[e].value)}
             style={{}}
         >
@@ -424,14 +477,18 @@ function QuestionCheckboxChoice(props: QuestionCheckboxChoiceProps) {
 
     return (
         <Checkbox.Group
-            style={{ width: '100%' }}
+            className={s.checkBoxGroup}
             defaultValue={defaultValues}
             onChange={handleChange}
         >
             {options?.map((option: any, index: number) => {
                 const string = String(option.value.Coding?.display || option.value.integer);
 
-                return <Checkbox value={string}>{string}</Checkbox>;
+                return (
+                    <Checkbox style={{ margin: 0 }} value={string}>
+                        {string}
+                    </Checkbox>
+                );
             })}
         </Checkbox.Group>
     );
