@@ -88,7 +88,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
     };
 
     const [form] = Form.useForm();
-    const formValues = form.getFieldsValue();
+    const [formValues, setFormValues] = useState(form.getFieldsValue());
 
     const onSave = async (values: FormValues) => {
         const { onSave } = props;
@@ -110,6 +110,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
             form={form}
             initialValues={formData.formValues}
             onFinish={(values) => onSubmit({ ...formData, formValues: values })}
+            onChange={() => setFormValues(form.getFieldsValue())}
         >
             <QuestionnaireResponseFormProvider
                 formValues={formValues}
@@ -128,11 +129,17 @@ export const QuestionnaireResponseForm = (props: Props) => {
                 readOnly={readOnly}
             >
                 <>
-                    <QuestionItems
-                        questionItems={formData.context.questionnaire.item!}
-                        parentPath={[]}
-                        context={calcInitialContext(formData.context, formValues)}
-                    />
+                    {formData.context.questionnaire.item ? (
+                        <>
+                            <QuestionItems
+                                questionItems={formData.context.questionnaire.item}
+                                parentPath={[]}
+                                context={calcInitialContext(formData.context, formValues)}
+                            />
+                        </>
+                    ) : (
+                        <div>{console.error('formData.context.questionnaire.item does not exist')}</div>
+                    )}
                     {!readOnly && (
                         <Button type="primary" htmlType="submit">
                             Send
@@ -148,11 +155,21 @@ function Group({ parentPath, questionItem, context }: GroupItemProps) {
     const { linkId, text, item, hidden } = questionItem;
     const fieldName = [...parentPath, linkId, 'items'];
 
-    return (
-        <Form.Item label={<b>{text}</b>} name={fieldName} hidden={hidden}>
-            <QuestionItems questionItems={item!} parentPath={fieldName} context={context[0]} />
-        </Form.Item>
-    );
+    if (!item) {
+        console.error('item does not exist');
+        return <div />;
+    }
+
+    if (context[0]) {
+        return (
+            <Form.Item label={<b>{text}</b>} name={fieldName} hidden={hidden}>
+                <QuestionItems questionItems={item} parentPath={fieldName} context={context[0]} />
+            </Form.Item>
+        );
+    } else {
+        console.error('context does not exist');
+        return <div />;
+    }
 }
 
 function QuestionText({ parentPath, questionItem }: QuestionItemProps) {
@@ -365,7 +382,9 @@ function QuestionSelectChoice(props: QuestionSelectChoiceProps) {
 
     return (
         <Select
-            defaultValue={value.Coding?.display || value.integer}
+            defaultValue={
+                value ? (value.Coding.display ? value.Coding.display : value.integer) : []
+            }
             onChange={(e) => onChange(options?.[e].value)}
             style={{}}
         >
@@ -387,7 +406,8 @@ interface QuestionCheckboxChoiceProps {
 function QuestionCheckboxChoice(props: QuestionCheckboxChoiceProps) {
     const { options, value, onChange } = props;
 
-    const defaultValues = value.map((el: any) => el.value.Coding?.display);
+    const defaultValues = value ? value.map((el: any) => el.value.Coding?.display) : [];
+    // const defaultValues: CheckboxValueType[] | undefined = [];
 
     const handleChange = (e: any[]) => {
         if (!options) {
