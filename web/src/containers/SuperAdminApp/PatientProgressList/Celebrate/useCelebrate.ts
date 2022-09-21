@@ -105,7 +105,6 @@ export const useCelebrate = ({ patient }: Props) => {
             console.log(response.data);
             message.warning(response.data);
         }
-        setStatus('completed');
     }, [patient.id]);
 
     useInterval(async () => {
