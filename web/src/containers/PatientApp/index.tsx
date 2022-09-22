@@ -36,7 +36,7 @@ export function PatientApp({ user }: PatientAppProps) {
             title: <span style={titleStyle}>Questionnaire</span>,
         },
         {
-            url: `https://community.covidimaging.app/auth/oauth2_basic`, // TODO config COMMUNITY_URL
+            url: `https://community.ucfwealth.app/auth/oauth2_basic`, // TODO config COMMUNITY_URL
             title: <span style={titleStyle}>Community</span>,
         },
     ];
