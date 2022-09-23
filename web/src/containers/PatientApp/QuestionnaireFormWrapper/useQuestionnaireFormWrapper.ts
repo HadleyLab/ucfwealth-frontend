@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { useState } from 'react';
 
 import { useService } from 'aidbox-react/src/hooks/service';
@@ -60,6 +61,10 @@ export const useQuestionnaireFormWrapper = ({ patient }: Props) => {
             resourceType: 'PatientSettings',
         };
         const response = await saveFHIRResource(resource);
+        if (isFailure(response)) {
+            message.error('Questionnaire does not exist');
+            return;
+        }
         if (isSuccess(response)) setQuestionnaireSelected(questionnaireId);
     };
 
