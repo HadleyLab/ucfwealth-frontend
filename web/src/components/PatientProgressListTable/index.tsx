@@ -51,6 +51,9 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
             if (questionnaireNameList.indexOf('patient-report-baseline') >= 0) {
                 return 'Breast Cancer';
             }
+            if (questionnaireNameList.indexOf('survival-and-disease-control') >= 0) {
+                return 'Survival and Disease control';
+            }
         }
         return 'Did not join';
     };
@@ -105,6 +108,10 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
                 {
                     text: 'Breast Cancer research',
                     value: 'patient-report-baseline',
+                },
+                {
+                    text: 'Survival and Disease control',
+                    value: 'survival-and-disease-control',
                 },
             ],
             onFilter: (

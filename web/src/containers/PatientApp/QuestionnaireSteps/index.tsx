@@ -113,6 +113,10 @@ export const QuestionnaireSteps = ({
         title = 'COVID-19 research';
     }
 
+    if (questionnaireName === 'survival-and-disease-control') {
+        title = 'Survival and Disease control';
+    }
+
     return (
         <>
             <h2 className={s.title}>{title}</h2>
