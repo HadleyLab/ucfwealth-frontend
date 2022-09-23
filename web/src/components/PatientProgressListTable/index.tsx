@@ -52,7 +52,7 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
                 return 'Breast Cancer';
             }
             if (questionnaireNameList.indexOf('survival-and-disease-control') >= 0) {
-                return 'Survival and Disease control';
+                return 'Survival and Disease';
             }
         }
         return 'Did not join';
