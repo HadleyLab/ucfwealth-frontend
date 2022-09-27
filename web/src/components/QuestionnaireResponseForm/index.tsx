@@ -458,6 +458,16 @@ export const QuestionnaireResponseForm = (props: Props) => {
             return renderGroup(questionItem, parentPath, formParams);
         }
 
+        if (type === 'boolean') {
+            return (
+                <RenderAnswerBoolean
+                    questionItem={questionItem}
+                    parentPath={parentPath}
+                    addChoiceValueToProgressBar={addChoiceValueToProgressBar}
+                />
+            );
+        }
+
         console.error(`TODO: Unsupported item type ${type}`);
 
         return null;
@@ -547,7 +557,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
     );
 };
 
-interface Propss {
+interface RenderAnswerChoiceProps {
     questionItem: QuestionnaireItem;
     parentPath: string[];
     formParams: FormRenderProps;
@@ -565,11 +575,11 @@ const RenderAnswerChoice = ({
     formParams,
     addChoiceValueToProgressBar,
     renderQuestions,
-}: Propss) => {
+}: RenderAnswerChoiceProps) => {
     const { linkId, text, item, repeats, required, answerValueSet } = questionItem;
     const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
     const fieldName = fieldPath.join('.');
-    const [answerOption, setAnserOption] = useState(questionItem.answerOption);
+    const [answerOption, setAnswerOption] = useState(questionItem.answerOption);
     useEffect(() => {
         (async function () {
             if (answerValueSet) {
@@ -589,9 +599,9 @@ const RenderAnswerChoice = ({
                         }),
                 );
                 if (isSuccess(response)) {
-                    setAnserOption(response.data);
+                    setAnswerOption(response.data);
                 } else {
-                    setAnserOption([]);
+                    setAnswerOption([]);
                 }
             }
         })();
@@ -640,6 +650,65 @@ const RenderAnswerChoice = ({
                     ];
                     return renderQuestions(item, subItemParentPath, formParams);
                 }
+                return null;
+            }}
+        />
+    );
+};
+
+interface RenderAnswerBooleanProps {
+    questionItem: QuestionnaireItem;
+    parentPath: string[];
+    addChoiceValueToProgressBar: (choice: any) => void;
+}
+
+const RenderAnswerBoolean = ({
+    questionItem,
+    parentPath,
+    addChoiceValueToProgressBar,
+}: RenderAnswerBooleanProps) => {
+    const { linkId, text, item, required } = questionItem;
+    const fieldPath = [...parentPath, linkId, '0'];
+    const fieldName = fieldPath.join('.');
+    const answerOption = [
+        {
+            value: { value: false },
+            display: 'No',
+        },
+        {
+            value: { value: true },
+            display: 'Yes',
+        },
+    ];
+    return (
+        <ChooseField<FormAnswerItems>
+            name={fieldName}
+            label={<div className={s.chooseFieldLabel}>{text}</div>}
+            inline={!item}
+            options={_.map(answerOption, (opt) => ({
+                value: { value: opt.value },
+                label: opt.display,
+            }))}
+            fieldProps={{
+                validate: required
+                    ? (inputValue: any) => {
+                          {
+                              if (!inputValue) {
+                                  return 'Required';
+                              }
+                          }
+                          return undefined;
+                      }
+                    : undefined,
+            }}
+            isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
+            renderOptionContent={(option, index, value) => {
+                const selectedIndex = _.findIndex(_.isArray(value) ? value : [value], (answer) =>
+                    isValueEqual(answer.value, option.value.value),
+                );
+                selectedIndex === 0
+                    ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
+                    : null;
                 return null;
             }}
         />
