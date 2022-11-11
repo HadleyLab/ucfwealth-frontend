@@ -193,7 +193,7 @@ const contentStyle = {
     dispaly: 'flex',
     alignSelf: 'center',
     background: '#fff',
-    padding: '24px 40px',
+    padding: '24px 0px',
     minHeight: 'calc(100vh - 66px)',
     minWidth: '1200px',
 };
