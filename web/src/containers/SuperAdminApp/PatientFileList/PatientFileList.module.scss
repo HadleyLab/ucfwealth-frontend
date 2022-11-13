@@ -6,7 +6,8 @@
 .leftArrow {
     width: 24px;
     cursor: pointer;
-    padding: 5px;
+    padding-top: 5px;
+    margin-left: 30px;
     justify-self: flex-start;
 }
 
@@ -14,7 +15,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
-    margin-right: 24px;
+    margin-right: 54px;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 10px;
