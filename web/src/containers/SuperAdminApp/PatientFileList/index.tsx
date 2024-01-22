@@ -47,12 +47,12 @@ export const PatientFileList = () => {
                                     <div
                                         className={s.fileKey}
                                         key={key}
-                                        onClick={() => downloadFile(`${patientId}/${fileName}`)}
+                                        onClick={() => downloadFile(`${fileName}`)}
                                     >
                                         {fileName}
                                     </div>
                                     <div className={s.showImage}>
-                                        <ShowImage fileKey={`${patientId}/${fileName}`} />
+                                        <ShowImage fileKey={`${fileName}`} />
                                     </div>
                                 </div>
                             ))

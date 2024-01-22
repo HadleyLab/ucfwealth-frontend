@@ -7,12 +7,7 @@ import { Circle } from 'rc-progress';
 import { useEffect, useState } from 'react';
 
 import { isFailure, isSuccess } from 'aidbox-react/src/libs/remoteData';
-import {
-    extractBundleResources,
-    getFHIRResource,
-    saveFHIRResource,
-} from 'aidbox-react/src/services/fhir';
-import { mapSuccess, service } from 'aidbox-react/src/services/service';
+import { getFHIRResource } from 'aidbox-react/src/services/fhir';
 
 import { Patient } from 'shared/src/contrib/aidbox';
 
@@ -21,12 +16,6 @@ import { sharedPatientId } from 'src/sharedState';
 interface UploadProgressProps {
     getData: () => Promise<any>;
     uploadFileName: string;
-    setAccountCredentials: (accountCredentials: [accountId: string, accountKey: string]) => void;
-    setShowModal: (showModal: boolean) => void;
-    createHederaAccount: () => Promise<{
-        accountId: string;
-        accountKey: string;
-    }>;
     setFileListCoordinator: (array: string[]) => void;
 }
 
@@ -34,9 +23,6 @@ export const UploadProgress = ({
     // TODO Refactor this component
     getData,
     uploadFileName,
-    setAccountCredentials,
-    setShowModal,
-    createHederaAccount,
     setFileListCoordinator,
 }: UploadProgressProps) => {
     const progressData = useItemProgressListener() || { completed: 0 };
@@ -72,69 +58,11 @@ export const UploadProgress = ({
         if (isFailure(response)) return false;
     };
 
-    const checkHederaAccountExists = async (patientId: string) => {
-        const response = await service({
-            method: 'GET',
-            url: `HederaAccount?_ilike=${patientId}`,
-        });
-        return Boolean(
-            mapSuccess(response, (bundle) => extractBundleResources(bundle).HederaAccount)['data']
-                .length,
-        );
-    };
-
-    const downloadTxtFile = (accountId: string, accountKey: string) => {
-        const element = document.createElement('a');
-        const file = new Blob([`accountId: ${accountId}\naccountKey: ${accountKey}`], {
-            type: 'text/plain',
-        });
-        element.href = URL.createObjectURL(file);
-        element.download = `hedera_${accountId}.txt`;
-        document.body.appendChild(element);
-        element.click();
-    };
-
-    const showHederaAccountModal = (accountId: string, accountKey: string) => {
-        setAccountCredentials([accountId, accountKey]);
-        downloadTxtFile(accountId, accountKey);
-        setShowModal(true);
-    };
-
-    const saveHederaAccountId = async (
-        patientId: string,
-        accountId: string,
-        accountKey: string,
-    ) => {
-        const resource = {
-            patient: { id: patientId, resourceType: 'Patient' },
-            accountId,
-            accountKey,
-            resourceType: 'HederaAccount',
-        };
-        return await saveFHIRResource(resource);
-    };
-
-    const createAndSaveHederaAccount = async (patientId: string) => {
-        const { accountId, accountKey } = await createHederaAccount();
-        await saveHederaAccountId(patientId, accountId, accountKey);
-        showHederaAccountModal(accountId, accountKey);
-    };
-
     const workAfterUpload = async () => {
         const patientId = sharedPatientId.getSharedState().id;
         const patientExists = await checkPatientExists(patientId);
         console.log('The patient exists:', patientExists);
         console.log('Patient ID:', patientId);
-        if (patientExists) {
-            const isHederaAccountExist = await checkHederaAccountExists(patientId);
-            if (!isHederaAccountExist) {
-                createAndSaveHederaAccount(patientId);
-            } else {
-                console.log('Hedera account already exists');
-            }
-        } else {
-            console.log('The patient with the specified id does not exist');
-        }
         updateFileList();
     };
 

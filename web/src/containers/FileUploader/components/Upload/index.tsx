@@ -1,6 +1,5 @@
 import Uploady from '@rpldy/uploady';
 
-import { HederaAccountModal } from './HederaAccountModal';
 import { SignedUploadDragAndDrop } from './SignedUploadDragAndDrop';
 import { UploadProgress } from './UploadProgress';
 import { useUpload } from './useUpload';
@@ -15,21 +14,11 @@ export const Upload = ({ getData, setFileListCoordinator }: UploadProps) => {
     const {
         uploadFileName,
         setUploadFileName,
-        showModal,
-        setShowModal,
-        accountCredentials,
-        setAccountCredentials,
-        createHederaAccount,
         filterByExtension,
     } = useUpload();
 
     return (
         <div className="upload-container">
-            <HederaAccountModal
-                accountCredentials={accountCredentials}
-                showModal={showModal}
-                setShowModal={setShowModal}
-            />
             <Uploady
                 fileFilter={filterByExtension}
                 multiple
@@ -40,9 +29,6 @@ export const Upload = ({ getData, setFileListCoordinator }: UploadProps) => {
                 <UploadProgress
                     getData={getData}
                     uploadFileName={uploadFileName}
-                    setAccountCredentials={setAccountCredentials}
-                    setShowModal={setShowModal}
-                    createHederaAccount={createHederaAccount}
                     setFileListCoordinator={setFileListCoordinator}
                 />
                 <SignedUploadDragAndDrop setUploadFileName={setUploadFileName} />

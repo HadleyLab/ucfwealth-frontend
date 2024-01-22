@@ -155,13 +155,6 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
             width: '10%',
             align: 'center' as 'center',
         },
-        {
-            title: <b>Celebrate participant</b>,
-            dataIndex: 'hedera',
-            key: 'hedera',
-            width: '15%',
-            align: 'center' as 'center',
-        },
     ];
 
     return (
