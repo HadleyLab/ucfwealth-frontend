@@ -23,10 +23,10 @@ export function PatientApp({ user }: PatientAppProps) {
     sharedPatientId.setSharedState({ id: user.data.patient?.id || '' });
 
     const routes: RouteItem[] = [
-        {
-            url: `https://beda.software/breast-cancer/`,
-            title: <span style={titleStyle}>Home</span>,
-        },
+        // {
+        //     url: `https://beda.software/breast-cancer/`,
+        //     title: <span style={titleStyle}>Home</span>,
+        // },
         {
             path: `${match.url}/summary-overview`,
             title: <span style={titleStyle}>Profile data</span>,
