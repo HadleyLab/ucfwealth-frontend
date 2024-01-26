@@ -13,7 +13,10 @@ export const ShowImage = ({ fileKey }: ShowImageProps) => {
     const { imageRD } = useShowImage({ fileKey });
 
     return (
-        <RenderRemoteData remoteData={imageRD}>
+        <RenderRemoteData
+            remoteData={imageRD}
+            renderFailure={() => <div>image preview is not available</div>}
+        >
             {(data) => <img src={`data:image/png;base64,${data}`} className={s.image} />}
         </RenderRemoteData>
     );
