@@ -45,7 +45,7 @@ export const QuestionnaireFormWrapper = ({
                             ) : !isSaveDisabled ? (
                                 <div style={{ width: '1000px' }}>
                                     <h2 className={s.title}>Select a study to participate</h2>
-                                    <div className={s.sectionWrapper}>
+                                    {/* <div className={s.sectionWrapper}>
                                         <div className={s.subTitle}>COVID-19 research</div>
                                         <div className={s.joinText}>
                                             <p>
@@ -75,7 +75,7 @@ export const QuestionnaireFormWrapper = ({
                                         >
                                             Join
                                         </Button>
-                                    </div>
+                                    </div> */}
                                     <div className={s.sectionWrapper}>
                                         <div className={s.subTitle}>Breast Cancer research</div>
                                         <div className={s.joinText}>
@@ -99,7 +99,7 @@ export const QuestionnaireFormWrapper = ({
                                             Join
                                         </Button>
                                     </div>
-                                    <div className={s.sectionWrapper}>
+                                    {/* <div className={s.sectionWrapper}>
                                         <div className={s.subTitle}>
                                             Survival and Disease control
                                         </div>
@@ -156,7 +156,7 @@ export const QuestionnaireFormWrapper = ({
                                         >
                                             Join
                                         </Button>
-                                    </div>
+                                    </div> */}
                                 </div>
                             ) : (
                                 <div style={{ fontSize: 16, fontWeight: 600, marginTop: 1 }}>
