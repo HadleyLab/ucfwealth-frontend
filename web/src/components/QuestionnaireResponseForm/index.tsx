@@ -5,6 +5,7 @@ import _ from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Field, FormRenderProps } from 'react-final-form';
+import { useHistory } from 'react-router-dom';
 
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { mapSuccess, service } from 'aidbox-react/src/services/service';
@@ -18,6 +19,7 @@ import {
 } from 'shared/src/contrib/aidbox';
 
 import { InputField } from 'src/components/fields';
+import { QuestionnaireStepManager } from 'src/containers/PatientApp/QuestionnaireFormWrapper/useQuestionnaireFormWrapper';
 import { SaveIcon } from 'src/images/SaveIcon';
 import {
     FormAnswerItems,
@@ -38,6 +40,13 @@ import s from './QuestionnaireResponseForm.module.scss';
 interface Props {
     resource: QuestionnaireResponse;
     questionnaire: Questionnaire;
+    choices: any[];
+    questionnaireId: string;
+    progress: number;
+    onSave: (resource: QuestionnaireResponse) => Promise<any> | void;
+    questionnaireStepManager: QuestionnaireStepManager;
+    setChoices: (value: any[]) => void;
+    readOnly?: boolean;
     customWidgets?: {
         [linkId: string]: (
             questionItem: QuestionnaireItem,
@@ -45,38 +54,43 @@ interface Props {
             formParams: FormRenderProps,
         ) => React.ReactNode;
     };
-    readOnly?: boolean;
-    choices: any[];
-    currentStep?: number;
-    questionnaireId: string;
-    progress: number;
-    onSave: (resource: QuestionnaireResponse) => Promise<any> | void;
     onChange?: (resource: QuestionnaireResponse) => void;
-    setChoices: (value: any[]) => void;
-    setCurrentStep?: (value: React.SetStateAction<number>) => void;
 }
 
 type FormValues = FormItems;
 
-export const QuestionnaireResponseForm = (props: Props) => {
+export const QuestionnaireResponseForm = ({
+    resource,
+    questionnaire,
+    choices,
+    questionnaireId,
+    progress,
+    onSave,
+    questionnaireStepManager,
+    setChoices,
+    readOnly,
+    customWidgets,
+    onChange,
+}: Props) => {
+    const { stepInfo, setStepInfo } = questionnaireStepManager;
+
+    const history = useHistory();
+
     const addChoiceValueToProgressBar = (choice: any) => {
-        const choices = props.choices;
         if (
             !choices.find((c) => c.question === choice.question && choice !== '') &&
-            props.questionnaire.id !== 'personal-information'
+            questionnaire.id !== 'personal-information'
         ) {
-            props.setChoices([...choices, choice]);
+            setChoices([...choices, choice]);
         }
     };
 
-    const onSave = async (values: FormValues) => {
-        const { onSave } = props;
+    const onSubmit = async (values: FormValues) => {
         const updatedResource = fromFormValues(values);
         return onSave(updatedResource);
     };
 
     const fromFormValues = (values: FormValues) => {
-        const { questionnaire, resource } = props;
         return {
             ...resource,
             ...mapFormToResponse(values, questionnaire),
@@ -84,7 +98,6 @@ export const QuestionnaireResponseForm = (props: Props) => {
     };
 
     const toFormValues = (): FormValues => {
-        const { resource, questionnaire } = props;
         return mapResponseToForm(resource, questionnaire);
     };
 
@@ -484,21 +497,32 @@ export const QuestionnaireResponseForm = (props: Props) => {
     };
 
     const renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
-        const { readOnly } = props;
         const { submitting, valid, handleSubmit } = formParams;
 
         const onClick = async () => {
             await handleSubmit();
             setAnswerDateTimeChanged(true);
-            if (valid && validDate && props.setCurrentStep && typeof props.currentStep === 'number')
-                props.setCurrentStep(props.currentStep + 1);
+            if (valid && validDate && typeof stepInfo.currentStep === 'number')
+                if (stepInfo.currentStep == 2) {
+                    history.push('/app/summary-overview');
+                } else {
+                    setStepInfo({
+                        ...stepInfo,
+                        currentStep: stepInfo.currentStep + 1,
+                        stepAccess: {
+                            completedQuestionnaires:
+                                stepInfo.stepAccess.completedQuestionnaires + 1,
+                            uploadedFiles: stepInfo.stepAccess.uploadedFiles,
+                        },
+                    });
+                }
         };
 
         return (
             <>
                 {renderQuestions(items, [], formParams)}
-                {props.questionnaireId === 'screening-questions' && (
-                    <QuestionnaireProgress progress={props.progress} />
+                {questionnaireId === 'screening-questions' && (
+                    <QuestionnaireProgress progress={progress} />
                 )}
                 {!readOnly && (
                     <div className="questionnaire-form-actions">
@@ -520,7 +544,6 @@ export const QuestionnaireResponseForm = (props: Props) => {
     const onFormChange = (form: FormApi<FormValues>): Unsubscribe => {
         const unsubscribe = form.subscribe(
             ({ values }) => {
-                const { onChange } = props;
                 if (onChange) {
                     if (!_.isEqual(values, toFormValues())) {
                         const updatedResource = fromFormValues(values);
@@ -538,7 +561,7 @@ export const QuestionnaireResponseForm = (props: Props) => {
 
     return (
         <CustomForm<FormValues>
-            onSubmit={onSave}
+            onSubmit={onSubmit}
             layout={'vertical'}
             initialValues={toFormValues()}
             initialValuesEqual={_.isEqual}
@@ -546,11 +569,11 @@ export const QuestionnaireResponseForm = (props: Props) => {
             mutators={{ ...arrayMutators }}
         >
             {(params) => {
-                if (!props.questionnaire.item) {
-                    console.error('questionnaire item is missing', props.questionnaire.item);
+                if (!questionnaire.item) {
+                    console.error('questionnaire item is missing', questionnaire.item);
                     return;
                 }
-                const items = getEnabledQuestions(props.questionnaire.item, [], params.values);
+                const items = getEnabledQuestions(questionnaire.item, [], params.values);
                 return renderForm(items, params);
             }}
         </CustomForm>
@@ -583,7 +606,7 @@ const RenderAnswerChoice = ({
     useEffect(() => {
         (async function () {
             if (answerValueSet) {
-                console.log(answerValueSet);
+                // console.log(answerValueSet); dev
 
                 const response = mapSuccess(
                     await service<{ data: Array<{ concept: Coding }> }>({

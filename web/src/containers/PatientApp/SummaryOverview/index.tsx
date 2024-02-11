@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-import { useHistory } from 'react-router-dom';
 
 import { DicomSummary } from 'src/components/DicomSummary';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
@@ -15,9 +14,8 @@ export const SummaryOverview = () => {
         patientId,
         goToQuestionnaire,
         getQuestionnaireSummary,
+        onClickUpload,
     } = useSummaryOverview();
-
-    const history = useHistory();
 
     return (
         <div className={s.wrapper}>
@@ -50,11 +48,7 @@ export const SummaryOverview = () => {
                         {(data) => <DicomSummary data={data} />}
                     </RenderRemoteData>
                 </div>
-                <Button
-                    type="primary"
-                    onClick={() => history.push('/app/questionnaire')}
-                    className={s.button}
-                >
+                <Button type="primary" onClick={onClickUpload} className={s.button}>
                     Upload images
                 </Button>
             </div>

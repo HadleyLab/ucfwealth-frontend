@@ -17,8 +17,13 @@ export const QuestionnaireFormWrapper = ({
     patient,
     isSaveDisabled,
 }: QuestionnaireFormWrapperProps) => {
-    const { settingsMapRD, questionnaireSelect, questionnaireSelected, setQuestionnaireSelected } =
-        useQuestionnaireFormWrapper({ patient });
+    const {
+        settingsMapRD,
+        questionnaireSelect,
+        questionnaireSelected,
+        setQuestionnaireSelected,
+        questionnaireStepManager,
+    } = useQuestionnaireFormWrapper({ patient });
 
     return (
         <div className={s.wrapper}>
@@ -41,6 +46,8 @@ export const QuestionnaireFormWrapper = ({
                                         settingsMap.questionnaireResponseList
                                     }
                                     isSaveDisabled={isSaveDisabled}
+                                    dicomContentList={settingsMap.dicomContentList}
+                                    questionnaireStepManager={questionnaireStepManager}
                                 />
                             ) : !isSaveDisabled ? (
                                 <div style={{ width: '1000px' }}>

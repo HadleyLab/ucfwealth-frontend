@@ -1,7 +1,8 @@
+import { notification } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 import { useService } from 'aidbox-react/src/hooks/service';
-import { isFailure } from 'aidbox-react/src/libs/remoteData';
+import { isFailure, isSuccess } from 'aidbox-react/src/libs/remoteData';
 import { extractBundleResources, getFHIRResources, WithId } from 'aidbox-react/src/services/fhir';
 import { mapSuccess, sequenceMap, service } from 'aidbox-react/src/services/service';
 
@@ -102,11 +103,25 @@ export const useSummaryOverview = () => {
     const history = useHistory();
     const goToQuestionnaire = () => history.push({ pathname: `/app/questionnaire` });
 
+    const onClickUpload = () => {
+        if (isSuccess(questionnaireResponseListRD) && questionnaireResponseListRD.data.length > 0) {
+            history.push({
+                pathname: '/app/questionnaire',
+                state: { uploadImageStep: true },
+            });
+        } else {
+            notification.open({
+                message: 'Join the research before uploading files',
+            });
+        }
+    };
+
     return {
         fileListRD,
         questionnaireListMapRD,
         patientId,
         goToQuestionnaire,
         getQuestionnaireSummary,
+        onClickUpload,
     };
 };

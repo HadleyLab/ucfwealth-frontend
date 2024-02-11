@@ -13,6 +13,7 @@ import config from 'shared/src/config';
 import { User } from 'shared/src/contrib/aidbox';
 
 import { RoleSwitch } from 'src/components/RoleSwitch';
+import { FileUploader } from 'src/containers/FileUploader';
 import { Login } from 'src/containers/Login';
 import { PractitionerApp } from 'src/containers/ParactitonerApp';
 import { PatientApp } from 'src/containers/PatientApp';
@@ -23,7 +24,6 @@ import { history } from 'src/services/history';
 import { getUserRole, UserRole } from 'src/services/role';
 import { removeToken, retrieveToken, saveToken } from 'src/services/token';
 
-import { FileUploader } from '../FileUploader/App';
 import { SessionContext } from '../SessionContext';
 import { Auth } from './Auth';
 

@@ -1,6 +1,6 @@
 import { FileList } from './components/FileList';
 import { Upload } from './components/Upload';
-import { useApp } from './hooks/useApp';
+import { useFileUploader } from './hooks/useFileUploader';
 
 import './index.css';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const FileUploader = ({ showFileList = true, setFileListCoordinator = () => {} }: Props) => {
-    const { getData, showLoader, contentList } = useApp();
+    const { getData, showLoader, contentList } = useFileUploader();
 
     return (
         <main>

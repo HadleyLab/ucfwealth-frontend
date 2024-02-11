@@ -2,7 +2,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
 import { ShowImage } from 'src/components/ShowImage';
-import { FileUploader } from 'src/containers/FileUploader/App';
+import { FileUploader } from 'src/containers/FileUploader';
 import { LeftArrowIcon } from 'src/images/LeftArrowIcon';
 import { sharedPatientId } from 'src/sharedState';
 import { downloadFile } from 'src/utils/patientFileList';
