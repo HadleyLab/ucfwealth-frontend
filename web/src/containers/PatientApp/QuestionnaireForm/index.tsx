@@ -4,8 +4,8 @@ import { Patient, Questionnaire, QuestionnaireResponse } from 'shared/src/contri
 
 import { QuestionnaireResponseForm } from 'src/components/QuestionnaireResponseForm';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
+import { QuestionnaireStepManager } from 'src/containers/PatientApp/QuestionnaireFormWrapper/useQuestionnaireFormWrapper';
 
-import { QuestionnaireStepManager } from '../QuestionnaireFormWrapper/useQuestionnaireFormWrapper';
 import { useQuestionnaireForm } from './useQuestionnaireForm';
 
 interface QuestionnaireResponseFormData {
@@ -16,7 +16,7 @@ interface QuestionnaireResponseFormData {
 interface Props {
     patient: Patient;
     questionnaireId: string;
-    questionnaireStepManager: QuestionnaireStepManager,
+    questionnaireStepManager: QuestionnaireStepManager;
     isSaveDisabled?: boolean;
 }
 
@@ -24,7 +24,7 @@ export const QuestionnaireForm = ({
     patient,
     questionnaireId,
     questionnaireStepManager,
-    isSaveDisabled
+    isSaveDisabled,
 }: Props) => {
     const { questFormRespRD, progress, choices, saveQR, setChoices } = useQuestionnaireForm({
         patient,
