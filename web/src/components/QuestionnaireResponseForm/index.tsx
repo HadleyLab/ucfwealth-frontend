@@ -606,7 +606,7 @@ const RenderAnswerChoice = ({
     useEffect(() => {
         (async function () {
             if (answerValueSet) {
-                // console.log(answerValueSet); dev
+                console.log(answerValueSet);
 
                 const response = mapSuccess(
                     await service<{ data: Array<{ concept: Coding }> }>({
