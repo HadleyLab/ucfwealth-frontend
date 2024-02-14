@@ -121,8 +121,6 @@ export const QuestionnaireSteps = ({
         title = 'COVID-19 research';
     } else if (questionnaireName === 'survival-and-disease-control') {
         title = 'Survival and Disease control';
-    } else if (questionnaireName == 'eortc-questionnaire') {
-        title = 'EORTCQLQ';
     }
 
     useEffect(() => {

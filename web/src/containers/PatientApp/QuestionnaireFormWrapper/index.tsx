@@ -135,34 +135,6 @@ export const QuestionnaireFormWrapper = ({
                                         >
                                             Join
                                         </Button>
-                                    </div>
-                                    <div className={s.sectionWrapper}>
-                                        <div className={s.subTitle}>EORTCQLQ</div>
-                                        <div className={s.joinText}>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing
-                                                elit. Nam et enim quis purus vestibulum aliquam. In
-                                                non velit felis. Donec est augue, pretium vitae
-                                                tellus vitae, condimentum vestibulum massa. Mauris
-                                                hendrerit, sem in vestibulum iaculis, risus nunc
-                                                lobortis dolor, sit amet dictum libero lorem tempus
-                                                ante. Phasellus tincidunt, magna non ultrices
-                                                malesuada, lorem est tempus massa, at gravida velit
-                                                lectus et justo. Maecenas rutrum risus sit amet mi
-                                                vehicula, ut viverra libero vulputate. Phasellus
-                                                vestibulum dolor eu sapien venenatis, ullamcorper
-                                                varius elit ullamcorper. Etiam egestas nibh et nisi
-                                                maximus, quis feugiat lorem sollicitudin.
-                                            </p>
-                                        </div>
-                                        <Button
-                                            onClick={() =>
-                                                questionnaireSelect('eortc-questionnaire')
-                                            }
-                                            type="primary"
-                                        >
-                                            Join
-                                        </Button>
                                     </div> */}
                                 </div>
                             ) : (
