@@ -4,6 +4,7 @@ import { Patient, Questionnaire, QuestionnaireResponse } from 'shared/src/contri
 
 import { QuestionnaireResponseForm } from 'src/components/QuestionnaireResponseForm';
 import { RenderRemoteData } from 'src/components/RenderRemoteData';
+import { QuestionnaireStepManager } from 'src/containers/PatientApp/QuestionnaireFormWrapper/useQuestionnaireFormWrapper';
 
 import { useQuestionnaireForm } from './useQuestionnaireForm';
 
@@ -15,17 +16,15 @@ interface QuestionnaireResponseFormData {
 interface Props {
     patient: Patient;
     questionnaireId: string;
-    currentStep?: number;
-    setCurrentStep?: (value: React.SetStateAction<number>) => void;
+    questionnaireStepManager: QuestionnaireStepManager;
     isSaveDisabled?: boolean;
 }
 
 export const QuestionnaireForm = ({
     patient,
     questionnaireId,
-    currentStep,
-    setCurrentStep,
-    isSaveDisabled
+    questionnaireStepManager,
+    isSaveDisabled,
 }: Props) => {
     const { questFormRespRD, progress, choices, saveQR, setChoices } = useQuestionnaireForm({
         patient,
@@ -44,12 +43,11 @@ export const QuestionnaireForm = ({
                             questionnaire={data.questionnaire}
                             resource={data.questionnaireResponse}
                             choices={choices}
-                            currentStep={currentStep}
                             questionnaireId={questionnaireId}
                             progress={progress}
                             onSave={saveQR as (resource: QuestionnaireResponse) => Promise<any>}
                             setChoices={setChoices}
-                            setCurrentStep={setCurrentStep}
+                            questionnaireStepManager={questionnaireStepManager}
                             readOnly={isSaveDisabled || false}
                         />
                     );

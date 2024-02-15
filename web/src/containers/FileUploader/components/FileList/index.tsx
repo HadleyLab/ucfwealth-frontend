@@ -35,7 +35,7 @@ const Loading = () => <div className="my-2">Loading...</div>;
 const Empty = () => <div className="my-2">File list is empty</div>;
 
 interface ContetnListProps {
-    contentList: [] | string[];
+    contentList: string[];
 }
 
 const ContentList = ({ contentList }: ContetnListProps) => {

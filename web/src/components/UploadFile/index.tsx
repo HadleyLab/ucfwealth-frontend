@@ -1,9 +1,15 @@
-import { FileUploader } from 'src/containers/FileUploader/App';
+import { Button } from 'antd';
+
+import { FileUploader } from 'src/containers/FileUploader';
 import { SuccessIcon } from 'src/images/SuccessIcon';
 
-import s from './QuestionnaireSuccess.module.scss';
+import s from './UploadFile.module.scss';
 
-export const QuestionnaireSuccess = () => {
+interface Props {
+    onContinue: () => Promise<void>;
+}
+
+export const UploadFile = ({ onContinue }: Props) => {
     return (
         <div className={s.wrapper}>
             <SuccessIcon />
@@ -15,6 +21,9 @@ export const QuestionnaireSuccess = () => {
                     If so, please upload it into the system.
                 </div>
                 <FileUploader />
+                <Button type="primary" onClick={onContinue}>
+                    <span>Continue</span>
+                </Button>
             </div>
         </div>
     );

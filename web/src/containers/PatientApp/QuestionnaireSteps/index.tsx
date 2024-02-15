@@ -1,10 +1,11 @@
 import { Steps } from 'antd';
-import { useState } from 'react';
+import { useEffect } from 'react';
 
 import { Patient, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-import { QuestionnaireSuccess } from 'src/components/QuestionnaireSuccess';
+import { UploadFile } from 'src/components/UploadFile';
 import { QuestionnaireForm } from 'src/containers/PatientApp/QuestionnaireForm';
+import { QuestionnaireStepManager } from 'src/containers/PatientApp/QuestionnaireFormWrapper/useQuestionnaireFormWrapper';
 
 import s from './QuestionnaireSteps.module.scss';
 
@@ -14,33 +15,32 @@ interface Props {
     patient: Patient;
     questionnaireName: string;
     questionnaireResponseList: QuestionnaireResponse[];
+    dicomContentList: string[];
+    questionnaireStepManager: QuestionnaireStepManager;
     isSaveDisabled?: boolean;
 }
-
-const getDefaultStep = (questionnaireResponseList: QuestionnaireResponse[]) => {
-    if (questionnaireResponseList.length >= 2) {
-        return 2;
-    }
-    if (questionnaireResponseList.length >= 1) {
-        return 1;
-    }
-    return 0;
-};
 
 export const QuestionnaireSteps = ({
     patient,
     questionnaireName,
     questionnaireResponseList,
-    isSaveDisabled
+    dicomContentList,
+    questionnaireStepManager,
+    isSaveDisabled,
 }: Props) => {
-    const [currentStep, setCurrentStep] = useState(getDefaultStep(questionnaireResponseList));
-
+    const { stepInfo, uploadImageStep, setStepInfo, onContinue, getDefaultStep } =
+        questionnaireStepManager;
     const steps = [
         {
             title: (
                 <div
-                    style={currentStep !== 0 ? { cursor: 'pointer' } : {}}
-                    onClick={() => setCurrentStep(0)}
+                    style={stepInfo.currentStep !== 0 ? { cursor: 'pointer' } : {}}
+                    onClick={() =>
+                        setStepInfo({
+                            ...stepInfo,
+                            currentStep: 0,
+                        })
+                    }
                 >
                     Participant Information
                 </div>
@@ -49,8 +49,7 @@ export const QuestionnaireSteps = ({
                 <QuestionnaireForm
                     patient={patient}
                     questionnaireId={'personal-information'}
-                    currentStep={currentStep}
-                    setCurrentStep={setCurrentStep}
+                    questionnaireStepManager={questionnaireStepManager}
                     isSaveDisabled={isSaveDisabled}
                 />
             ),
@@ -59,13 +58,45 @@ export const QuestionnaireSteps = ({
             title: (
                 <div
                     style={
-                        questionnaireResponseList.length >= 1 && currentStep !== 1
+                        stepInfo.stepAccess.completedQuestionnaires >= 1 &&
+                        stepInfo.currentStep !== 1
                             ? { cursor: 'pointer' }
                             : {}
                     }
                     onClick={() => {
-                        if (questionnaireResponseList.length >= 1) {
-                            setCurrentStep(1);
+                        if (stepInfo.stepAccess.completedQuestionnaires >= 1) {
+                            setStepInfo({
+                                ...stepInfo,
+                                currentStep: 1,
+                            });
+                        }
+                    }}
+                >
+                    Upload files
+                </div>
+            ),
+            content: <UploadFile onContinue={onContinue} />,
+        },
+
+        {
+            title: (
+                <div
+                    style={
+                        stepInfo.stepAccess.completedQuestionnaires >= 1 &&
+                        stepInfo.stepAccess.uploadedFiles > 0 &&
+                        stepInfo.currentStep !== 2
+                            ? { cursor: 'pointer' }
+                            : {}
+                    }
+                    onClick={() => {
+                        if (
+                            stepInfo.stepAccess.completedQuestionnaires >= 1 &&
+                            stepInfo.stepAccess.uploadedFiles > 0
+                        ) {
+                            setStepInfo({
+                                ...stepInfo,
+                                currentStep: 2,
+                            });
                         }
                     }}
                 >
@@ -76,56 +107,46 @@ export const QuestionnaireSteps = ({
                 <QuestionnaireForm
                     patient={patient}
                     questionnaireId={questionnaireName}
-                    currentStep={currentStep}
-                    setCurrentStep={setCurrentStep}
+                    questionnaireStepManager={questionnaireStepManager}
                     isSaveDisabled={isSaveDisabled}
                 />
             ),
         },
-        {
-            title: (
-                <div
-                    style={
-                        questionnaireResponseList.length >= 2 && currentStep !== 2
-                            ? { cursor: 'pointer' }
-                            : {}
-                    }
-                    onClick={() => {
-                        if (questionnaireResponseList.length >= 2) {
-                            setCurrentStep(2);
-                        }
-                    }}
-                >
-                    Upload files
-                </div>
-            ),
-            content: <QuestionnaireSuccess />,
-        },
     ];
 
     let title;
-
     if (questionnaireName === 'patient-report-baseline') {
         title = 'Breast Cancer research';
-    }
-
-    if (questionnaireName === 'screening-questions') {
+    } else if (questionnaireName === 'screening-questions') {
         title = 'COVID-19 research';
-    }
-
-    if (questionnaireName === 'survival-and-disease-control') {
+    } else if (questionnaireName === 'survival-and-disease-control') {
         title = 'Survival and Disease control';
     }
+
+    useEffect(() => {
+        if (stepInfo.firstStepLoad) {
+            setStepInfo({
+                currentStep: getDefaultStep(questionnaireResponseList, dicomContentList),
+                firstStepLoad: false,
+                stepAccess: {
+                    completedQuestionnaires: questionnaireResponseList.length,
+                    uploadedFiles: dicomContentList.length,
+                },
+            });
+        }
+    }, [stepInfo.firstStepLoad]);
 
     return (
         <>
             <h2 className={s.title}>{title}</h2>
-            <Steps current={currentStep} className={s.steps}>
-                {steps.map((item) => (
-                    <Step key={item.title as any} title={item.title} />
-                ))}
-            </Steps>
-            <div className={s.stepsContent}>{steps[currentStep].content}</div>
+            {!uploadImageStep ? (
+                <Steps current={stepInfo.currentStep} className={s.steps}>
+                    {steps.map((item, index) => (
+                        <Step key={index} title={item.title} />
+                    ))}
+                </Steps>
+            ) : null}
+            <div className={s.stepsContent}>{steps[stepInfo.currentStep].content}</div>
         </>
     );
 };
