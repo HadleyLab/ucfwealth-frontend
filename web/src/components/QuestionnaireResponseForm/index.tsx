@@ -1,41 +1,33 @@
-import { Button, DatePicker } from 'antd';
+import { Button, Steps } from 'antd';
 import { FormApi, Unsubscribe } from 'final-form';
 import arrayMutators from 'final-form-arrays';
 import _ from 'lodash';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { Field, FormRenderProps } from 'react-final-form';
+import React, { useState } from 'react';
+import { FormRenderProps } from 'react-final-form';
 import { useHistory } from 'react-router-dom';
 
-import { isSuccess } from 'aidbox-react/src/libs/remoteData';
-import { mapSuccess, service } from 'aidbox-react/src/services/service';
+import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-import {
-    Coding,
-    Questionnaire,
-    QuestionnaireItem,
-    QuestionnaireItemAnswerOption,
-    QuestionnaireResponse,
-} from 'shared/src/contrib/aidbox';
-
-import { InputField } from 'src/components/fields';
 import { QuestionnaireStepManager } from 'src/containers/PatientApp/QuestionnaireFormWrapper/useQuestionnaireFormWrapper';
 import { SaveIcon } from 'src/images/SaveIcon';
 import {
-    FormAnswerItems,
     FormItems,
-    getDisplay,
     getEnabledQuestions,
     interpolateAnswers,
-    isValueEqual,
     mapFormToResponse,
     mapResponseToForm,
 } from 'src/utils/questionnaire';
 
 import { CustomForm } from '../CustomForm';
-import { ChooseField } from '../fields/ChooseField';
-import { QuestionnaireProgress } from '../QuestionnaireProgress';
+// import { QuestionnaireProgress } from '../QuestionnaireProgress';
 import s from './QuestionnaireResponseForm.module.scss';
+import { RenderAnswerBoolean } from './RenderAnswerBoolean';
+import { RenderAnswerChoice } from './RenderAnswerChoice';
+import { RenderAnswerDateTime } from './RenderAnswerDateTime';
+import { RenderAnswerNumeric } from './RenderAnswerNumeric';
+import { RenderAnswerText } from './RenderAnswerText';
+import { RenderGroup } from './RenderGroup';
+import { RenderRepeatsAnswer } from './RenderRepeatsAnswer';
 
 interface Props {
     resource: QuestionnaireResponse;
@@ -59,6 +51,8 @@ interface Props {
 
 type FormValues = FormItems;
 
+const { Step } = Steps;
+
 export const QuestionnaireResponseForm = ({
     resource,
     questionnaire,
@@ -73,6 +67,8 @@ export const QuestionnaireResponseForm = ({
     onChange,
 }: Props) => {
     const { stepInfo, setStepInfo } = questionnaireStepManager;
+
+    const [currentStep, setCurrentStep] = useState(0);
 
     const history = useHistory();
 
@@ -112,82 +108,19 @@ export const QuestionnaireResponseForm = ({
         parentPath: string[],
         formParams: FormRenderProps,
     ) => {
-        const { linkId, text, required, repeats } = questionItem;
-        const baseFieldPath = [...parentPath, linkId];
+        const { repeats } = questionItem;
 
         if (!repeats) {
             return renderAnswer(questionItem, parentPath, formParams, 0);
         }
 
-        if (!required) {
-            console.error('TODO: Unsupported question which is not required and repeats');
-        }
-
         return (
-            <Field name={baseFieldPath.join('.')}>
-                {({ input }) => {
-                    return (
-                        <div>
-                            <div>{text}</div>
-
-                            {_.map(
-                                input.value.length ? input.value : [{}],
-                                (elem, index: number) => {
-                                    if (index > 0 && !input.value[index]) {
-                                        return null;
-                                    }
-
-                                    return (
-                                        <div key={`repeatsAnswer-${index}`} className="d-flex">
-                                            <div className="flex-grow-1">
-                                                {renderAnswer(
-                                                    questionItem,
-                                                    parentPath,
-                                                    formParams,
-                                                    index,
-                                                )}
-                                            </div>
-                                            {index > 0 ? (
-                                                <div
-                                                    style={{
-                                                        width: 40,
-                                                        height: 40,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                    }}
-                                                    onClick={() =>
-                                                        input.onChange(
-                                                            _.filter(
-                                                                input.value,
-                                                                (val, valIndex: number) =>
-                                                                    valIndex !== index,
-                                                            ),
-                                                        )
-                                                    }
-                                                >
-                                                    Delete{' '}
-                                                </div>
-                                            ) : (
-                                                <div style={{ width: 40 }} />
-                                            )}
-                                        </div>
-                                    );
-                                },
-                            )}
-                            <Button
-                                onClick={() =>
-                                    input.onChange(
-                                        input.value.length ? [...input.value, {}] : [{}, {}],
-                                    )
-                                }
-                            >
-                                Add another answer
-                            </Button>
-                        </div>
-                    );
-                }}
-            </Field>
+            <RenderRepeatsAnswer
+                formParams={formParams}
+                parentPath={parentPath}
+                questionItem={questionItem}
+                renderAnswer={renderAnswer}
+            />
         );
     };
 
@@ -196,77 +129,30 @@ export const QuestionnaireResponseForm = ({
         parentPath: string[],
         formParams: FormRenderProps,
         index = 0,
-    ) => {
-        const { linkId, text, item, required, hidden } = questionItem;
-        const fieldPath = [...parentPath, linkId, _.toString(index)];
-        const name = [...fieldPath, 'value', 'string'].join('.');
-
-        return (
-            <div className={s.inputField} style={hidden ? { opacity: '0.3' } : {}}>
-                <Field name={name}>
-                    {({ input, meta }) => {
-                        const inputProps = {
-                            ...input,
-                            ...(hidden ? { disabled: true } : {}),
-                        };
-                        return (
-                            <InputField
-                                name={name}
-                                input={inputProps}
-                                meta={meta}
-                                label={text}
-                                fieldProps={{
-                                    validate: required
-                                        ? (inputValue: any) =>
-                                              _.isUndefined(inputValue) ? 'Required' : undefined
-                                        : undefined,
-                                }}
-                            />
-                        );
-                    }}
-                </Field>
-                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </div>
-        );
-    };
+    ) => (
+        <RenderAnswerText
+            formParams={formParams}
+            parentPath={parentPath}
+            questionItem={questionItem}
+            renderQuestions={renderQuestions}
+            index={index}
+        />
+    );
 
     const renderAnswerNumeric = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
         index = 0,
-    ) => {
-        const { linkId, text, type, item, required, hidden } = questionItem;
-        const fieldPath = [...parentPath, linkId, _.toString(index)];
-
-        const inputFieldPath = [...fieldPath, 'value', type];
-
-        return (
-            <div className={s.inputField}>
-                <InputField
-                    name={inputFieldPath.join('.')}
-                    fieldProps={{
-                        parse: (value: any) =>
-                            value
-                                ? type === 'integer'
-                                    ? _.parseInt(value)
-                                    : parseFloat(value)
-                                : undefined,
-                        validate: required
-                            ? (inputValue: any) =>
-                                  _.isUndefined(inputValue) ? 'Required' : undefined
-                            : undefined,
-                    }}
-                    type="number"
-                    label={text}
-                    disabled={hidden}
-                    // helpText={helpText}
-                    // addonAfter={unit && unit.display!}
-                />
-                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </div>
-        );
-    };
+    ) => (
+        <RenderAnswerNumeric
+            formParams={formParams}
+            parentPath={parentPath}
+            questionItem={questionItem}
+            renderQuestions={renderQuestions}
+            index={index}
+        />
+    );
 
     const [validDate, setValidDate] = React.useState(true);
     const [answerDateTimeChanged, setAnswerDateTimeChanged] = React.useState(false);
@@ -276,156 +162,33 @@ export const QuestionnaireResponseForm = ({
         parentPath: string[],
         formParams: FormRenderProps,
         index = 0,
-    ) => {
-        const { linkId, text, item } = questionItem;
-        const fieldPath = [...parentPath, linkId, _.toString(index)];
-        const dateFormat = 'YYYY-MM-DD';
-        return (
-            <>
-                <Field name={[...fieldPath, 'value', 'date'].join('.')}>
-                    {({ input, meta }) => {
-                        if (!input.value) {
-                            setValidDate(false);
-                        }
-                        return (
-                            <div className={s.datepicker}>
-                                <div className={s.inputField} style={{ marginBottom: 8 }}>
-                                    {text}
-                                </div>
-                                <DatePicker
-                                    defaultValue={input.value && moment(input.value, dateFormat)}
-                                    onChange={(date, dateString) => {
-                                        setAnswerDateTimeChanged(true);
-                                        if (!dateString || dateString === '') {
-                                            setValidDate(false);
-                                        } else {
-                                            input.onChange(dateString);
-                                            setValidDate(true);
-                                        }
-                                    }}
-                                    format={dateFormat}
-                                    status={!validDate && answerDateTimeChanged ? 'error' : ''}
-                                />
-                                {!validDate && answerDateTimeChanged ? (
-                                    <div className={s.requiredRed}>Required</div>
-                                ) : !validDate && !answerDateTimeChanged ? (
-                                    <div className={s.requiredGrey}>Required</div>
-                                ) : (
-                                    <div style={{ height: '27px' }} />
-                                )}
-                            </div>
-                        );
-                    }}
-                </Field>
-                {item ? renderQuestions(item, [...fieldPath, 'items'], formParams) : null}
-            </>
-        );
-    };
+    ) => (
+        <RenderAnswerDateTime
+            formParams={formParams}
+            parentPath={parentPath}
+            questionItem={questionItem}
+            renderQuestions={renderQuestions}
+            index={index}
+            validDate={validDate}
+            setValidDate={setValidDate}
+            answerDateTimeChanged={answerDateTimeChanged}
+            setAnswerDateTimeChanged={setAnswerDateTimeChanged}
+        />
+    );
 
     const renderGroup = (
         questionItem: QuestionnaireItem,
         parentPath: string[],
         formParams: FormRenderProps,
         // fieldsRenderConfig: FieldsRenderConfig,
-    ) => {
-        const { linkId, item, text, repeats } = questionItem;
-
-        if (item) {
-            const baseFieldPath = [...parentPath, linkId];
-
-            if (repeats) {
-                return (
-                    <Field name={baseFieldPath.join('.')}>
-                        {({ input }) => {
-                            return (
-                                <div>
-                                    <div>
-                                        {_.map(
-                                            input.value.items && input.value.items.length
-                                                ? input.value.items
-                                                : [{}],
-                                            (_elem, index: number) => {
-                                                if (index > 0 && !input.value.items[index]) {
-                                                    return null;
-                                                }
-                                                return (
-                                                    <div
-                                                        className={s.imagingSiteGroup}
-                                                        key={`group-${index}`}
-                                                    >
-                                                        <div className={s.imagingSiteHeader}>
-                                                            <div
-                                                                className={s.groupParagraphHeader}
-                                                            >{`${questionItem.text} #${
-                                                                index + 1
-                                                            }`}</div>
-                                                            <Button
-                                                                onClick={() => {
-                                                                    const filteredArray = _.filter(
-                                                                        input.value.items,
-                                                                        (_val, valIndex: number) =>
-                                                                            valIndex !== index,
-                                                                    );
-                                                                    input.onChange({
-                                                                        items: [...filteredArray],
-                                                                    });
-                                                                }}
-                                                            >
-                                                                <span>Remove</span>
-                                                            </Button>
-                                                        </div>
-                                                        <div>
-                                                            {renderQuestions(
-                                                                item,
-                                                                [
-                                                                    ...parentPath,
-                                                                    linkId,
-                                                                    'items',
-                                                                    index.toString(),
-                                                                ],
-                                                                formParams,
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            },
-                                        )}
-                                    </div>
-                                    <div className={s.addAnother}>
-                                        <Button
-                                            onClick={() => {
-                                                const existingItems = input.value.items || [];
-                                                const updatedInput = {
-                                                    items: [...existingItems, {}],
-                                                };
-                                                input.onChange(updatedInput);
-                                            }}
-                                        >
-                                            <p>{`+ Add another ${text}`}</p>
-                                        </Button>
-                                    </div>
-                                </div>
-                            );
-                        }}
-                    </Field>
-                );
-            }
-            const paragraphs = _.split(text, '\n');
-            return (
-                <div style={{ paddingBottom: 10, textAlign: 'left', whiteSpace: 'initial' }}>
-                    {_.map(paragraphs, (paragraph, index) => {
-                        return (
-                            <p key={`group-paragraph-${index}`} className={s.groupParagraph}>
-                                {paragraph}
-                            </p>
-                        );
-                    })}
-                    {renderQuestions(item, [...parentPath, linkId, 'items'], formParams)}
-                </div>
-            );
-        }
-        return null;
-    };
+    ) => (
+        <RenderGroup
+            formParams={formParams}
+            parentPath={parentPath}
+            questionItem={questionItem}
+            renderQuestions={renderQuestions}
+        />
+    );
 
     const renderAnswer = (
         rawQuestionItem: QuestionnaireItem,
@@ -436,7 +199,6 @@ export const QuestionnaireResponseForm = ({
             ...rawQuestionItem,
             text: interpolateAnswers(rawQuestionItem.text!, parentPath, formParams.values),
         };
-        // const { linkId, type, item, text } = questionItem;
         const { type } = questionItem;
 
         if (type === 'string' || type === 'text') {
@@ -499,33 +261,55 @@ export const QuestionnaireResponseForm = ({
     const renderForm = (items: QuestionnaireItem[], formParams: FormRenderProps) => {
         const { submitting, valid, handleSubmit } = formParams;
 
+        const isLastStep = currentStep === items.length - 1;
+
         const onClick = async () => {
-            await handleSubmit();
-            setAnswerDateTimeChanged(true);
-            if (valid && validDate && typeof stepInfo.currentStep === 'number')
-                if (stepInfo.currentStep == 2) {
-                    history.push('/app/summary-overview');
-                } else {
-                    setStepInfo({
-                        ...stepInfo,
-                        currentStep: stepInfo.currentStep + 1,
-                        stepAccess: {
-                            completedQuestionnaires:
-                                stepInfo.stepAccess.completedQuestionnaires + 1,
-                            uploadedFiles: stepInfo.stepAccess.uploadedFiles,
-                        },
-                    });
-                }
+            if (isLastStep) {
+                await handleSubmit();
+                setAnswerDateTimeChanged(true);
+                if (valid && validDate && typeof stepInfo.currentStep === 'number')
+                    if (stepInfo.currentStep == 2) {
+                        history.push('/app/summary-overview');
+                    } else {
+                        setStepInfo({
+                            ...stepInfo,
+                            currentStep: stepInfo.currentStep + 1,
+                            stepAccess: {
+                                completedQuestionnaires:
+                                    stepInfo.stepAccess.completedQuestionnaires + 1,
+                                uploadedFiles: stepInfo.stepAccess.uploadedFiles,
+                            },
+                        });
+                    }
+            } else {
+                setCurrentStep(currentStep + 1);
+            }
         };
 
         return (
             <>
-                {renderQuestions(items, [], formParams)}
-                {questionnaireId === 'screening-questions' && (
-                    <QuestionnaireProgress progress={progress} />
+                <Steps current={currentStep}>
+                    {items.map((_, index) => (
+                        <Step key={index} title={`Step ${index + 1}`} />
+                    ))}
+                </Steps>
+                {items[currentStep] && (
+                    <div>
+                        <h2>{items[currentStep].text}</h2>
+                    </div>
                 )}
-                {!readOnly && (
-                    <div className="questionnaire-form-actions">
+
+                {items[currentStep] && renderQuestions([items[currentStep]], [], formParams)}
+                <div className="questionnaire-form-actions">
+                    {currentStep > 0 && (
+                        <Button onClick={() => setCurrentStep(currentStep - 1)}>Previous</Button>
+                    )}
+                    {currentStep < items.length - 1 && (
+                        <Button type="primary" onClick={() => setCurrentStep(currentStep + 1)}>
+                            Next
+                        </Button>
+                    )}
+                    {!readOnly && isLastStep && (
                         <Button
                             type="primary"
                             className={s.saveButton}
@@ -535,8 +319,8 @@ export const QuestionnaireResponseForm = ({
                             <SaveIcon style={{ marginRight: 9 }} />
                             <span>Save and Continue</span>
                         </Button>
-                    </div>
-                )}
+                    )}
+                </div>
             </>
         );
     };
@@ -577,163 +361,5 @@ export const QuestionnaireResponseForm = ({
                 return renderForm(items, params);
             }}
         </CustomForm>
-    );
-};
-
-interface RenderAnswerChoiceProps {
-    questionItem: QuestionnaireItem;
-    parentPath: string[];
-    formParams: FormRenderProps;
-    addChoiceValueToProgressBar: (choice: any) => void;
-    renderQuestions: (
-        items: QuestionnaireItem[],
-        parentPath: string[],
-        formParams: FormRenderProps,
-    ) => JSX.Element[];
-}
-
-const RenderAnswerChoice = ({
-    questionItem,
-    parentPath,
-    formParams,
-    addChoiceValueToProgressBar,
-    renderQuestions,
-}: RenderAnswerChoiceProps) => {
-    const { linkId, text, item, repeats, required, answerValueSet } = questionItem;
-    const fieldPath = [...parentPath, linkId, ...(repeats ? [] : ['0'])];
-    const fieldName = fieldPath.join('.');
-    const [answerOption, setAnswerOption] = useState(questionItem.answerOption);
-    useEffect(() => {
-        (async function () {
-            if (answerValueSet) {
-                console.log(answerValueSet);
-
-                const response = mapSuccess(
-                    await service<{ data: Array<{ concept: Coding }> }>({
-                        url: '/$query/expand',
-                        params: { valueset: answerValueSet, text: '' },
-                    }),
-                    (data) =>
-                        data.data.map((d) => {
-                            const result: QuestionnaireItemAnswerOption = {
-                                value: { Coding: d.concept },
-                            };
-                            return result;
-                        }),
-                );
-                if (isSuccess(response)) {
-                    setAnswerOption(response.data);
-                } else {
-                    setAnswerOption([]);
-                }
-            }
-        })();
-    }, [answerValueSet]);
-
-    return (
-        <ChooseField<FormAnswerItems>
-            name={fieldName}
-            label={<div className={s.chooseFieldLabel}>{text}</div>}
-            multiple={repeats}
-            inline={!item && !repeats}
-            options={_.map(answerOption, (opt) => ({
-                value: { value: opt.value },
-                label: getDisplay(opt.value),
-            }))}
-            fieldProps={{
-                validate: required
-                    ? (inputValue: any) => {
-                          if (repeats) {
-                              if (!inputValue?.length) {
-                                  return 'Choose at least one option';
-                              }
-                          } else {
-                              if (!inputValue) {
-                                  return 'Required';
-                              }
-                          }
-
-                          return undefined;
-                      }
-                    : undefined,
-            }}
-            isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
-            renderOptionContent={(option, index, value) => {
-                const selectedIndex = _.findIndex(_.isArray(value) ? value : [value], (answer) =>
-                    isValueEqual(answer.value, option.value.value),
-                );
-                selectedIndex === 0
-                    ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
-                    : null;
-                if (item && selectedIndex !== -1) {
-                    const subItemParentPath = [
-                        ...fieldPath,
-                        ...(repeats ? [_.toString(selectedIndex)] : []),
-                        'items',
-                    ];
-                    return renderQuestions(item, subItemParentPath, formParams);
-                }
-                return null;
-            }}
-        />
-    );
-};
-
-interface RenderAnswerBooleanProps {
-    questionItem: QuestionnaireItem;
-    parentPath: string[];
-    addChoiceValueToProgressBar: (choice: any) => void;
-}
-
-const RenderAnswerBoolean = ({
-    questionItem,
-    parentPath,
-    addChoiceValueToProgressBar,
-}: RenderAnswerBooleanProps) => {
-    const { linkId, text, item, required } = questionItem;
-    const fieldPath = [...parentPath, linkId, '0'];
-    const fieldName = fieldPath.join('.');
-    const answerOption = [
-        {
-            value: { value: false },
-            display: 'No',
-        },
-        {
-            value: { value: true },
-            display: 'Yes',
-        },
-    ];
-    return (
-        <ChooseField<FormAnswerItems>
-            name={fieldName}
-            label={<div className={s.chooseFieldLabel}>{text}</div>}
-            inline={!item}
-            options={_.map(answerOption, (opt) => ({
-                value: { value: opt.value },
-                label: opt.display,
-            }))}
-            fieldProps={{
-                validate: required
-                    ? (inputValue: any) => {
-                          {
-                              if (!inputValue) {
-                                  return 'Required';
-                              }
-                          }
-                          return undefined;
-                      }
-                    : undefined,
-            }}
-            isEqual={(value1: any, value2: any) => isValueEqual(value1.value, value2.value)}
-            renderOptionContent={(option, index, value) => {
-                const selectedIndex = _.findIndex(_.isArray(value) ? value : [value], (answer) =>
-                    isValueEqual(answer.value, option.value.value),
-                );
-                selectedIndex === 0
-                    ? addChoiceValueToProgressBar({ question: questionItem.text, ...value })
-                    : null;
-                return null;
-            }}
-        />
     );
 };
