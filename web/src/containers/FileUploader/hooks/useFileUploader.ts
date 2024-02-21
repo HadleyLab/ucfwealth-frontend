@@ -17,7 +17,7 @@ export interface DicomContent {
     };
 }
 
-export const getContentList = async (sessionId: string): Promise<string[]> => {
+const getContentList = async (sessionId: string): Promise<string[]> => {
     if (!sessionId) {
         return [];
     }
@@ -43,6 +43,7 @@ export const useFileUploader = () => {
         const contents = await getContentList(sessionId);
         setContentList(contents);
         setShowLoader(false);
+        return contents;
     }, [sessionId]);
 
     useEffect(() => {
