@@ -24,9 +24,9 @@ export const SignedUploadDragAndDrop = ({ setUploadFileName }: Props) => {
         const { file } = files;
         const { name, type } = file;
 
-        setUploadFileName(name);
-
         const patientId = sharedPatientId.getSharedState().id;
+
+        setUploadFileName(`${patientId}/${name}`);
 
         const response = await service({
             method: 'GET',
