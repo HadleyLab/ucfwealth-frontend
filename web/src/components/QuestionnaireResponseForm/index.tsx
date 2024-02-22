@@ -19,7 +19,6 @@ import {
 } from 'src/utils/questionnaire';
 
 import { CustomForm } from '../CustomForm';
-// import { QuestionnaireProgress } from '../QuestionnaireProgress';
 import s from './QuestionnaireResponseForm.module.scss';
 import { RenderAnswerBoolean } from './RenderAnswerBoolean';
 import { RenderAnswerChoice } from './RenderAnswerChoice';
@@ -263,64 +262,74 @@ export const QuestionnaireResponseForm = ({
 
         const isLastStep = currentStep === items.length - 1;
 
-        const onClick = async () => {
-            if (isLastStep) {
-                await handleSubmit();
-                setAnswerDateTimeChanged(true);
-                if (valid && validDate && typeof stepInfo.currentStep === 'number')
-                    if (stepInfo.currentStep == 2) {
-                        history.push('/app/summary-overview');
-                    } else {
-                        setStepInfo({
-                            ...stepInfo,
-                            currentStep: stepInfo.currentStep + 1,
-                            stepAccess: {
-                                completedQuestionnaires:
-                                    stepInfo.stepAccess.completedQuestionnaires + 1,
-                                uploadedFiles: stepInfo.stepAccess.uploadedFiles,
-                            },
-                        });
-                    }
-            } else {
+        const isValid = valid && validDate && typeof stepInfo.currentStep === 'number';
+
+        const onSaveContinue = async () => {
+            if (!isLastStep) {
                 setCurrentStep(currentStep + 1);
+                return;
             }
+
+            if (!isValid) return;
+
+            await handleSubmit();
+            setAnswerDateTimeChanged(true);
+
+            if (stepInfo.currentStep === 2) {
+                history.push('/app/summary-overview');
+            } else {
+                setStepInfo({
+                    ...stepInfo,
+                    currentStep: stepInfo.currentStep + 1,
+                    stepAccess: {
+                        completedQuestionnaires: stepInfo.stepAccess.completedQuestionnaires + 1,
+                        uploadedFiles: stepInfo.stepAccess.uploadedFiles,
+                    },
+                });
+            }
+        };
+
+        const onPrevious = () => {
+            setCurrentStep(currentStep - 1);
+        };
+
+        const onNext = () => {
+            if (!isValid) return;
+            setCurrentStep(currentStep + 1);
         };
 
         return (
             <>
-                <Steps current={currentStep}>
-                    {items.map((_, index) => (
-                        <Step key={index} title={`Step ${index + 1}`} />
-                    ))}
-                </Steps>
-                {items[currentStep] && (
-                    <div>
-                        <h2>{items[currentStep].text}</h2>
-                    </div>
-                )}
-
+                {items.length > 1 ? (
+                    <Steps current={currentStep} className={s.steps}>
+                        {items.map((_, index) => (
+                            <Step key={index} title={`Step ${index + 1}`} />
+                        ))}
+                    </Steps>
+                ) : null}
                 {items[currentStep] && renderQuestions([items[currentStep]], [], formParams)}
-                <div className="questionnaire-form-actions">
+                <>
                     {currentStep > 0 && (
-                        <Button onClick={() => setCurrentStep(currentStep - 1)}>Previous</Button>
+                        <Button className={s.stepButton} onClick={onPrevious}>
+                            Previous
+                        </Button>
                     )}
-                    {currentStep < items.length - 1 && (
-                        <Button type="primary" onClick={() => setCurrentStep(currentStep + 1)}>
+                    {currentStep < items.length - 1 ? (
+                        <Button type="primary" className={s.stepButton} onClick={onNext}>
                             Next
                         </Button>
-                    )}
-                    {!readOnly && isLastStep && (
+                    ) : !readOnly && isLastStep ? (
                         <Button
                             type="primary"
-                            className={s.saveButton}
+                            className={s.stepButton}
                             disabled={submitting}
-                            onClick={onClick}
+                            onClick={onSaveContinue}
                         >
-                            <SaveIcon style={{ marginRight: 9 }} />
+                            <SaveIcon className={s.saveIcon} />
                             <span>Save and Continue</span>
                         </Button>
-                    )}
-                </div>
+                    ) : null}
+                </>
             </>
         );
     };

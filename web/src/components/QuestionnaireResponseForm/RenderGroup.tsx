@@ -102,14 +102,18 @@ export function RenderGroup({ questionItem, renderQuestions, parentPath, formPar
     const paragraphs = _.split(text, '\n');
 
     return (
-        <div style={{ paddingBottom: 10, textAlign: 'left', whiteSpace: 'initial' }}>
-            {_.map(paragraphs, (paragraph, index) => {
-                return (
-                    <p key={`group-paragraph-${index}`} className={s.groupParagraph}>
-                        {paragraph}
-                    </p>
-                );
-            })}
+        <div className={s.groupContainer}>
+            {parentPath.length === 0 ? (
+                <h2 className={s.groupTitle}>{text}</h2>
+            ) : (
+                _.map(paragraphs, (paragraph, index) => {
+                    return (
+                        <p key={`group-paragraph-${index}`} className={s.groupParagraph}>
+                            {paragraph}
+                        </p>
+                    );
+                })
+            )}
             {renderQuestions(item, [...parentPath, linkId, 'items'], formParams)}
         </div>
     );
