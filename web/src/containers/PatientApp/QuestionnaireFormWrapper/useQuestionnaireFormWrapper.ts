@@ -1,5 +1,4 @@
 import { message } from 'antd';
-import { notification } from 'antd';
 import { useCallback, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -14,7 +13,7 @@ import { mapSuccess, sequenceMap, service } from 'aidbox-react/src/services/serv
 
 import { Patient, QuestionnaireResponse } from 'shared/src/contrib/aidbox';
 
-import { DicomContent, getContentList } from 'src/containers/FileUploader/hooks/useFileUploader';
+import { DicomContent } from 'src/containers/FileUploader/hooks/useFileUploader';
 import { sharedPatientId } from 'src/sharedState';
 
 interface Props {
@@ -138,13 +137,7 @@ export const useQuestionnaireFormWrapper = ({ patient }: Props) => {
             history.push('/app/summary-overview');
             return;
         }
-        const contentList = await getContentList(sessionId)
-        if (contentList.length === 0) {
-            notification.open({
-                message: 'File list is empty',
-            });
-            return;
-        }
+
         setStepInfo((prevStepInfo) => {
             return {
                 ...prevStepInfo,
