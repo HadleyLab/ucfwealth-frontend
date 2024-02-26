@@ -2,7 +2,6 @@ import { Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
-import { Celebrate } from 'src/containers/SuperAdminApp/PatientProgressList/Celebrate';
 import { ExtendedPatient } from 'src/containers/SuperAdminApp/PatientProgressList/usePatientProgressList';
 import { QuestionnaireAvailableBadge } from 'src/containers/SuperAdminApp/QuestionnaireAvailableBadge';
 import { RightArrowIcon } from 'src/images/RightArrowIcon';
@@ -82,7 +81,6 @@ export const PatientProgressListTable = ({ patientList, patientCount }: Props) =
                     </div>
                 </div>
             ),
-            hedera: <Celebrate patient={patient} />,
         };
     });
 
