@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { isSuccess } from 'aidbox-react/src/libs/remoteData';
 
-import { useInterval } from 'src/containers/SuperAdminApp/PatientProgressList/Celebrate/useInterval';
+import { useInterval } from 'src/containers/UnprivilegedApp/useInterval';
 import { getUserInfo } from 'src/services/auth';
 
 export function UnprivilegedApp() {
