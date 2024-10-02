@@ -25,7 +25,6 @@ import {
     PublicAppointment,
     QuestionnaireBuilder,
     QuestionnaireList,
-    SetPassword,
     VideoCall,
 } from '@beda.software/emr/containers';
 import { restoreUserSession } from '@beda.software/emr/dist/containers/App/utils';
@@ -34,6 +33,7 @@ import { getToken, parseOAuthState, setToken } from '@beda.software/emr/services
 import { sharedAuthorizedPatient } from '@beda.software/emr/sharedState';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
+import { SetPassword } from '../SetPassword';
 import { SignIn } from '../SignIn';
 import { SignUp } from '../SignUp';
 
