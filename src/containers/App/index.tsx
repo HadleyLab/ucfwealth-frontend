@@ -7,7 +7,7 @@ import { useService } from 'aidbox-react/lib/hooks/service';
 import { success } from 'aidbox-react/lib/libs/remoteData';
 
 import { User } from '@beda.software/aidbox-types';
-import { AnonymousLayout, BaseLayout, Spinner } from '@beda.software/emr/components';
+import { AnonymousLayout, Spinner } from '@beda.software/emr/components';
 import {
     EncounterList,
     HealthcareServiceList,
@@ -32,6 +32,8 @@ import { DocumentPrint } from '@beda.software/emr/dist/containers/PatientDetails
 import { getToken, parseOAuthState, setToken } from '@beda.software/emr/services';
 import { sharedAuthorizedPatient } from '@beda.software/emr/sharedState';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
+
+import { BaseLayout } from 'src/components/BaseLayout';
 
 import { SetPassword } from '../SetPassword';
 import { SignIn } from '../SignIn';
@@ -217,8 +219,6 @@ function AuthenticatedPatientUserApp() {
     return (
         <BaseLayout>
             <Routes>
-                <Route path="/invoices" element={<InvoiceList />} />
-                <Route path="/invoices/:id" element={<InvoiceDetails />} />
                 <Route path={`/patients/:id/*`} element={<PatientDetails />} />
                 <Route path="*" element={<Navigate to={`/patients/${patient!.id}`} />} />
             </Routes>
