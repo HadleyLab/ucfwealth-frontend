@@ -16,7 +16,6 @@ import {
     MedicationManagement,
     NotificationPage,
     OrganizationScheduling,
-    PatientDetails,
     PatientList,
     PatientQuestionnaire,
     PractitionerDetails,
@@ -35,6 +34,7 @@ import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 
+import { PatientDetails } from '../PatientDetails';
 import { SetPassword } from '../SetPassword';
 import { SignIn } from '../SignIn';
 import { SignUp } from '../SignUp';
