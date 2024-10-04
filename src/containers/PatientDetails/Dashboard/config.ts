@@ -1,12 +1,12 @@
 import type { Dashboard, DashboardInstance } from '@beda.software/emr/dist/components/Dashboard/types';
-import { GeneralInformationDashboardContainer } from '@beda.software/emr/dist/containers/PatientDetails/PatientOverviewDynamic/containers/GeneralIInformationDashboardContainer/index';
 
+import { GeneralIInformationWidget } from './GeneralIInformationWidget';
 import { RequiredFormsWidget } from './RequiredFormsWidget';
 
 export const patientDashboardConfig: DashboardInstance = {
     top: [
         {
-            widget: GeneralInformationDashboardContainer,
+            widget: GeneralIInformationWidget,
         },
     ],
     left: [
