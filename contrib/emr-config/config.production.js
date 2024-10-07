@@ -4,14 +4,14 @@ const config = {
     wearablesAccessConsentCodingSystem: 'https://fhir.emr.beda.software/CodeSystem/consent-subject',
 
     tier: 'production',
-    baseURL: 'https://aidbox.emr.beda.software',
-    sdcIdeUrl: 'https://sdc.beda.software',
-    aiQuestionnaireBuilderUrl: 'https://builder.emr.beda.software',
-
+    baseURL: 'https://aidbox.ucfwealth.app',
+    
+    sdcIdeUrl: null,
+    aiQuestionnaireBuilderUrl: null,
     sdcBackendUrl: null,
     webSentryDSN: null,
     mobileSentryDSN: null,
-    jitsiMeetServer: 'video.emr.beda.software/',
+    jitsiMeetServer: null,
     wearablesDataStreamService: 'https://ingest.emr.beda.software/api/v1',
     metriportIdentifierSystem: 'https://api.sandbox.metriport.com',
     aiAssistantServiceUrl: 'https://scribe.emr.beda.software',
