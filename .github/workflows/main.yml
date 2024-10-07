@@ -11,7 +11,7 @@ jobs:
       packages: write
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
+      IMAGE_NAME: hadleylab/ucfwealth-frontend
       DISABLE_ESLINT_PLUGIN: true
       NODE_OPTIONS: --max-old-space-size=4096
     steps:
