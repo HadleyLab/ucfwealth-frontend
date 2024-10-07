@@ -2,7 +2,7 @@ name: Build image and restart services
 on:
   push:
     branches:
-      - main
+      - emr
 jobs:
   Release:
     runs-on: ubuntu-latest
