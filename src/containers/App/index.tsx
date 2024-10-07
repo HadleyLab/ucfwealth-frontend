@@ -29,18 +29,19 @@ import {
 import { restoreUserSession } from '@beda.software/emr/dist/containers/App/utils';
 import { DocumentPrint } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/index';
 import { getToken, parseOAuthState, setToken } from '@beda.software/emr/services';
-import { sharedAuthorizedPatient } from '@beda.software/emr/sharedState';
+import { sharedAuthorizedPatient, sharedAuthorizedUser } from '@beda.software/emr/sharedState';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 
+import { EnableTwoFactor } from '../EnableTwoFactor';
 import { PatientDetails } from '../PatientDetails';
 import { SetPassword } from '../SetPassword';
 import { SignIn } from '../SignIn';
 import { SignUp } from '../SignUp';
 
 export function App() {
-    const [userResponse] = useService(async () => {
+    const [userResponse, manager] = useService(async () => {
         const appToken = getToken();
         return appToken ? restoreUserSession(appToken) : success(null);
     });
@@ -49,7 +50,7 @@ export function App() {
         if (user) {
             return matchCurrentUserRole({
                 [Role.Admin]: () => <AuthenticatedAdminUserApp />,
-                [Role.Patient]: () => <AuthenticatedPatientUserApp />,
+                [Role.Patient]: () => <AuthenticatedPatientUserApp reload={manager.reload} />,
                 [Role.Practitioner]: () => <AuthenticatedPractitionerUserApp />,
                 [Role.Receptionist]: () => <AuthenticatedReceptionistUserApp />,
             });
@@ -221,8 +222,17 @@ function AuthenticatedReceptionistUserApp() {
     );
 }
 
-function AuthenticatedPatientUserApp() {
+function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
     const [patient] = sharedAuthorizedPatient.useSharedState();
+    const [user] = sharedAuthorizedUser.useSharedState();
+
+    if (!user?.twoFactor?.enabled) {
+        return (
+            <BaseLayout>
+                <EnableTwoFactor reload={reload} />
+            </BaseLayout>
+        );
+    }
 
     return (
         <Routes>
