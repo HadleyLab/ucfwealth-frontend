@@ -6,7 +6,6 @@ import s from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.module.s
 import { S } from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.styles';
 import { AppTabBar } from '@beda.software/emr/dist/components/BaseLayout/TabBar/index';
 
-import { AppFooter } from './Footer';
 import { AppSidebar } from './Sidebar';
 
 interface Props {
@@ -21,7 +20,6 @@ export function BaseLayout({ children, style }: Props) {
             <AppTabBar />
             <Layout className={s.content}>
                 {children}
-                <AppFooter />
             </Layout>
         </S.Container>
     );
@@ -33,7 +31,6 @@ export function AnonymousLayout({ children, style }: Props) {
             <AppSidebar />
             <Layout className={s.content}>
                 {children}
-                <AppFooter />
             </Layout>
         </S.Container>
     );

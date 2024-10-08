@@ -94,8 +94,8 @@ function AnonymousUserApp() {
         <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/signin" element={<SignIn originPathName={originPathRef.current} />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/reset-password/:code" element={<SetPassword />} />
+            <Route path="/signup" element={<SignUp originPathName={originPathRef.current} />} />
+            <Route path="/reset-password/:code" element={<SetPassword originPathName={originPathRef.current} />} />
             <Route
                 path="/appointment/book"
                 element={

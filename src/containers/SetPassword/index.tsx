@@ -1,16 +1,24 @@
-import { Trans, t } from '@lingui/macro';
+import { t } from '@lingui/macro';
+import { Button } from 'antd';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { axiosInstance as axiosAidboxInstance } from 'aidbox-react/lib/services/instance';
 
-import { QuestionnaireResponseForm, Title } from '@beda.software/emr/components';
-import { S } from '@beda.software/emr/dist/containers/SetPassword/SetPassword.styles';
+import { QuestionnaireResponseForm } from '@beda.software/emr/components';
 import { inMemorySaveService, questionnaireIdLoader } from '@beda.software/emr/hooks';
 import { axiosInstance as axiosFHIRInstance, getToken } from '@beda.software/emr/services';
 
+import { AuthLayout } from 'src/components/AuthLayout';
 
-export function SetPassword() {
+import { S } from './styles';
+import { authorize } from '../SignIn';
+
+interface Props {
+    originPathName?: string;
+}
+
+export function SetPassword(props: Props) {
     const { code } = useParams<{ code: string }>();
 
     const appToken = getToken();
@@ -33,11 +41,9 @@ export function SetPassword() {
     }, [isAnonymousUser]);
 
     return (
-        <S.Container>
-            <S.Form>
-                <Title level={4} style={{ textAlign: 'center', marginBottom: 32 }}>
-                    <Trans>Set password</Trans>
-                </Title>
+        <AuthLayout illustrationNumber={3}>
+            <S.Container>
+                <S.Title>{t`Set password`}</S.Title>
                 <QuestionnaireResponseForm
                     questionnaireLoader={questionnaireIdLoader('set-password')}
                     questionnaireResponseSaveService={inMemorySaveService}
@@ -59,8 +65,22 @@ export function SetPassword() {
                             },
                         ],
                     }}
+                    FormFooterComponent={({ submitting, submitDisabled }) => (
+                        <S.Buttons>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                style={{ flex: 1 }}
+                                size="large"
+                                disabled={submitting || submitDisabled}
+                                onClick={() => authorize({ nextUrl: props.originPathName })}
+                            >
+                                {t`Submit`}
+                            </Button>
+                        </S.Buttons>
+                    )}
                 />
-            </S.Form>
-        </S.Container>
+            </S.Container>
+        </AuthLayout>
     );
 }
