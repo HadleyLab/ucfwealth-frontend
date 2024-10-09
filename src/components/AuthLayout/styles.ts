@@ -66,26 +66,6 @@ export const S = {
         background-image: url(${headerImage});
         background-size: cover;
     `,
-    CollegeName: styled(Text)`
-        color: #fff;
-        font-size: 16px;
-        line-height: 24px;
-        margin-top: 4px;
-        font-weight: 500;
-    `,
-    UniName: styled(Text)`
-        color: #fff;
-        font-size: 12px;
-        line-height: 20px;
-        font-weight: 500;
-    `,
-    AppName: styled(Text)`
-        color: #ea80b0;
-        font-size: 24px;
-        line-height: 24px;
-        margin-top: 10px;
-        font-weight: 700;
-    `,
     Form: styled.div`
         padding: 40px;
     `,
