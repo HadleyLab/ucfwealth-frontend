@@ -6,4 +6,114 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Plural-Forms: \n"
 
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:60
+msgid "Community"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:47
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:53
+msgid "Encounters"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:45
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:67
+msgid "Invoices"
+msgstr ""
+
+#: src/containers/SignIn/index.tsx:31
+#: src/containers/SignUp/index.tsx:56
+#: src/containers/SignUp/index.tsx:85
+msgid "Log in"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarBottom/index.tsx:102
+msgid "Log out"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:68
+msgid "Medications"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:58
+msgid "My Dashboard"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:18
+msgid "Name"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:37
+msgid "No"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:48
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:54
+#: src/containers/PatientDetails/PatientHeader/index.tsx:21
+msgid "Patients"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:49
+msgid "Practitioners"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:69
+msgid "Prescriptions"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:50
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:55
+msgid "Questionnaires"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:12
+msgid "Required forms"
+msgstr ""
+
+#: src/containers/SetPassword/index.tsx:53
+msgid "Save"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:66
+msgid "Scheduling"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:46
+msgid "Services"
+msgstr ""
+
+#: src/containers/SetPassword/index.tsx:46
+msgid "Set password"
+msgstr ""
+
+#: src/containers/SignIn/index.tsx:34
+#: src/containers/SignUp/index.tsx:65
+msgid "Sign up"
+msgstr ""
+
+#: src/containers/SignUp/index.tsx:45
+msgid "Sign Up"
+msgstr ""
+
+#: src/containers/SetPassword/index.tsx:78
+#: src/containers/SignUp/index.tsx:75
+msgid "Submit"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:35
+msgid "Submitted?"
+msgstr ""
+
+#: src/containers/SignUp/index.tsx:49
+msgid "We have sent you email. Please click on the link in the email to complete registration"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:37
+msgid "Yes"
+msgstr ""
