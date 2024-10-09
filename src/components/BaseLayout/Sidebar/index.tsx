@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { S } from '@beda.software/emr/dist/components/BaseLayout/Sidebar/Sidebar.styles';
-import { SidebarBottom } from '@beda.software/emr/dist/components/BaseLayout/Sidebar/SidebarBottom/index';
 
+import { SidebarBottom } from './SidebarBottom';
 import { SidebarTop } from './SidebarTop';
 
 export function AppSidebar() {

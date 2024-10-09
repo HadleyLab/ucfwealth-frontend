@@ -56,7 +56,11 @@ export function SidebarTop(props: Props) {
               ],
               [Role.Patient]: (patient) => [
                   { label: t`My Dashboard`, path: `/patients/${patient.id}`, icon: <EncountersIcon /> },
-                  { label: t`Community`, path: `/patients/${patient.id}`, icon: <PatientsIcon /> },
+                  {
+                      label: t`Community`,
+                      path: `https://community.ucfwealth.app/auth/oauth2_basic`,
+                      icon: <PatientsIcon />,
+                  },
               ],
               [Role.Receptionist]: () => [
                   { label: t`Scheduling`, path: '/scheduling', icon: <EncountersIcon /> },
@@ -104,7 +108,13 @@ function renderTopMenu(menuRoutes: RouteItem[], onItemClick: (path: string) => v
     return menuRoutes.map((route) => ({
         key: route.path,
         icon: route.icon,
-        onClick: () => onItemClick(route.path),
+        onClick: () => {
+            if (route.path.startsWith('http')) {
+                window.open(route.path, '_blank')?.focus();
+            } else {
+                onItemClick(route.path);
+            }
+        },
         label: (
             <div className={s.menuLink}>
                 <span className={s.menuItemLabel}>{route.label}</span>

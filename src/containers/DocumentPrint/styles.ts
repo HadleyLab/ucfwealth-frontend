@@ -5,9 +5,9 @@ const { Text, Paragraph } = Typography;
 
 export const S = {
     HeaderSpace: styled.div<{ $headerHeight?: string }>`
-        height: 40px;
+        height: 70px;
         @media print {
-            height: ${(props) => (props.$headerHeight ? props.$headerHeight : '40px')};
+            height: ${(props) => (props.$headerHeight ? props.$headerHeight : '70px')};
         }
     `,
     FooterSpace: styled.div<{ $footerHeight?: string }>`

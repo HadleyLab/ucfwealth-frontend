@@ -5,6 +5,8 @@ import { RenderRemoteData } from 'aidbox-react/lib/components/RenderRemoteData';
 import { Spinner } from '@beda.software/emr/components';
 import { usePatientDocumentPrint } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/hooks';
 import { flattenQuestionnaireGroupItems, getQuestionnaireItemValue } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/utils';
+
+import logo from './images/logo.png';
 import { S } from './styles';
 
 export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?: QuestionnaireResponse }) {
@@ -52,7 +54,9 @@ export function DocumentPrint(props: { headerHeight?: string; footerHeight?: str
                                 <thead>
                                     <tr>
                                         <td>
-                                            <S.HeaderSpace $headerHeight={headerHeight}>UNIVERSITY OF CENTRAL FLORIDA</S.HeaderSpace>
+                                            <S.HeaderSpace $headerHeight={headerHeight}>
+                                                <img src={logo} />
+                                            </S.HeaderSpace>
                                         </td>
                                     </tr>
                                 </thead>
