@@ -3,10 +3,6 @@ import { Menu } from 'antd';
 import classNames from 'classnames';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import s from '@beda.software/emr/dist/components/BaseLayout/Sidebar/SidebarTop/SidebarTop.module.scss';
-import { S } from '@beda.software/emr/dist/components/BaseLayout/Sidebar/SidebarTop/SidebarTop.styles';
-import { CompanyName } from '@beda.software/emr/dist/icons/brand/CompanyName';
-import { LogoSmall } from '@beda.software/emr/dist/icons/brand/LogoSmall';
 import { EncountersIcon } from '@beda.software/emr/dist/icons/menu/EncountersIcon';
 import { InvoicesIcon } from '@beda.software/emr/dist/icons/menu/InvoicesIcon';
 import { MedicationsIcon } from '@beda.software/emr/dist/icons/menu/MedicationsIcon';
@@ -17,6 +13,10 @@ import { QuestionnairesIcon } from '@beda.software/emr/dist/icons/menu/Questionn
 import { ServicesIcon } from '@beda.software/emr/dist/icons/menu/ServicesIcon';
 import { getToken } from '@beda.software/emr/services';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
+
+import logo from './images/logo.svg';
+import s from './SidebarTop.module.scss';
+import { S } from './SidebarTop.styles';
 
 export interface RouteItem {
     path: string;
@@ -82,8 +82,10 @@ export function SidebarTop(props: Props) {
             {...other}
         >
             <Link to="/" className={s.logoWrapper}>
-                <LogoSmall style={{ minWidth: 32 }} />
-                <CompanyName className={s.logoCompanyName} style={{ minWidth: 89 }} />
+                <S.Logo>
+                    <img src={logo} />
+                </S.Logo>
+                <S.Name className={s.logoCompanyName}>UCF MammoChat</S.Name>
             </Link>
             <S.Divider />
             <Menu

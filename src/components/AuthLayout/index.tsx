@@ -1,4 +1,5 @@
-import logo from './images/logo.svg';
+import logo from 'src/images/ucf-logo.svg';
+
 import { S } from './styles';
 
 interface Props {

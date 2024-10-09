@@ -27,13 +27,13 @@ import {
     VideoCall,
 } from '@beda.software/emr/containers';
 import { restoreUserSession } from '@beda.software/emr/dist/containers/App/utils';
-import { DocumentPrint } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/index';
 import { getToken, parseOAuthState, setToken } from '@beda.software/emr/services';
 import { sharedAuthorizedPatient, sharedAuthorizedUser } from '@beda.software/emr/sharedState';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 
+import { DocumentPrint } from '../DocumentPrint';
 import { EnableTwoFactor } from '../EnableTwoFactor';
 import { PatientDetails } from '../PatientDetails';
 import { SetPassword } from '../SetPassword';

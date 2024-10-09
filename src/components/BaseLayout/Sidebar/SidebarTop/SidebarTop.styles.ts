@@ -1,6 +1,8 @@
 import { Divider } from 'antd';
 import styled from 'styled-components';
 
+import { Text } from '@beda.software/emr/components';
+
 export const S = {
     Container: styled.div<{ $collapsed: boolean }>`
         display: flex;
@@ -50,5 +52,26 @@ export const S = {
     `,
     Divider: styled(Divider)`
         margin: 0;
+    `,
+    Logo: styled.div`
+        height: 32px;
+        width: 32px;
+        min-width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            max-height: 32px;
+            max-width: 32px;
+        }
+    `,
+    Name: styled(Text)`
+        color: #ea80b0;
+        font-size: 18px;
+        line-height: 18px;
+        margin-top: 10px;
+        font-weight: 700;
+        white-space: nowrap;
     `,
 };

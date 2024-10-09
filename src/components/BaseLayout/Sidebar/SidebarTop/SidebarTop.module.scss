@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    padding: 0 55px;
+    padding: 0 10px;
     transition: padding 0.2s;
 
     .container:global(._collapsed) & {
