@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { Text } from '@beda.software/emr/components';
 
 import backgroundImage from './images/background.png';
+import headerImage from './images/header.png';
 import illustration1Image from './images/illustration1.png';
 import illustration2Image from './images/illustration2.png';
 import illustration3Image from './images/illustration3.png';
@@ -19,6 +20,7 @@ export const S = {
         background-color: #262626;
         background-image: url(${backgroundImage});
         background-size: cover;
+        background-position: center;
     `,
     Content: styled.div`
         display: flex;
@@ -61,6 +63,8 @@ export const S = {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        background-image: url(${headerImage});
+        background-size: cover;
     `,
     CollegeName: styled(Text)`
         color: #fff;

@@ -1,5 +1,3 @@
-import logo from 'src/images/ucf-logo.svg';
-
 import { S } from './styles';
 
 interface Props {
@@ -15,12 +13,7 @@ export function AuthLayout(props: Props) {
             <S.Content>
                 <S.Illustration $illustrationNumber={illustrationNumber} />
                 <S.FormContainer>
-                    <S.Header>
-                        <img src={logo} />
-                        <S.CollegeName>College of Medicine</S.CollegeName>
-                        <S.UniName>University of Central Florida</S.UniName>
-                        <S.AppName>UCF MammoChat</S.AppName>
-                    </S.Header>
+                    <S.Header />
                     <S.Form>{children}</S.Form>
                 </S.FormContainer>
             </S.Content>

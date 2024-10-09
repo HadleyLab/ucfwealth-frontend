@@ -1,0 +1,62 @@
+body {
+    min-height: 100vh;
+    position: relative;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 8vh 0;
+    background-color: #262626;
+    background-image: url('./images/background.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.aidbox-auth-tabs {
+    display: none !important;
+}
+
+.aidbox-auth-wgt {
+    position: relative;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    display: flex;
+    flex-direction: row;
+    max-width: 916px;
+    /* background-color: ${({ theme }) => theme.antdTheme?.colorBgContainer}; */
+    background-position: center;
+    min-height: 500px;
+    padding-left: 532px !important;
+    box-shadow: none !important;
+}
+
+.aidbox-auth-wgt:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 532px;
+    bottom: 0;
+    background-color: #ffffff;
+    background-image: url("./images/illustration2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.aidbox-auth-header {
+    width: 384px;
+    height: 205px;
+    background-image: url("./images/header.png");
+    background-size: cover;
+    border-radius: 0 !important;
+}
+
+.aidbox-auth-header h3 {
+    display: none;
+}
+
+.aidbox-auth-body {
+    padding: 40px !important;
+}
