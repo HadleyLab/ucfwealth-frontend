@@ -1,12 +1,10 @@
 import styled, { css } from 'styled-components';
 
-import { Text } from '@beda.software/emr/components';
-
-import backgroundImage from './images/background.png';
-import headerImage from './images/header.png';
-import illustration1Image from './images/illustration1.png';
-import illustration2Image from './images/illustration2.png';
-import illustration3Image from './images/illustration3.png';
+import backgroundImage from './images/background.jpg';
+import headerImage from './images/header.jpg';
+import illustration1Image from './images/illustration1.jpg';
+import illustration2Image from './images/illustration2.jpg';
+import illustration3Image from './images/illustration3.jpg';
 
 export const S = {
     Container: styled.div`

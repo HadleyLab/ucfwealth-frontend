@@ -24,7 +24,7 @@ body {
     justify-content: center;
     padding: 8vh 0;
     background-color: #262626;
-    background-image: url('./images/background.png');
+    background-image: url('./images/background.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -57,7 +57,7 @@ body {
     width: 532px;
     bottom: 0;
     background-color: #ffffff;
-    background-image: url('./images/illustration2.png');
+    background-image: url('./images/illustration2.jpg');
     background-size: cover;
     background-position: center;
 }
@@ -65,7 +65,7 @@ body {
 .aidbox-auth-header {
     width: 384px;
     height: 205px;
-    background-image: url('./images/header.png');
+    background-image: url('./images/header.jpg');
     background-size: cover;
     border-radius: 0 !important;
 }
