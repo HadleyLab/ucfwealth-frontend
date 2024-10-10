@@ -1,13 +1,10 @@
 import { t } from '@lingui/macro';
 import { Button } from 'antd';
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { axiosInstance as axiosAidboxInstance } from 'aidbox-react/lib/services/instance';
 
 import { QuestionnaireResponseForm } from '@beda.software/emr/components';
 import { inMemorySaveService, questionnaireIdLoader } from '@beda.software/emr/hooks';
-import { axiosInstance as axiosFHIRInstance, getToken } from '@beda.software/emr/services';
 
 import { AuthLayout } from 'src/components/AuthLayout';
 
@@ -21,25 +18,6 @@ interface Props {
 export function SetPassword(props: Props) {
     const { code } = useParams<{ code: string }>();
 
-    const appToken = getToken();
-    const isAnonymousUser = !appToken;
-
-    useEffect(() => {
-        if (isAnonymousUser) {
-            axiosFHIRInstance.defaults.headers.Authorization = `Basic ${window.btoa('anonymous:secret')}`;
-            axiosAidboxInstance.defaults.headers.Authorization = `Basic ${window.btoa('anonymous:secret')}`;
-
-            return;
-        }
-
-        return () => {
-            if (isAnonymousUser) {
-                axiosFHIRInstance.defaults.headers.Authorization = null;
-                (axiosAidboxInstance.defaults.headers.Authorization as unknown) = undefined;
-            }
-        };
-    }, [isAnonymousUser]);
-
     return (
         <AuthLayout illustrationNumber={3}>
             <S.Container>
@@ -48,7 +26,7 @@ export function SetPassword(props: Props) {
                     questionnaireLoader={questionnaireIdLoader('set-password')}
                     questionnaireResponseSaveService={inMemorySaveService}
                     onSuccess={() => {
-                        window.location.href = '/';
+                        authorize({ nextUrl: props.originPathName })
                     }}
                     saveButtonTitle={t`Save`}
                     initialQuestionnaireResponse={{
@@ -73,7 +51,6 @@ export function SetPassword(props: Props) {
                                 style={{ flex: 1 }}
                                 size="large"
                                 disabled={submitting || submitDisabled}
-                                onClick={() => authorize({ nextUrl: props.originPathName })}
                             >
                                 {t`Submit`}
                             </Button>
