@@ -63,7 +63,7 @@ export const PatientDetails = (props: PatientDetailsProps) => {
                                                 />
                                                 <Route
                                                     path="/documents/:qrId/*"
-                                                    element={<PatientDocumentDetails patient={patient} />}
+                                                    element={<PatientDocumentDetails patient={patient} hideControls />}
                                                 />
                                             </>
                                         )}
