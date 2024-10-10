@@ -2,11 +2,9 @@ import { AlertOutlined } from '@ant-design/icons';
 import { t } from '@lingui/macro';
 import { Button } from 'antd';
 import { Patient } from 'fhir/r4b';
-import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { DashboardCard, DashboardCardTable, Spinner } from '@beda.software/emr/components';
-import { usePatientReload } from '@beda.software/emr/dist/containers/PatientDetails/Dashboard/contexts';
 import { RenderRemoteData } from '@beda.software/fhir-react';
 
 import { RequiredFormsWidgetData, useRequiredFormsWidget } from './hooks';
@@ -15,12 +13,7 @@ export function RequiredFormsWidget(props: { patient: Patient }) {
     const title = t`Required forms`;
     const { patient } = props;
     const { response } = useRequiredFormsWidget(patient);
-    const reload = usePatientReload();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        reload();
-    });
 
     const columns = [
         {
