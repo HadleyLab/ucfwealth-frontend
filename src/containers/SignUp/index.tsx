@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { axiosInstance as axiosAidboxInstance } from 'aidbox-react/lib/services/instance';
 
 import { QuestionnaireResponseForm } from '@beda.software/emr/components';
-import { questionnaireIdLoader } from '@beda.software/emr/hooks';
+import { inMemorySaveService, questionnaireIdWOAssembleLoader } from '@beda.software/emr/hooks';
 import { axiosInstance as axiosFHIRInstance, getToken } from '@beda.software/emr/services';
 
 import { AuthLayout } from 'src/components/AuthLayout';
@@ -58,11 +58,16 @@ export function SignUp(props: Props) {
                     </>
                 ) : (
                     <QuestionnaireResponseForm
-                        questionnaireLoader={questionnaireIdLoader('patient-create')}
-                        onSuccess={() => {
-                            setConfirmEmail(true);
-                        }}
+                        questionnaireLoader={questionnaireIdWOAssembleLoader('patient-create')}
+                        questionnaireResponseSaveService={inMemorySaveService}
+                            onSuccess={() => {
+                                setConfirmEmail(true);
+                            }}
                         saveButtonTitle={t`Sign up`}
+                        initialQuestionnaireResponse={{
+                            id: 'sign-up',
+                            resourceType: 'QuestionnaireResponse'
+                        }}
                         FormFooterComponent={({ submitting, submitDisabled }) => (
                             <S.Buttons>
                                 <Button

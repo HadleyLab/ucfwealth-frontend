@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 
 import { QuestionnaireResponseForm } from '@beda.software/emr/components';
-import { inMemorySaveService, questionnaireIdLoader } from '@beda.software/emr/hooks';
+import { inMemorySaveService, questionnaireIdWOAssembleLoader } from '@beda.software/emr/hooks';
 
 import { AuthLayout } from 'src/components/AuthLayout';
 
@@ -23,7 +23,7 @@ export function SetPassword(props: Props) {
             <S.Container>
                 <S.Title>{t`Set password`}</S.Title>
                 <QuestionnaireResponseForm
-                    questionnaireLoader={questionnaireIdLoader('set-password')}
+                    questionnaireLoader={questionnaireIdWOAssembleLoader('set-password')}
                     questionnaireResponseSaveService={inMemorySaveService}
                     onSuccess={() => {
                         authorize({ nextUrl: props.originPathName })
