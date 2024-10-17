@@ -4,8 +4,8 @@ const config = {
     wearablesAccessConsentCodingSystem: 'https://fhir.emr.beda.software/CodeSystem/consent-subject',
 
     tier: 'production',
-    baseURL: 'https://aidbox.ucfwealth.app',
-    
+    baseURL: 'https://api.mammochat.com',
+
     sdcIdeUrl: null,
     aiQuestionnaireBuilderUrl: null,
     sdcBackendUrl: null,
