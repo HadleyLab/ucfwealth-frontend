@@ -35,6 +35,7 @@ import { BaseLayout } from 'src/components/BaseLayout';
 
 import { DocumentPrint } from '../DocumentPrint';
 import { EnableTwoFactor } from '../EnableTwoFactor';
+import { ForgotPassword } from '../ForgotPassword';
 import { PatientDetails } from '../PatientDetails';
 import { SetPassword } from '../SetPassword';
 import { SignIn } from '../SignIn';
@@ -95,6 +96,7 @@ function AnonymousUserApp() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/signin" element={<SignIn originPathName={originPathRef.current} />} />
             <Route path="/signup" element={<SignUp originPathName={originPathRef.current} />} />
+            <Route path="/forgot-password" element={<ForgotPassword originPathName={originPathRef.current} />} />
             <Route path="/reset-password/:code" element={<SetPassword originPathName={originPathRef.current} />} />
             <Route
                 path="/appointment/book"

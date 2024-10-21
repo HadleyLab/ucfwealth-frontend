@@ -21,19 +21,26 @@ export function SignIn(props: Props) {
 
     return (
         <AuthLayout>
-            <S.Buttons>
-                <Button
-                    type="primary"
-                    onClick={() => authorize({ nextUrl: props.originPathName })}
-                    size="large"
-                    style={{ flex: 1 }}
-                >
-                    {t`Log in`}
-                </Button>
-                <Button type="primary" ghost onClick={() => navigate('/signup')} style={{ flex: 1 }} size="large">
-                    {t`Sign up`}
-                </Button>
-            </S.Buttons>
+            <S.Content>
+                <S.Buttons>
+                    <Button
+                        type="primary"
+                        onClick={() => authorize({ nextUrl: props.originPathName })}
+                        size="large"
+                        style={{ flex: 1 }}
+                    >
+                        {t`Log in`}
+                    </Button>
+                    <Button type="primary" ghost onClick={() => navigate('/signup')} style={{ flex: 1 }} size="large">
+                        {t`Sign up`}
+                    </Button>
+                </S.Buttons>
+                <S.ForgotPassword>
+                    <Button type="link" onClick={() => navigate('/forgot-password')}>
+                        {t`Forgot Password?`}
+                    </Button>
+                </S.ForgotPassword>
+            </S.Content>
         </AuthLayout>
     );
 }

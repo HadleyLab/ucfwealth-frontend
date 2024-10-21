@@ -2,7 +2,6 @@ import { t } from '@lingui/macro';
 import { Button } from 'antd';
 import { useParams } from 'react-router-dom';
 
-
 import { QuestionnaireResponseForm } from '@beda.software/emr/components';
 import { inMemorySaveService, questionnaireIdWOAssembleLoader } from '@beda.software/emr/hooks';
 

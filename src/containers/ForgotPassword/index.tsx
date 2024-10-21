@@ -17,8 +17,8 @@ interface Props {
     originPathName?: string;
 }
 
-export function SignUp(props: Props) {
-    const [confirmEmail, setConfirmEmail] = useState(false);
+export function ForgotPassword(props: Props) {
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const appToken = getToken();
     const isAnonymousUser = !appToken;
@@ -40,13 +40,13 @@ export function SignUp(props: Props) {
     }, [isAnonymousUser]);
 
     return (
-        <AuthLayout>
+        <AuthLayout illustrationNumber={3}>
             <S.Container>
-                <S.Title>{t`Sign Up`}</S.Title>
-                {confirmEmail ? (
+                <S.Title>{t`Forgot password`}</S.Title>
+                {formSubmitted ? (
                     <>
                         <S.Message>
-                            {t`We have sent you email. Please click on the link in the email to complete registration.`}
+                            {t`We have sent you email. Please click on the link in the email to reset your password.`}
                         </S.Message>
                         <Button
                             type="primary"
@@ -57,29 +57,31 @@ export function SignUp(props: Props) {
                         </Button>
                     </>
                 ) : (
-                    <QuestionnaireResponseForm
-                        questionnaireLoader={questionnaireIdWOAssembleLoader('patient-create')}
-                        questionnaireResponseSaveService={inMemorySaveService}
+                    <>
+                        <S.EntryMessage>{t`Please enter your email address. You will receive a link to create a new password via email.`}</S.EntryMessage>
+                        <QuestionnaireResponseForm
+                            questionnaireLoader={questionnaireIdWOAssembleLoader('forgot-password')}
+                            questionnaireResponseSaveService={inMemorySaveService}
                             onSuccess={() => {
-                                setConfirmEmail(true);
+                                setFormSubmitted(true);
                             }}
-                        saveButtonTitle={t`Sign up`}
-                        initialQuestionnaireResponse={{
-                            id: 'sign-up',
-                            resourceType: 'QuestionnaireResponse'
-                        }}
-                        FormFooterComponent={({ submitting, submitDisabled }) => (
-                            <S.Buttons>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{ flex: 1 }}
-                                    size="large"
-                                    disabled={submitting || submitDisabled}
-                                >
-                                    {t`Submit`}
-                                </Button>
-                                <Button
+                            saveButtonTitle={t`Sign up`}
+                            initialQuestionnaireResponse={{
+                                id: 'forgot-password',
+                                resourceType: 'QuestionnaireResponse',
+                            }}
+                            FormFooterComponent={({ submitting, submitDisabled }) => (
+                                <S.Buttons>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        style={{ flex: 1 }}
+                                        size="large"
+                                        disabled={submitting || submitDisabled}
+                                    >
+                                        {t`Submit`}
+                                    </Button>
+                                    {/* <Button
                                     type="primary"
                                     ghost
                                     onClick={() => authorize({ nextUrl: props.originPathName })}
@@ -88,10 +90,17 @@ export function SignUp(props: Props) {
                                     style={{ flex: 1 }}
                                 >
                                     {t`Log in`}
-                                </Button>
-                            </S.Buttons>
-                        )}
-                    />
+                                </Button> */}
+                                </S.Buttons>
+                            )}
+                        />
+                        <S.Footer>
+                            <S.FooterText>{t`Remember your password?`}</S.FooterText>
+                            <Button type="link" onClick={() => authorize({ nextUrl: props.originPathName })}>
+                                {t`Sign In`}
+                            </Button>
+                        </S.Footer>
+                    </>
                 )}
             </S.Container>
         </AuthLayout>

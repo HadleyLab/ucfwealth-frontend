@@ -13,23 +13,35 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:60
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:45
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:53
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:61
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:69
 msgid "Community"
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:47
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:53
-msgid "Encounters"
+#~ msgid "Encounters"
+#~ msgstr ""
+
+#: src/containers/ForgotPassword/index.tsx:45
+msgid "Forgot password"
+msgstr ""
+
+#: src/containers/SignIn/index.tsx:40
+msgid "Forgot Password?"
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:45
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:67
-msgid "Invoices"
-msgstr ""
+#~ msgid "Invoices"
+#~ msgstr ""
 
-#: src/containers/SignIn/index.tsx:31
+#: src/containers/ForgotPassword/index.tsx:56
+#: src/containers/SignIn/index.tsx:32
 #: src/containers/SignUp/index.tsx:56
-#: src/containers/SignUp/index.tsx:85
+#: src/containers/SignUp/index.tsx:90
 msgid "Log in"
 msgstr ""
 
@@ -38,62 +50,79 @@ msgid "Log out"
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:68
-msgid "Medications"
-msgstr ""
+#~ msgid "Medications"
+#~ msgstr ""
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:58
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:59
 msgid "My Dashboard"
 msgstr ""
 
-#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:18
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:20
 msgid "Name"
 msgstr ""
 
-#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:37
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:40
 msgid "No"
 msgstr ""
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:48
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:54
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:41
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:51
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:67
 #: src/containers/PatientDetails/PatientHeader/index.tsx:21
 msgid "Patients"
 msgstr ""
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:49
+#: src/containers/ForgotPassword/index.tsx:61
+msgid "Please enter your email address. You will receive a link to create a new password via email."
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:42
 msgid "Practitioners"
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:69
-msgid "Prescriptions"
+#~ msgid "Prescriptions"
+#~ msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:55
+msgid "Print"
 msgstr ""
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:50
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:55
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:43
 msgid "Questionnaires"
 msgstr ""
 
-#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:12
+#: src/containers/ForgotPassword/index.tsx:98
+msgid "Remember your password?"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:13
 msgid "Required forms"
 msgstr ""
 
-#: src/containers/SetPassword/index.tsx:53
+#: src/containers/SetPassword/index.tsx:30
 msgid "Save"
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:66
-msgid "Scheduling"
-msgstr ""
+#~ msgid "Scheduling"
+#~ msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:46
-msgid "Services"
-msgstr ""
+#~ msgid "Services"
+#~ msgstr ""
 
-#: src/containers/SetPassword/index.tsx:46
+#: src/containers/SetPassword/index.tsx:23
 msgid "Set password"
 msgstr ""
 
-#: src/containers/SignIn/index.tsx:34
-#: src/containers/SignUp/index.tsx:65
+#: src/containers/ForgotPassword/index.tsx:100
+msgid "Sign In"
+msgstr ""
+
+#: src/containers/ForgotPassword/index.tsx:68
+#: src/containers/SignIn/index.tsx:35
+#: src/containers/SignUp/index.tsx:66
 msgid "Sign up"
 msgstr ""
 
@@ -101,19 +130,28 @@ msgstr ""
 msgid "Sign Up"
 msgstr ""
 
-#: src/containers/SetPassword/index.tsx:78
-#: src/containers/SignUp/index.tsx:75
+#: src/containers/ForgotPassword/index.tsx:82
+#: src/containers/SetPassword/index.tsx:54
+#: src/containers/SignUp/index.tsx:80
 msgid "Submit"
 msgstr ""
 
-#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:35
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:38
 msgid "Submitted?"
 msgstr ""
 
 #: src/containers/SignUp/index.tsx:49
-msgid "We have sent you email. Please click on the link in the email to complete registration"
+#~ msgid "We have sent you email. Please click on the link in the email to complete registration"
+#~ msgstr ""
+
+#: src/containers/SignUp/index.tsx:49
+msgid "We have sent you email. Please click on the link in the email to complete registration."
 msgstr ""
 
-#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:37
+#: src/containers/ForgotPassword/index.tsx:49
+msgid "We have sent you email. Please click on the link in the email to reset your password."
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:40
 msgid "Yes"
 msgstr ""
