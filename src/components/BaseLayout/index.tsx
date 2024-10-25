@@ -6,6 +6,8 @@ import s from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.module.s
 import { S } from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.styles';
 import { AppTabBar } from '@beda.software/emr/dist/components/BaseLayout/TabBar/index';
 
+import { ThemeProvider } from 'src/theme';
+
 import { AppSidebar } from './Sidebar';
 
 interface Props {
@@ -18,9 +20,7 @@ export function BaseLayout({ children, style }: Props) {
         <S.Container style={style}>
             <AppSidebar />
             <AppTabBar />
-            <Layout className={s.content}>
-                {children}
-            </Layout>
+            <Layout className={s.content}>{children}</Layout>
         </S.Container>
     );
 }
@@ -29,9 +29,7 @@ export function AnonymousLayout({ children, style }: Props) {
     return (
         <S.Container style={style}>
             <AppSidebar />
-            <Layout className={s.content}>
-                {children}
-            </Layout>
+            <Layout className={s.content}>{children}</Layout>
         </S.Container>
     );
 }
@@ -40,9 +38,22 @@ export function BasePageHeader(props: React.HTMLAttributes<HTMLDivElement>) {
     const { className, ...rest } = props;
 
     return (
-        <S.PageWrapper>
-            <div className={classNames(s.pageHeader, className)} {...rest} />
-        </S.PageWrapper>
+        <ThemeProvider
+            palette={
+                {
+                    primaryPalette: {
+                        bcp_1: '#000',
+                    },
+                    neutral: {
+                        primaryText: '#fff',
+                    },
+                } as any
+            }
+        >
+            <S.PageWrapper>
+                <div className={classNames(s.pageHeader, className)} {...rest} />
+            </S.PageWrapper>
+        </ThemeProvider>
     );
 }
 

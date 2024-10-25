@@ -1,6 +1,7 @@
 import { ConfigProvider as ANTDConfigProvider } from 'antd';
+import _ from 'lodash';
 import { ReactNode } from 'react';
-import { ThemeProvider as StyledComponentsThemeProvider, createGlobalStyle } from 'styled-components';
+import { DefaultTheme, ThemeProvider as StyledComponentsThemeProvider, createGlobalStyle } from 'styled-components';
 
 import { useTheme } from '@beda.software/emr/utils';
 
@@ -9,6 +10,7 @@ import { getAppTheme, getANTDTheme } from './';
 interface Props {
     theme?: 'dark' | 'light';
     children: ReactNode;
+    palette?: Partial<DefaultTheme>;
 }
 
 const GlobalStyle = createGlobalStyle<{ $whiteColor?: boolean }>`
@@ -24,17 +26,17 @@ const GlobalStyle = createGlobalStyle<{ $whiteColor?: boolean }>`
 `;
 
 export function ThemeProvider(props: Props) {
-    const { theme: initialTheme, children } = props;
+    const { theme: initialTheme, children, palette} = props;
 
     const { theme } = useTheme();
     const dark = (initialTheme ?? theme) === 'dark';
 
-    const antdTheme = getANTDTheme({ dark: dark });
-    const appTheme = {
-        ...getAppTheme({ dark: dark }),
+    const antdTheme = getANTDTheme({ dark, palette });
+    const appTheme = _.merge({}, {
+      ...getAppTheme({ dark: dark }),
         mode: initialTheme ?? theme,
         antdTheme: antdTheme.token,
-    };
+    }, palette ?? {});
 
     return (
         <ANTDConfigProvider theme={antdTheme}>

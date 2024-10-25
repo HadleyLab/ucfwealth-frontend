@@ -1,15 +1,22 @@
 import { theme as ANTDTheme, ThemeConfig } from 'antd';
 import _ from 'lodash';
+import { DefaultTheme } from 'styled-components';
 
 import { colors, getPalette } from './palette';
 
 const { getDesignToken } = ANTDTheme;
 
-export function getANTDTheme({ dark }: { dark?: boolean }): ThemeConfig {
-    const palette = getPalette({ dark });
+interface Props {
+    dark?: boolean;
+    palette?: Partial<DefaultTheme>;
+}
+
+export function getANTDTheme({ dark, palette: newPalette }: Props): ThemeConfig {
+    const palette = _.merge({}, getPalette({ dark }), newPalette ?? {});
 
     const config: ThemeConfig = {
         token: {
+            colorText: palette.neutral.primaryText,
             colorPrimary: colors.primary,
             colorLink: palette.link,
             colorLinkHover: palette.primaryPalette.bcp_5,
