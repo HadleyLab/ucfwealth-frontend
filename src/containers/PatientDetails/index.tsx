@@ -1,6 +1,6 @@
 import { CarePlan, Patient } from 'fhir/r4b';
 import { useMemo } from 'react';
-import { useParams, Outlet, Route, Routes } from 'react-router-dom';
+import { useParams, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
 
 import { Spinner } from '@beda.software/emr/components';
 import { PatientReloadProvider } from '@beda.software/emr/dist/containers/PatientDetails/Dashboard/contexts';
@@ -28,6 +28,7 @@ export interface PatientDetailsProps {
 
 export const PatientDetails = (props: PatientDetailsProps) => {
     const params = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     const [patientResponse, manager] = usePatientResource({ id: params.id! });
     const author = selectCurrentUserRoleResource();
@@ -59,7 +60,7 @@ export const PatientDetails = (props: PatientDetailsProps) => {
                                                 <Route path="/" element={<PatientOverview patient={patient} />} />
                                                 <Route
                                                     path="/documents/new/:questionnaireId"
-                                                    element={<PatientDocument patient={patient} author={author} />}
+                                                    element={<PatientDocument patient={patient} author={author} onSuccess={() => navigate(`/patients/${patient.id}`)} />}
                                                 />
                                                 <Route
                                                     path="/documents/:qrId/*"

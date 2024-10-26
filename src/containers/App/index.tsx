@@ -33,6 +33,7 @@ import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
 import { BaseLayout } from 'src/components/BaseLayout';
 
+import { usePatientConsent } from './hooks';
 import { DocumentPrint } from '../DocumentPrint';
 import { EnableTwoFactor } from '../EnableTwoFactor';
 import { ForgotPassword } from '../ForgotPassword';
@@ -227,6 +228,7 @@ function AuthenticatedReceptionistUserApp() {
 function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
     const [patient] = sharedAuthorizedPatient.useSharedState();
     const [user] = sharedAuthorizedUser.useSharedState();
+    const { response } = usePatientConsent(patient!);
 
     if (!user?.twoFactor?.enabled) {
         return (
@@ -237,19 +239,27 @@ function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
     }
 
     return (
-        <Routes>
-            <Route path={`/print-patient-document/:id/:qrId`} element={<DocumentPrint />} />
-            <Route
-                path="*"
-                element={
-                    <BaseLayout>
-                        <Routes>
-                            <Route path={`/patients/:id/*`} element={<PatientDetails />} />
-                            <Route path="*" element={<Navigate to={`/patients/${patient!.id}`} />} />
-                        </Routes>
-                    </BaseLayout>
-                }
-            />
-        </Routes>
+        <RenderRemoteData remoteData={response} renderLoading={Spinner}>
+            {({ consent }) => (
+                <Routes>
+                    <Route path={`/print-patient-document/:id/:qrId`} element={<DocumentPrint />} />
+                    <Route
+                        path="*"
+                        element={
+                            <BaseLayout>
+                                <Routes>
+                                    <Route path={`/patients/:id/*`} element={<PatientDetails />} />
+                                    {consent ? (
+                                        <Route path="*" element={<Navigate to={`/patients/${patient!.id}`} />} />
+                                    ) : (
+                                        <Route path="*" element={<Navigate to={`/patients/${patient!.id}/documents/new/patient-informed-consent`} />} />
+                                    )}
+                                </Routes>
+                            </BaseLayout>
+                        }
+                    />
+                </Routes>
+            )}
+        </RenderRemoteData>
     );
 }
