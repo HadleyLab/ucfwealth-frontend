@@ -36,7 +36,7 @@ export function SidebarTop(props: Props) {
     const navigate = useNavigate();
     const communityMenuItem = {
         label: t`Community`,
-        path: `htps://community.mammochat.com/auth/oauth2_basic`,
+        path: `https://community.mammochat.com/auth/oauth2_basic`,
         icon: <PatientsIcon />,
     };
 
