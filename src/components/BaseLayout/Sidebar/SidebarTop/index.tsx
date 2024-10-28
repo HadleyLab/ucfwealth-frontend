@@ -43,7 +43,7 @@ export function SidebarTop(props: Props) {
                   { label: t`Questionnaires`, path: '/questionnaires', icon: <QuestionnairesIcon /> },
                   {
                       label: t`Community`,
-                      path: `https://community.ucfwealth.app/auth/oauth2_basic`,
+                      path: `https://community.mammochat.com/auth/oauth2_basic`,
                       icon: <PatientsIcon />,
                   },
               ],
