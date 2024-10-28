@@ -34,44 +34,33 @@ export function SidebarTop(props: Props) {
     const isAnonymousUser = !appToken;
     const { collapsed, onItemClick, ...other } = props;
     const navigate = useNavigate();
+    const communityMenuItem = {
+        label: t`Community`,
+        path: `htps://community.mammochat.com/auth/oauth2_basic`,
+        icon: <PatientsIcon />,
+    };
 
     const menuItems: RouteItem[] = !isAnonymousUser
         ? matchCurrentUserRole({
-              [Role.Admin]: () => [
-                  { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
-                  { label: t`Practitioners`, path: '/practitioners', icon: <PractitionersIcon /> },
-                  { label: t`Questionnaires`, path: '/questionnaires', icon: <QuestionnairesIcon /> },
-                  {
-                      label: t`Community`,
-                      path: `https://community.mammochat.com/auth/oauth2_basic`,
-                      icon: <PatientsIcon />,
-                  },
-              ],
-              [Role.Practitioner]: () => [
-                  { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
-                  {
-                      label: t`Community`,
-                      path: `https://community.ucfwealth.app/auth/oauth2_basic`,
-                      icon: <PatientsIcon />,
-                  },
-              ],
-              [Role.Patient]: (patient) => [
-                  { label: t`My Dashboard`, path: `/patients/${patient.id}`, icon: <EncountersIcon /> },
-                  {
-                      label: t`Community`,
-                      path: `https://community.ucfwealth.app/auth/oauth2_basic`,
-                      icon: <PatientsIcon />,
-                  },
-              ],
-              [Role.Receptionist]: () => [
-                  { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
-                  {
-                      label: t`Community`,
-                      path: `https://community.ucfwealth.app/auth/oauth2_basic`,
-                      icon: <PatientsIcon />,
-                  },
-              ],
-          })
+            [Role.Admin]: () => [
+                { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
+                { label: t`Practitioners`, path: '/practitioners', icon: <PractitionersIcon /> },
+                { label: t`Questionnaires`, path: '/questionnaires', icon: <QuestionnairesIcon /> },
+                communityMenuItem,
+            ],
+            [Role.Practitioner]: () => [
+                { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
+                communityMenuItem,
+            ],
+            [Role.Patient]: (patient) => [
+                { label: t`My Dashboard`, path: `/patients/${patient.id}`, icon: <EncountersIcon /> },
+                communityMenuItem,
+            ],
+            [Role.Receptionist]: () => [
+                { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
+                communityMenuItem,
+            ],
+        })
         : [];
 
     const activeMenu = `/${location.pathname.split('/')[1]}`;
