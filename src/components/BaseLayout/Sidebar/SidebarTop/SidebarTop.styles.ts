@@ -70,7 +70,6 @@ export const S = {
         color: #ea80b0;
         font-size: 18px;
         line-height: 18px;
-        margin-top: 10px;
         font-weight: 700;
         white-space: nowrap;
     `,

@@ -10,9 +10,9 @@ import { QuestionnairesIcon } from '@beda.software/emr/dist/icons/menu/Questionn
 import { getToken } from '@beda.software/emr/services';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
-import logo from './images/logo.svg';
 import s from './SidebarTop.module.scss';
 import { S } from './SidebarTop.styles';
+import logo from '../images/logo.svg';
 
 export interface RouteItem {
     path: string;

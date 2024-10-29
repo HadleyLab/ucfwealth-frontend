@@ -4,11 +4,11 @@ import { ReactNode } from 'react';
 
 import s from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.module.scss';
 import { S } from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.styles';
-import { AppTabBar } from '@beda.software/emr/dist/components/BaseLayout/TabBar/index';
 
 import { ThemeProvider } from 'src/theme';
 
 import { AppSidebar } from './Sidebar';
+import { AppTabBar } from './TabBar';
 
 interface Props {
     children: ReactNode;
