@@ -28,6 +28,12 @@ export const S = {
         background-color: ${({ theme }) => theme.antdTheme?.colorBgContainer};
         background-position: center;
         min-height: 500px;
+
+        @media only screen and (max-width: 800px) {
+            & {
+                max-width: 384px;
+            }
+        }
     `,
     Illustration: styled.div<{ $illustrationNumber?: number }>`
         max-width: 532px;
@@ -48,6 +54,12 @@ export const S = {
             css`
                 background-image: url(${illustration3Image});
             `}
+
+        @media only screen and (max-width: 800px) {
+            & {
+                display: none;
+            }
+        }
     `,
     FormContainer: styled.div`
         flex: 1;
@@ -63,6 +75,13 @@ export const S = {
         justify-content: center;
         background-image: url(${headerImage});
         background-size: cover;
+
+        @media only screen and (max-width: 800px) {
+            & {
+                max-width: 384px;
+                width: 100%;
+            }
+        }
     `,
     Form: styled.div`
         padding: 40px;

@@ -48,6 +48,13 @@ body {
     background-color: #fff !important;
 }
 
+@media only screen and (max-width: 800px) {
+    .aidbox-auth-wgt {
+        max-width: 384px;
+        padding-left: 0 !important;
+    }
+}
+
 .aidbox-auth-wgt:before {
     content: '';
     display: block;
@@ -62,12 +69,25 @@ body {
     background-position: center;
 }
 
+@media only screen and (max-width: 800px) {
+    .aidbox-auth-wgt:before {
+        display: none;
+    }
+}
+
 .aidbox-auth-header {
     width: 384px;
     height: 205px;
     background-image: url('./images/header.jpg');
     background-size: cover;
     border-radius: 0 !important;
+}
+
+@media only screen and (max-width: 800px) {
+    .aidbox-auth-header {
+        max-width: 384px;
+        width: 100%;
+    }
 }
 
 .aidbox-auth-header h3 {
