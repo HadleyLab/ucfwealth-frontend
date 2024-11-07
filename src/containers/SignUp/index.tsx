@@ -62,12 +62,12 @@ export function SignUp(props: Props) {
                     <QuestionnaireResponseForm
                         questionnaireLoader={questionnaireIdWOAssembleLoader('patient-create')}
                         questionnaireResponseSaveService={inMemorySaveService}
-                            onSuccess={() => {
-                                setConfirmEmail(true);
-                            }}
-                            onFailure={() => {
-                                notification.error({message: "This user already exisits, please try forgot password feature or contact the administrator."})
-                            }}
+                        onSuccess={() => {
+                            setConfirmEmail(true);
+                        }}
+                        onFailure={() => {
+                            notification.error({ message: "This user already exisits, please try forgot password feature or contact the administrator." })
+                        }}
                         saveButtonTitle={t`Sign up`}
                         initialQuestionnaireResponse={{
                             id: 'sign-up',
@@ -75,34 +75,33 @@ export function SignUp(props: Props) {
                         }}
                         FormFooterComponent={({ submitting, submitDisabled }) => (
                             <>
-                            <S.Buttons>
-                                <Button
-                                    type="primary"
-                                    htmlType="submit"
-                                    style={{ flex: 1 }}
-                                    size="large"
-                                    disabled={submitting || submitDisabled}
-                                >
-                                    {t`Submit`}
-                                </Button>
-                                <Button
-                                    type="primary"
-                                    ghost
-                                    onClick={() => authorize({ nextUrl: props.originPathName })}
-                                    disabled={submitting}
-                                    size="large"
-                                    style={{ flex: 1 }}
-                                >
-                                    {t`Log in`}
-                                </Button>
-                            </S.Buttons>
-                <S.ForgotPassword>
-                    <Button type="link" onClick={() => navigate('/forgot-password')}>
-                        {t`Forgot Password?`}
-                    </Button>
-                </S.ForgotPassword>
+                                <S.Buttons>
+                                    <Button
+                                        type="primary"
+                                        htmlType="submit"
+                                        style={{ flex: 1 }}
+                                        size="large"
+                                        disabled={submitting || submitDisabled}
+                                    >
+                                        {t`Submit`}
+                                    </Button>
+                                    <Button
+                                        type="primary"
+                                        ghost
+                                        onClick={() => authorize({ nextUrl: props.originPathName })}
+                                        disabled={submitting}
+                                        size="large"
+                                        style={{ flex: 1 }}
+                                    >
+                                        {t`Log in`}
+                                    </Button>
+                                </S.Buttons>
+                                <S.ForgotPassword>
+                                    <Button type="link" onClick={() => navigate('/forgot-password')}>
+                                        {t`Forgot Password?`}
+                                    </Button>
+                                </S.ForgotPassword>
                             </>
- 
                         )}
                     />
                 )}
