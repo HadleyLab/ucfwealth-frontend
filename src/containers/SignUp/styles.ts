@@ -22,4 +22,9 @@ export const S = {
     Message: styled(Text)`
         margin-bottom: 32px;
     `,
+    ForgotPassword: styled.div`
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    `
 };

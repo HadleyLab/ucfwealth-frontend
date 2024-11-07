@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro';
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { axiosInstance as axiosAidboxInstance } from 'aidbox-react/lib/services/instance';
 
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function SignUp(props: Props) {
+    const navigate = useNavigate();
     const [confirmEmail, setConfirmEmail] = useState(false);
 
     const appToken = getToken();
@@ -63,12 +65,16 @@ export function SignUp(props: Props) {
                             onSuccess={() => {
                                 setConfirmEmail(true);
                             }}
+                            onFailure={() => {
+                                notification.error({message: "This user already exisits, please try forgot password feature or contact the administrator."})
+                            }}
                         saveButtonTitle={t`Sign up`}
                         initialQuestionnaireResponse={{
                             id: 'sign-up',
                             resourceType: 'QuestionnaireResponse'
                         }}
                         FormFooterComponent={({ submitting, submitDisabled }) => (
+                            <>
                             <S.Buttons>
                                 <Button
                                     type="primary"
@@ -90,6 +96,13 @@ export function SignUp(props: Props) {
                                     {t`Log in`}
                                 </Button>
                             </S.Buttons>
+                <S.ForgotPassword>
+                    <Button type="link" onClick={() => navigate('/forgot-password')}>
+                        {t`Forgot Password?`}
+                    </Button>
+                </S.ForgotPassword>
+                            </>
+ 
                         )}
                     />
                 )}
