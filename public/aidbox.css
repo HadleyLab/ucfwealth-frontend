@@ -143,6 +143,19 @@ input:focus {
     box-shadow: 0 0 0 2px rgba(255, 5, 72, 0.06) !important;
 }
 
+.aidbox-auth-body:before {
+    margin-bottom: 24px;
+}
+
+.login-2fa-confirm-page .form-group:before {
+    content: 'Check your email for 2FA token. The token is valid for 2 minutes';
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+    color: rgba(0, 0, 0, 0.45);
+    margin-bottom: 16px;
+}
+
 @media (prefers-color-scheme: dark) {
     .aidbox-auth-wgt {
         background-color: #141414 !important;
@@ -178,5 +191,9 @@ input:focus {
 
     .aidbox-auth-wgt label {
         color: rgba(255, 255, 255, 0.85) !important;
+    }
+
+    .login-2fa-confirm-page .form-group:before {
+        color: rgba(255, 255, 255, 0.45);
     }
 }
