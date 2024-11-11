@@ -53,7 +53,7 @@ export function SidebarTop(props: Props) {
                 communityMenuItem,
             ],
             [Role.Patient]: (patient) => [
-                { label: t`My Dashboard`, path: `/patients/${patient.id}`, icon: <EncountersIcon /> },
+                { label: t`My Studies`, path: `/patients/${patient.id}`, icon: <EncountersIcon /> },
                 communityMenuItem,
             ],
             [Role.Receptionist]: () => [
