@@ -44,8 +44,6 @@ export function SidebarTop(props: Props) {
         ? matchCurrentUserRole({
             [Role.Admin]: () => [
                 { label: t`Patients`, path: '/patients', icon: <PatientsIcon /> },
-                { label: t`Practitioners`, path: '/practitioners', icon: <PractitionersIcon /> },
-                { label: t`Questionnaires`, path: '/questionnaires', icon: <QuestionnairesIcon /> },
                 communityMenuItem,
             ],
             [Role.Practitioner]: () => [

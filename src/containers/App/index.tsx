@@ -162,7 +162,7 @@ function AuthenticatedAdminUserApp() {
                             <Route path="/questionnaires/:id/edit" element={<QuestionnaireBuilder />} />
                             <Route path="/questionnaires/:id" element={<div>questionnaires/:id</div>} />
                             <Route path="/healthcare-services" element={<HealthcareServiceList />} />
-                            <Route path="*" element={<Navigate to="/encounters" />} />
+                            <Route path="*" element={<Navigate to="/patients" />} />
                         </Routes>
                     </BaseLayout>
                 }
