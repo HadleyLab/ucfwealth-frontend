@@ -1,5 +1,4 @@
 import { StepProps, Steps } from 'antd';
-import { QuestionnaireItem } from 'fhir/r4b';
 import { useState } from 'react';
 import { GroupItemProps, QuestionItems } from 'sdc-qrf';
 
@@ -11,7 +10,7 @@ export function Wizzard(props: GroupItemProps) {
     const { parentPath, questionItem, context } = props;
     const [current, setCurrent] = useState(0);
     const { item = [], linkId, text } = questionItem;
-    const stepsItems: StepProps[] = item.map((i: QuestionnaireItem) => ({}));
+    const stepsItems: StepProps[] = item;
     const currentItem = item[current];
 
     const onStepChange = (value: number) => {
