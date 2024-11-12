@@ -16,6 +16,10 @@ export function useGeneralInformationDashboard(patient: Patient) {
             value: _.upperFirst(patient.gender),
         },
         {
+            title: 'Address',
+            value: patient.address?.[0]?.text,
+        },
+        {
             title: 'Phone number',
             value: patient.telecom?.filter(({ system }) => system === 'phone')[0]?.value,
         },
