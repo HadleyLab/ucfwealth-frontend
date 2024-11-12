@@ -7,6 +7,8 @@ import { S } from '@beda.software/emr/dist/components/BaseLayout/BaseLayout.styl
 
 import { ThemeProvider } from 'src/theme';
 
+import localStyles from './BaseLayout.module.scss';
+import { AppFooter } from './Footer';
 import { AppSidebar } from './Sidebar';
 import { AppTabBar } from './TabBar';
 
@@ -20,7 +22,10 @@ export function BaseLayout({ children, style }: Props) {
         <S.Container style={style}>
             <AppSidebar />
             <AppTabBar />
-            <Layout className={s.content}>{children}</Layout>
+            <Layout className={localStyles.content}>
+                {children}
+                <AppFooter />
+            </Layout>
         </S.Container>
     );
 }
@@ -29,7 +34,9 @@ export function AnonymousLayout({ children, style }: Props) {
     return (
         <S.Container style={style}>
             <AppSidebar />
-            <Layout className={s.content}>{children}</Layout>
+            <Layout className={s.content}>
+                {children}
+            </Layout>
         </S.Container>
     );
 }
