@@ -5,7 +5,6 @@ import { useParams, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import { Spinner } from '@beda.software/emr/components';
 import { PatientReloadProvider } from '@beda.software/emr/dist/containers/PatientDetails/Dashboard/contexts';
 import { usePatientResource } from '@beda.software/emr/dist/containers/PatientDetails/hooks';
-import { PatientDocument } from '@beda.software/emr/dist/containers/PatientDetails/PatientDocument/index';
 import { PatientDocumentDetails } from '@beda.software/emr/dist/containers/PatientDetails/PatientDocumentDetails/index';
 import { PatientOverview } from '@beda.software/emr/dist/containers/PatientDetails/PatientOverviewDynamic/index';
 import { selectCurrentUserRoleResource } from '@beda.software/emr/utils';
@@ -15,6 +14,7 @@ import { isSuccess } from '@beda.software/remote-data';
 import { BasePageContent } from 'src/components/BaseLayout';
 import { RouteItem } from 'src/components/BaseLayout/Sidebar/SidebarTop';
 
+import { PatientDocument } from './PatientDocument';
 import { PatientHeader, PatientHeaderContextProvider } from './PatientHeader';
 
 export interface PatientDetailsEmbeddedPageDefinition extends RouteItem {
