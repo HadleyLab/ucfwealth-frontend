@@ -5,8 +5,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { EncountersIcon } from '@beda.software/emr/dist/icons/menu/EncountersIcon';
 import { PatientsIcon } from '@beda.software/emr/dist/icons/menu/PatientsIcon';
-import { PractitionersIcon } from '@beda.software/emr/dist/icons/menu/PractitionersIcon';
-import { QuestionnairesIcon } from '@beda.software/emr/dist/icons/menu/QuestionnairesIcon';
 import { getToken } from '@beda.software/emr/services';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
