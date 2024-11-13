@@ -30,18 +30,22 @@ export function AppFooter(props: Props) {
     return (
         <S.Footer className={`_${type}`}>
             <S.Content>
-                {contacts.map((c, index) => (
-                    <S.Contact key={`contact-${index}`}>
-                        <S.Image src={logo} />
-                        <S.ContactDetails>
-                            <Text>{c.name}</Text>
-                            <Text>Phone: {c.phone}</Text>
-                            <Text>
-                                Email: <S.Link href={`mailto:${c.email}`}>{c.email}</S.Link>
-                            </Text>
-                        </S.ContactDetails>
-                    </S.Contact>
-                ))}
+                <S.Title level={5}>Team Members</S.Title>
+                <Text>Our team members leading the research study</Text>
+                <S.Contacts>
+                    {contacts.map((c, index) => (
+                        <S.Contact key={`contact-${index}`}>
+                            <S.Image src={logo} />
+                            <S.ContactDetails>
+                                <Text>{c.name}</Text>
+                                <Text>Phone: {c.phone}</Text>
+                                <Text>
+                                    Email: <S.Link href={`mailto:${c.email}`}>{c.email}</S.Link>
+                                </Text>
+                            </S.ContactDetails>
+                        </S.Contact>
+                    ))}
+                </S.Contacts>
             </S.Content>
         </S.Footer>
     );

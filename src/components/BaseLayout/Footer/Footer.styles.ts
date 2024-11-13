@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
+import { Title } from '@beda.software/emr/components';
+
 export const S = {
     Footer: styled.footer`
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 100px;
+        height: 144px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -18,15 +20,29 @@ export const S = {
             --footer-text: rgba(255, 255, 255, 0.75);
             --footer-link-active: #fff;
         }
+
+        @media screen and (max-width: 1024px) {
+            position: static;
+            height: auto;
+        }
     `,
     Content: styled.div`
+        padding: 0 24px;
+        display: flex;
+        flex-direction: column;
+    `,
+    Title: styled(Title)`
+        margin-bottom: 0 !important;
+    `,
+    Contacts: styled.div`
         color: var(--footer-text);
         font-size: 14px;
         line-height: 22px;
         display: flex;
         flex-direction: row;
         gap: 32px;
-        padding: 0 24px;
+        margin-top: 12px;
+        flex-wrap: wrap;
     `,
     Contact: styled.div`
         display: flex;
