@@ -1,6 +1,7 @@
 import type { Dashboard, DashboardInstance } from '@beda.software/emr/dist/components/Dashboard/types';
 
 import { GeneralIInformationWidget } from './GeneralIInformationWidget';
+import { MedicalImagesAuthorizationWidget } from './MedicalImagesAuthorizationWidget';
 import { RequiredFormsWidget } from './RequiredFormsWidget';
 
 export const patientDashboardConfig: DashboardInstance = {
@@ -14,7 +15,11 @@ export const patientDashboardConfig: DashboardInstance = {
             widget: RequiredFormsWidget,
         },
     ],
-    right: [],
+    right: [
+        {
+            widget: MedicalImagesAuthorizationWidget,
+        },
+    ],
     bottom: [],
 };
 

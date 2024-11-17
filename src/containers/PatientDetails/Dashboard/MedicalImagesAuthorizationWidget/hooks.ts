@@ -5,36 +5,33 @@ import { getFHIRResources } from '@beda.software/emr/services';
 import { useService, extractBundleResources } from '@beda.software/fhir-react';
 import { isSuccess, success } from '@beda.software/remote-data';
 
-export interface RequiredFormsWidgetData {
+export interface MedicalImagesAuthorizationWidgetData {
     questionnaire: Questionnaire;
-    questionnaireResponse: QuestionnaireResponse | undefined;
+    questionnaireResponse: QuestionnaireResponse[];
 }
 
-export function useRequiredFormsWidget(patient: Patient) {
-    const questionnairesOrder = [
-        'patient-informed-consent',
-        'breast-cancer-study-survey',
-    ];
+export function useMedicalImagesAuthorizationWidget(patient: Patient) {
+    const questionnairesId = 'authorization-for-release-of-medical-images';
 
     const [response] = useService(async () => {
         const qResponse = await getFHIRResources<Questionnaire>('Questionnaire', {
-            id: questionnairesOrder.join(','),
+            id: questionnairesId,
         });
 
         if (isSuccess(qResponse)) {
             const questionnaires = extractBundleResources(qResponse.data).Questionnaire;
 
             const qrResponse = await getFHIRResources<QuestionnaireResponse>('QuestionnaireResponse', {
-                questionnaire: questionnairesOrder.join(','),
+                questionnaire: questionnairesId,
                 subject: `Patient/${patient.id}`,
             });
 
             if (isSuccess(qrResponse)) {
                 const questionnaireResponses = extractBundleResources(qrResponse.data).QuestionnaireResponse;
-                const result: RequiredFormsWidgetData[] = questionnairesOrder.map((qId) => ({
-                    questionnaire: questionnaires.find((q) => q.id === qId)!,
-                    questionnaireResponse: questionnaireResponses.find((qr) => qr.questionnaire === qId),
-                }));
+                const result: MedicalImagesAuthorizationWidgetData = {
+                    questionnaire: questionnaires[0],
+                    questionnaireResponse: questionnaireResponses,
+                }
 
                 return success(result);
             }
