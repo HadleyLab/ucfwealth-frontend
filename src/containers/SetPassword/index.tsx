@@ -1,5 +1,5 @@
 import { t } from '@lingui/macro';
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
 import { useParams } from 'react-router-dom';
 
 import { QuestionnaireResponseForm } from '@beda.software/emr/components';
@@ -9,6 +9,8 @@ import { AuthLayout } from 'src/components/AuthLayout';
 
 import { S } from './styles';
 import { authorize } from '../SignIn';
+import { OperationOutcome } from 'fhir/r4b';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     originPathName?: string;
@@ -16,6 +18,7 @@ interface Props {
 
 export function SetPassword(props: Props) {
     const { code } = useParams<{ code: string }>();
+    const navigate = useNavigate();
 
     return (
         <AuthLayout illustrationNumber={3}>
@@ -26,6 +29,10 @@ export function SetPassword(props: Props) {
                     questionnaireResponseSaveService={inMemorySaveService}
                     onSuccess={() => {
                         authorize({ nextUrl: props.originPathName })
+                    }}
+                    onFailure={(error: OperationOutcome) => {
+                        const message = error.issue.map(i => i.diagnostics).join(',');
+                        notification.error({ message });
                     }}
                     saveButtonTitle={t`Save`}
                     initialQuestionnaireResponse={{
@@ -52,6 +59,9 @@ export function SetPassword(props: Props) {
                                 disabled={submitting || submitDisabled}
                             >
                                 {t`Submit`}
+                            </Button>
+                            <Button type="link" onClick={() => navigate('/forgot-password')}>
+                                {t`Request a new link`}
                             </Button>
                         </S.Buttons>
                     )}
