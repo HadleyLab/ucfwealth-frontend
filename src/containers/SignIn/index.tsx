@@ -22,6 +22,16 @@ export function SignIn(props: Props) {
     return (
         <AuthLayout>
             <S.Content>
+                <p>
+                    Welcome to <b>MammoChat</b>, a supportive community designed just for breast cancer patients like you.
+                    Here, you can connect with others who understand your journey, access personalized information tailored to your unique needs,
+                    and explore new treatment options with confidence.
+                    Powered by advanced, transparent AI technology, MammoChat ensures you receive relevant,
+                    trusted guidance every step of the way.
+                    Join today to find support, gain insights, and empower yourself with the knowledge to make informed decisions about your care.
+                    Let’s navigate this journey together.
+                </p>
+                <br />
                 <S.Buttons>
                     <Button
                         type="primary"
