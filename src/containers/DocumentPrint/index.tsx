@@ -1,10 +1,16 @@
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'fhir/r4b';
+import { useContext } from 'react';
 
 import { RenderRemoteData } from 'aidbox-react/lib/components/RenderRemoteData';
 
 import { Spinner } from '@beda.software/emr/components';
 import { usePatientDocumentPrint } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/hooks';
-import { flattenQuestionnaireGroupItems, getQuestionnaireItemValue } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/utils';
+import {
+    flattenQuestionnaireGroupItems,
+    getQuestionnaireItemValue,
+} from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/utils';
+import { DateTimeFormatContext } from '@beda.software/emr/dist/contexts/date-time-format';
+import { parseFHIRDateTime } from '@beda.software/fhir-react';
 
 import logo from './images/logo.png';
 import { S } from './styles';
@@ -12,10 +18,21 @@ import { S } from './styles';
 export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?: QuestionnaireResponse }) {
     const { item, qResponse } = props;
     const itemValue = qResponse && getQuestionnaireItemValue(item, qResponse);
+    const { humanDate } = useContext(DateTimeFormatContext);
+
+    if (item.type === 'date') {
+        return (
+            <S.P key={item.linkId}>
+                {item.text}
+                {itemValue && `: ${parseFHIRDateTime(itemValue).format(humanDate)}`}
+            </S.P>
+        );
+    }
+
     return (
         <S.P key={item.linkId}>
             {item.text}
-            {itemValue && ': ' + itemValue}
+            {itemValue && `: ${itemValue}`}
         </S.P>
     );
 }
