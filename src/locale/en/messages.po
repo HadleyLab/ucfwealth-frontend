@@ -13,10 +13,15 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:45
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:53
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:61
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:69
+#: src/containers/PatientDetails/Dashboard/MedicalImagesAuthorizationWidget/index.tsx:57
+msgid "Add"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/MedicalImagesAuthorizationWidget/index.tsx:15
+msgid "Authorization for Release of Medical Images"
+msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:36
 msgid "Community"
 msgstr ""
 
@@ -29,7 +34,8 @@ msgstr ""
 msgid "Forgot password"
 msgstr ""
 
-#: src/containers/SignIn/index.tsx:40
+#: src/containers/SignIn/index.tsx:51
+#: src/containers/SignUp/index.tsx:101
 msgid "Forgot Password?"
 msgstr ""
 
@@ -39,9 +45,9 @@ msgstr ""
 #~ msgstr ""
 
 #: src/containers/ForgotPassword/index.tsx:56
-#: src/containers/SignIn/index.tsx:32
-#: src/containers/SignUp/index.tsx:56
-#: src/containers/SignUp/index.tsx:90
+#: src/containers/SignIn/index.tsx:43
+#: src/containers/SignUp/index.tsx:58
+#: src/containers/SignUp/index.tsx:96
 msgid "Log in"
 msgstr ""
 
@@ -54,9 +60,14 @@ msgstr ""
 #~ msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:59
-msgid "My Dashboard"
+#~ msgid "My Dashboard"
+#~ msgstr ""
+
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:52
+msgid "My Studies"
 msgstr ""
 
+#: src/containers/PatientDetails/Dashboard/MedicalImagesAuthorizationWidget/index.tsx:22
 #: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:20
 msgid "Name"
 msgstr ""
@@ -65,9 +76,9 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:41
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:51
-#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:67
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:44
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:48
+#: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:56
 #: src/containers/PatientDetails/PatientHeader/index.tsx:21
 msgid "Patients"
 msgstr ""
@@ -77,30 +88,35 @@ msgid "Please enter your email address. You will receive a link to create a new 
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:42
-msgid "Practitioners"
-msgstr ""
+#~ msgid "Practitioners"
+#~ msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:69
 #~ msgid "Prescriptions"
 #~ msgstr ""
 
+#: src/containers/PatientDetails/Dashboard/MedicalImagesAuthorizationWidget/index.tsx:37
 #: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:55
 msgid "Print"
 msgstr ""
 
 #: src/components/BaseLayout/Sidebar/SidebarTop/index.tsx:43
-msgid "Questionnaires"
-msgstr ""
+#~ msgid "Questionnaires"
+#~ msgstr ""
 
 #: src/containers/ForgotPassword/index.tsx:98
 msgid "Remember your password?"
+msgstr ""
+
+#: src/containers/SetPassword/index.tsx:64
+msgid "Request a new link"
 msgstr ""
 
 #: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:13
 msgid "Required forms"
 msgstr ""
 
-#: src/containers/SetPassword/index.tsx:30
+#: src/containers/SetPassword/index.tsx:37
 msgid "Save"
 msgstr ""
 
@@ -112,7 +128,7 @@ msgstr ""
 #~ msgid "Services"
 #~ msgstr ""
 
-#: src/containers/SetPassword/index.tsx:23
+#: src/containers/SetPassword/index.tsx:26
 msgid "Set password"
 msgstr ""
 
@@ -121,18 +137,18 @@ msgid "Sign In"
 msgstr ""
 
 #: src/containers/ForgotPassword/index.tsx:68
-#: src/containers/SignIn/index.tsx:35
-#: src/containers/SignUp/index.tsx:66
+#: src/containers/SignIn/index.tsx:46
+#: src/containers/SignUp/index.tsx:71
 msgid "Sign up"
 msgstr ""
 
-#: src/containers/SignUp/index.tsx:45
+#: src/containers/SignUp/index.tsx:47
 msgid "Sign Up"
 msgstr ""
 
 #: src/containers/ForgotPassword/index.tsx:82
-#: src/containers/SetPassword/index.tsx:54
-#: src/containers/SignUp/index.tsx:80
+#: src/containers/SetPassword/index.tsx:61
+#: src/containers/SignUp/index.tsx:86
 msgid "Submit"
 msgstr ""
 
@@ -144,7 +160,7 @@ msgstr ""
 #~ msgid "We have sent you email. Please click on the link in the email to complete registration"
 #~ msgstr ""
 
-#: src/containers/SignUp/index.tsx:49
+#: src/containers/SignUp/index.tsx:51
 msgid "We have sent you email. Please click on the link in the email to complete registration."
 msgstr ""
 
