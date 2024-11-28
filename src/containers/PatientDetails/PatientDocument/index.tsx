@@ -48,10 +48,6 @@ export function PatientDocument(props: PatientDocumentProps) {
         title: isSuccess(response) ? (response.data.formData.context.questionnaire?.name ?? '') : '',
     });
 
-    const groupControlComponents: ItemControlGroupItemComponentMapping = {
-        wizard: Wizzard,
-    };
-
     return (
         <div className={s.container}>
             <S.Content>
@@ -72,7 +68,6 @@ export function PatientDocument(props: PatientDocumentProps) {
                                     'anxiety-score': AnxietyScore,
                                     'depression-score': DepressionScore,
                                 }}
-                                itemControlGroupItemComponents={groupControlComponents}
                                 onCancel={() => navigate(-1)}
                                 saveButtonTitle={'Complete'}
                                 autoSave={!provenance}
