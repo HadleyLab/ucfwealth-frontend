@@ -1,7 +1,6 @@
 import { Organization, ParametersParameter, Patient, Practitioner, QuestionnaireResponse } from 'fhir/r4b';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ItemControlGroupItemComponentMapping } from 'sdc-qrf/lib/types';
 
 import { BaseQuestionnaireResponseForm, Spinner } from '@beda.software/emr/components';
 import {
@@ -14,8 +13,6 @@ import { usePatientDocument } from '@beda.software/emr/dist/containers/PatientDe
 import { usePatientHeaderLocationTitle } from '@beda.software/emr/dist/containers/PatientDetails/PatientHeader/hooks';
 import { RenderRemoteData, WithId } from '@beda.software/fhir-react';
 import { RemoteData, isSuccess, notAsked } from '@beda.software/remote-data';
-
-import { Wizzard } from 'src/components/Wizzard';
 
 import s from './PatientDocument.module.scss';
 
