@@ -1,5 +1,7 @@
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'fhir/r4b';
+import Markdown from 'react-markdown';
 import { useContext } from 'react';
+import { compileAsFirst } from '@beda.software/emr/utils';
 
 import { RenderRemoteData } from 'aidbox-react/lib/components/RenderRemoteData';
 
@@ -14,6 +16,9 @@ import { parseFHIRDateTime } from '@beda.software/fhir-react';
 
 import logo from './images/logo.png';
 import { S } from './styles';
+
+const isMarkdown = compileAsFirst(
+    "extension.where(url='http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl').valueCodeableConcept.coding.code = 'markdown'");
 
 export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?: QuestionnaireResponse }) {
     const { item, qResponse } = props;
@@ -31,7 +36,10 @@ export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?
 
     return (
         <S.P key={item.linkId}>
-            {item.text}
+            {isMarkdown(item) ?
+                <Markdown>{item.text}</Markdown> :
+                item.text
+            }
             {itemValue && `: ${itemValue}`}
         </S.P>
     );
