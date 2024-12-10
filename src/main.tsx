@@ -14,12 +14,14 @@ import '@beda.software/emr/dist/style.css';
 // Use you https://github.com/beda-software/fhir-emr/blob/master/src/theme/ThemeProvider.tsx as example
 import { PatientDashboardProvider } from '@beda.software/emr/dist/components/Dashboard/contexts';
 import { DateTimeFormatContext } from '@beda.software/emr/dist/contexts/date-time-format';
+import { ValueSetExpandProvider } from '@beda.software/emr/contexts';
 
 import { App } from './containers/App';
 import { dashboard } from './containers/PatientDetails/Dashboard/config';
 import { dynamicActivate, getCurrentLocale } from './services/i18n';
 import { ThemeProvider } from './theme';
 import { dateFormats } from './utils/date';
+import { expandValueSet } from './services/terminology';
 
 export const AppWithContext = () => {
     useEffect(() => {
@@ -31,7 +33,9 @@ export const AppWithContext = () => {
             <DateTimeFormatContext.Provider value={dateFormats}>
                 <PatientDashboardProvider dashboard={dashboard}>
                     <ThemeProvider>
-                        <App />
+                        <ValueSetExpandProvider.Provider value={expandValueSet}>
+                            <App />
+                        </ValueSetExpandProvider.Provider>
                     </ThemeProvider>
                 </PatientDashboardProvider>
             </DateTimeFormatContext.Provider>
