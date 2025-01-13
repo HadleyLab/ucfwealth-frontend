@@ -1,10 +1,11 @@
 import queryString from 'query-string';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { Route, BrowserRouter, Routes, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import { RenderRemoteData } from 'aidbox-react/lib/components/RenderRemoteData';
 import { useService } from 'aidbox-react/lib/hooks/service';
 import { success } from 'aidbox-react/lib/libs/remoteData';
+import { resetInstanceToken as resetAidboxInstanceToken } from 'aidbox-react/lib/services/instance';
 
 import { User } from '@beda.software/aidbox-types';
 import { AnonymousLayout, Spinner } from '@beda.software/emr/components';
@@ -27,7 +28,13 @@ import {
     VideoCall,
 } from '@beda.software/emr/containers';
 import { restoreUserSession } from '@beda.software/emr/dist/containers/App/utils';
-import { getToken, parseOAuthState, setToken } from '@beda.software/emr/services';
+import {
+    getToken,
+    logout,
+    parseOAuthState,
+    setToken,
+    resetInstanceToken as resetFHIRInstanceToken,
+} from '@beda.software/emr/services';
 import { sharedAuthorizedPatient, sharedAuthorizedUser } from '@beda.software/emr/sharedState';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
@@ -89,7 +96,7 @@ export function Auth() {
 
 function AnonymousUserApp() {
     const location = useLocation();
-    const originPathRef = useRef(location.pathname);
+    const originPathRef = useRef(location.pathname.startsWith('/reset-password') ? '/' : location.pathname);
     const navigate = useNavigate();
 
     return (
@@ -226,9 +233,25 @@ function AuthenticatedReceptionistUserApp() {
 }
 
 function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
+    const location = useLocation();
+
     const [patient] = sharedAuthorizedPatient.useSharedState();
     const [user] = sharedAuthorizedUser.useSharedState();
     const { response } = usePatientConsent(patient!);
+
+    const doLogout = useCallback(async (path: string) => {
+        await logout();
+        resetAidboxInstanceToken();
+        resetFHIRInstanceToken();
+        localStorage.clear();
+        window.location.href = path;
+    }, []);
+
+    useEffect(() => {
+        if (location.pathname.startsWith('/reset-password')) {
+            doLogout(location.pathname);
+        }
+    }, [location.pathname, doLogout]);
 
     if (!user?.twoFactor?.enabled) {
         return (
@@ -252,7 +275,14 @@ function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
                                     {consent ? (
                                         <Route path="*" element={<Navigate to={`/patients/${patient!.id}`} />} />
                                     ) : (
-                                        <Route path="*" element={<Navigate to={`/patients/${patient!.id}/documents/new/patient-informed-consent`} />} />
+                                        <Route
+                                            path="*"
+                                            element={
+                                                <Navigate
+                                                    to={`/patients/${patient!.id}/documents/new/patient-informed-consent`}
+                                                />
+                                            }
+                                        />
                                     )}
                                 </Routes>
                             </BaseLayout>
