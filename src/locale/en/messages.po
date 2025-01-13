@@ -113,8 +113,8 @@ msgid "Request a new link"
 msgstr ""
 
 #: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:13
-msgid "Required forms"
-msgstr ""
+#~ msgid "Required forms"
+#~ msgstr ""
 
 #: src/containers/SetPassword/index.tsx:37
 msgid "Save"
@@ -146,6 +146,10 @@ msgstr ""
 msgid "Sign Up"
 msgstr ""
 
+#: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:13
+msgid "Sign up for The Breast Cancer AI Study!"
+msgstr ""
+
 #: src/containers/ForgotPassword/index.tsx:82
 #: src/containers/SetPassword/index.tsx:61
 #: src/containers/SignUp/index.tsx:86
@@ -154,6 +158,14 @@ msgstr ""
 
 #: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:38
 msgid "Submitted?"
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/ExplanatoryTextWidget.tsx:20
+msgid "The research purpose of this project is to determine how we may develop Artificial Intelligence (AI) models of breast imaging that facilitate new ways of detecting and treating disease and improve patient outcomes by assembling a de-identified breast cancer radiographic imaging repository."
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/ExplanatoryTextWidget.tsx:29
+msgid "This project also aims to document how patients may use a trusted social health or wellness network to better understand their imaging."
 msgstr ""
 
 #: src/containers/SignUp/index.tsx:49
@@ -166,6 +178,10 @@ msgstr ""
 
 #: src/containers/ForgotPassword/index.tsx:49
 msgid "We have sent you email. Please click on the link in the email to reset your password."
+msgstr ""
+
+#: src/containers/PatientDetails/Dashboard/ExplanatoryTextWidget.tsx:11
+msgid "With over 40,000,000 mammograms run annually in the US, there are psychological consequences of breast cancer imaging that are well documented among patients such as stress and anxiety from largely false positive or indeterminant readings by radiologists."
 msgstr ""
 
 #: src/containers/PatientDetails/Dashboard/RequiredFormsWidget/index.tsx:40

@@ -10,7 +10,7 @@ import { RenderRemoteData } from '@beda.software/fhir-react';
 import { RequiredFormsWidgetData, useRequiredFormsWidget } from './hooks';
 
 export function RequiredFormsWidget(props: { patient: Patient }) {
-    const title = t`Required forms`;
+    const title = t`Sign up for The Breast Cancer AI Study!`;
     const { patient } = props;
     const { response } = useRequiredFormsWidget(patient);
     const navigate = useNavigate();

@@ -3,11 +3,15 @@ import type { Dashboard, DashboardInstance } from '@beda.software/emr/dist/compo
 import { GeneralIInformationWidget } from './GeneralIInformationWidget';
 import { MedicalImagesAuthorizationWidget } from './MedicalImagesAuthorizationWidget';
 import { RequiredFormsWidget } from './RequiredFormsWidget';
+import { ExplanatoryTextWidget } from './ExplanatoryTextWidget';
 
 export const patientDashboardConfig: DashboardInstance = {
     top: [
         {
             widget: GeneralIInformationWidget,
+        },
+        {
+            widget: ExplanatoryTextWidget,
         },
     ],
     left: [
