@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { EncountersIcon } from '@beda.software/emr/dist/icons/menu/EncountersIcon';
 import { PatientsIcon } from '@beda.software/emr/dist/icons/menu/PatientsIcon';
+import { QuestionnairesIcon } from '@beda.software/emr/icons';
 import { getToken } from '@beda.software/emr/services';
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
@@ -35,7 +36,7 @@ export function SidebarTop(props: Props) {
     const communityMenuItem = {
         label: t`Community`,
         path: `https://community.mammochat.com/auth/oauth2_basic`,
-        icon: <PatientsIcon />,
+        icon: <EncountersIcon />,
     };
 
     const menuItems: RouteItem[] = !isAnonymousUser
@@ -49,7 +50,7 @@ export function SidebarTop(props: Props) {
                 communityMenuItem,
             ],
             [Role.Patient]: (patient) => [
-                { label: t`My Studies`, path: `/patients/${patient.id}`, icon: <EncountersIcon /> },
+                { label: t`My Studies`, path: `/patients/${patient.id}`, icon: <QuestionnairesIcon /> },
                 communityMenuItem,
             ],
             [Role.Receptionist]: () => [
