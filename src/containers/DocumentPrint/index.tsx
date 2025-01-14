@@ -10,6 +10,7 @@ import { usePatientDocumentPrint } from '@beda.software/emr/dist/containers/Pati
 import {
     flattenQuestionnaireGroupItems,
     getQuestionnaireItemValue,
+    qItemIsHidden,
 } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/utils';
 import { DateTimeFormatContext } from '@beda.software/emr/dist/contexts/date-time-format';
 import { parseFHIRDateTime } from '@beda.software/fhir-react';
@@ -24,6 +25,10 @@ export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?
     const { item, qResponse } = props;
     const itemValue = qResponse && getQuestionnaireItemValue(item, qResponse);
     const { humanDate } = useContext(DateTimeFormatContext);
+
+    if (qItemIsHidden(item)) {
+        return null;
+    }
 
     if (item.type === 'date') {
         return (
