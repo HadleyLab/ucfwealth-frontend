@@ -12,33 +12,33 @@ import '@beda.software/emr/dist/style.css';
 
 // You can specify your own theme to ajdust color,
 // Use you https://github.com/beda-software/fhir-emr/blob/master/src/theme/ThemeProvider.tsx as example
-import { PatientDashboardProvider } from '@beda.software/emr/dist/components/Dashboard/contexts';
-import { DateTimeFormatContext } from '@beda.software/emr/dist/contexts/date-time-format';
 import { ValueSetExpandProvider } from '@beda.software/emr/contexts';
+import { PatientDashboardProvider } from '@beda.software/emr/dist/components/Dashboard/contexts';
+import { setDateTimeFormats } from '@beda.software/emr/utils';
 
 import { App } from './containers/App';
 import { dashboard } from './containers/PatientDetails/Dashboard/config';
 import { dynamicActivate, getCurrentLocale } from './services/i18n';
+import { expandValueSet } from './services/terminology';
 import { ThemeProvider } from './theme';
 import { dateFormats } from './utils/date';
-import { expandValueSet } from './services/terminology';
 
 export const AppWithContext = () => {
     useEffect(() => {
+        setDateTimeFormats(dateFormats);
+
         dynamicActivate(getCurrentLocale());
     }, []);
 
     return (
         <I18nProvider i18n={i18n}>
-            <DateTimeFormatContext.Provider value={dateFormats}>
-                <PatientDashboardProvider dashboard={dashboard}>
-                    <ThemeProvider>
-                        <ValueSetExpandProvider.Provider value={expandValueSet}>
-                            <App />
-                        </ValueSetExpandProvider.Provider>
-                    </ThemeProvider>
-                </PatientDashboardProvider>
-            </DateTimeFormatContext.Provider>
+            <PatientDashboardProvider dashboard={dashboard}>
+                <ThemeProvider>
+                    <ValueSetExpandProvider.Provider value={expandValueSet}>
+                        <App />
+                    </ValueSetExpandProvider.Provider>
+                </ThemeProvider>
+            </PatientDashboardProvider>
         </I18nProvider>
     );
 };

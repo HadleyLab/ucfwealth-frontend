@@ -1,7 +1,5 @@
 import { Questionnaire, QuestionnaireItem, QuestionnaireResponse } from 'fhir/r4b';
 import Markdown from 'react-markdown';
-import { useContext } from 'react';
-import { compileAsFirst } from '@beda.software/emr/utils';
 
 import { RenderRemoteData } from 'aidbox-react/lib/components/RenderRemoteData';
 
@@ -12,7 +10,7 @@ import {
     getQuestionnaireItemValue,
     qItemIsHidden,
 } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/utils';
-import { DateTimeFormatContext } from '@beda.software/emr/dist/contexts/date-time-format';
+import { compileAsFirst, humanDate } from '@beda.software/emr/utils';
 import { parseFHIRDateTime } from '@beda.software/fhir-react';
 
 import logo from './images/logo.png';
@@ -24,7 +22,6 @@ const isMarkdown = compileAsFirst(
 export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?: QuestionnaireResponse }) {
     const { item, qResponse } = props;
     const itemValue = qResponse && getQuestionnaireItemValue(item, qResponse);
-    const { humanDate } = useContext(DateTimeFormatContext);
 
     if (qItemIsHidden(item)) {
         return null;
