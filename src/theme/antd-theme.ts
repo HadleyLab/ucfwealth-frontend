@@ -32,8 +32,13 @@ export function getANTDTheme({ dark, palette: newPalette }: Props): ThemeConfig 
         },
         algorithm: dark ? ANTDTheme.darkAlgorithm : ANTDTheme.defaultAlgorithm,
         components: {
+            Typography: {
+                titleMarginBottom: 0,
+                titleMarginTop: 0,
+            },
             Layout: {
                 colorBgHeader: palette.neutral.sidebarBackground,
+                colorBgBody: palette.neutralPalette.gray_2,
             },
             Result: {
                 colorSuccess: palette.secondary,
