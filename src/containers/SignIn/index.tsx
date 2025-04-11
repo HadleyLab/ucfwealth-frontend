@@ -3,13 +3,18 @@ import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import { getAuthorizeUrl, OAuthState } from '@beda.software/emr/services';
+import config from '@beda.software/emr-config';
 
 import { AuthLayout } from 'src/components/AuthLayout';
 
 import { S } from './styles';
 
 export function authorize(state?: OAuthState) {
-    window.location.href = getAuthorizeUrl(state);
+    window.location.href = getAuthorizeUrl({
+        authPath: 'auth/authorize',
+        params: new URLSearchParams({ client_id: config.clientId, response_type: 'token' }),
+        state,
+    });
 }
 
 interface Props {
