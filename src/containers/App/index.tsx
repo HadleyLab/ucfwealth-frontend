@@ -39,8 +39,9 @@ import { sharedAuthorizedPatient, sharedAuthorizedUser } from '@beda.software/em
 import { matchCurrentUserRole, Role } from '@beda.software/emr/utils';
 
 import { BaseLayout } from 'src/components/BaseLayout';
+import { SignUpWizard } from 'src/components/SignUpWizard';
+import { useSignUpWizard } from 'src/components/SignUpWizard/hooks';
 
-import { usePatientConsent } from './hooks';
 import { DocumentPrint } from '../DocumentPrint';
 import { EnableTwoFactor } from '../EnableTwoFactor';
 import { ForgotPassword } from '../ForgotPassword';
@@ -237,7 +238,7 @@ function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
 
     const [patient] = sharedAuthorizedPatient.useSharedState();
     const [user] = sharedAuthorizedUser.useSharedState();
-    const { response } = usePatientConsent(patient!);
+    const { response } = useSignUpWizard(patient!);
 
     const doLogout = useCallback(async (path: string) => {
         await logout();
@@ -263,33 +264,38 @@ function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
 
     return (
         <RenderRemoteData remoteData={response} renderLoading={Spinner}>
-            {({ consent }) => (
-                <Routes>
-                    <Route path={`/print-patient-document/:id/:qrId`} element={<DocumentPrint />} />
-                    <Route
-                        path="*"
-                        element={
-                            <BaseLayout>
-                                <Routes>
-                                    <Route path={`/patients/:id/*`} element={<PatientDetails />} />
-                                    {consent ? (
+            {({ showWizard, questionnaires, notFinishedQuestionnaires, questionnaireResponses }) => {
+
+                if (showWizard) {
+                    return (
+                        <SignUpWizard
+                            patient={patient!}
+                            questionnaires={questionnaires}
+                            notFinishedQuestionnaires={notFinishedQuestionnaires}
+                            questionnaireResponses={questionnaireResponses}
+                            show={showWizard}
+                            onSuccess={reload}
+                        />
+                    );
+                };
+
+                return (
+                    <Routes>
+                        <Route path={`/print-patient-document/:id/:qrId`} element={<DocumentPrint />} />
+                        <Route
+                            path="*"
+                            element={
+                                <BaseLayout>
+                                    <Routes>
+                                        <Route path={`/patients/:id/*`} element={<PatientDetails />} />
                                         <Route path="*" element={<Navigate to={`/patients/${patient!.id}`} />} />
-                                    ) : (
-                                        <Route
-                                            path="*"
-                                            element={
-                                                <Navigate
-                                                    to={`/patients/${patient!.id}/documents/new/patient-informed-consent`}
-                                                />
-                                            }
-                                        />
-                                    )}
-                                </Routes>
-                            </BaseLayout>
-                        }
-                    />
-                </Routes>
-            )}
+                                    </Routes>
+                                </BaseLayout>
+                            }
+                        />
+                    </Routes>
+                );
+            }}
         </RenderRemoteData>
     );
 }
