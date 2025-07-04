@@ -15,7 +15,7 @@ const WizardContainer = ({ children }: { children: React.ReactNode }) => (
 
 export function SignUpWizard(props: SignUpWizardProps) {
     const { patient, onSuccess, questionnaires, notFinishedQuestionnaires,
-        questionnaireResponses, show } = props;
+        questionnaireResponses, show, onStepSuccess } = props;
     const [headerProps, setHeaderProps] = useState({ title: "", index: 0, total: 0 });
 
     if (!show) {
@@ -39,6 +39,7 @@ export function SignUpWizard(props: SignUpWizardProps) {
                         setHeaderProps({ title: q.title ?? "", index: index, total: questionnaires.length })}
                     launchContextParameters={[{ name: 'Patient', resource: patient }]}
                     onSuccess={onSuccess}
+                    onStepSuccess={onStepSuccess}
                 />
             </S.FormContainer>
         </WizardContainer>
