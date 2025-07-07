@@ -275,6 +275,7 @@ function AuthenticatedPatientUserApp({ reload }: { reload: () => void }) {
                             questionnaireResponses={questionnaireResponses}
                             show={showWizard}
                             onSuccess={reload}
+                            onStepSuccess={() => reload()}
                         />
                     );
                 };

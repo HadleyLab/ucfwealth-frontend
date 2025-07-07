@@ -7,4 +7,5 @@ export interface SignUpWizardProps {
     questionnaireResponses: QuestionnaireResponse[];
     show: boolean;
     onSuccess: () => void;
+    onStepSuccess: () => void;
 }
