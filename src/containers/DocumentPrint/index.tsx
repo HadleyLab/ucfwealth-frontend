@@ -11,7 +11,7 @@ import {
     qItemIsHidden,
 } from '@beda.software/emr/dist/containers/PatientDetails/DocumentPrint/utils';
 import { compileAsFirst, humanDate } from '@beda.software/emr/utils';
-import { parseFHIRDateTime } from '@beda.software/fhir-react';
+import { parseFHIRDate } from '@beda.software/fhir-react';
 
 import logo from './images/logo.png';
 import { S } from './styles';
@@ -31,7 +31,7 @@ export function DocumentPrintAnswer(props: { item: QuestionnaireItem; qResponse?
         return (
             <S.P key={item.linkId}>
                 {item.text}
-                {itemValue && `: ${parseFHIRDateTime(itemValue).format(humanDate)}`}
+                {itemValue && `: ${parseFHIRDate(itemValue).format(humanDate)}`}
             </S.P>
         );
     }
